@@ -254,6 +254,22 @@
         .map-legend-chk input { accent-color: var(--teal); margin: 0; cursor: pointer; }
         .map-legend-chk:hover { border-color: var(--text); color: var(--text); }
         .map-axis-toggle { font-size: 12px; }
+        /* [Mobile] 筛选/图例适配：横向滚动不换行，分层避免与导航/重置按钮重叠 */
+        @media (max-width: 768px) {
+            .map-legend {
+                flex-wrap: nowrap;
+                overflow-x: auto;
+                max-width: calc(100% - 24px);
+                -webkit-overflow-scrolling: touch;
+                scrollbar-width: none;
+                padding-bottom: 2px;
+            }
+            .map-legend::-webkit-scrollbar { display: none; }
+            .map-legend-chk, .map-legend-btn { flex: 0 0 auto; white-space: nowrap; }
+            .map-legend-disc { top: 64px; left: 12px; bottom: auto; }   /* 落在导航栏(56px)下方，不再压住导航 */
+            .map-legend-cat  { bottom: 14px; left: 12px; max-width: calc(100% - 96px); }  /* 底部横滚，右侧留出重置按钮空间 */
+            .map-fit-btn { right: 12px; bottom: 60px; }                 /* 抬到底部筛选栏上方，互不重叠 */
+        }
         .map-tooltip {
             position: absolute;
             pointer-events: none;
@@ -2913,6 +2929,10 @@ const NODE_SCALE_REF = 55;    // 可见节点数≈该值时缩放=1（舒适密
 const NODE_SCALE_MIN = 0.55;  // 再多也不小于此比例（保证仍可点中）
 const NODE_SCALE_MAX = 1.1;   // 节点很少时最多放大的比例
 let nodeScale = 1;
+let labelAll = false;            // 当前视口内可见节点少时为 true → 通盘显示名称（Obsidian 式）
+let lastVisCount = 0;            // 调试用：最近一帧视口内可见节点数（避免 try 块作用域问题）
+let lastFitCount = 0, lastFitSubset = false;  // 调试用：最近一次 fitToView 的节点数与是否用 subset
+const LABEL_THRESHOLD = 60;      // 视口内可见节点数 ≤ 该值则全显名，否则全隐（缩放探索时自动切换）
 const ERA_X  = { c:0.14, s:0.38, cri:0.62, con:0.86 };   // 保留旧映射（兼容引用）
 const ERA_SHORT = { classical:'c', structural:'s', critical:'cri', contemporary:'con' };
 // 归一化 era：同时兼容长词('classical'…)与已是短码('c'/'s'/'cri'/'con')两种写法。
@@ -3056,9 +3076,9 @@ function initNodes() {
 
 // ---- 力导向布局引擎（Obsidian 风格有机布局，替代原刚性网格）----
 
-// 初始聚焦集：直接进入图谱时，自动挑选三学科各连接度最高的思想家/理论作为核心节点，
-// 连同它们的邻居一并纳入 focusSet —— 这些节点在移动端默认显示名称，保证进页面即具备可读性；
-// 其余节点只显色点（放大到 1.8× 或选中/悬停时再显名），避免小屏糊成一团。
+// 初始聚焦集：直接进入图谱时，选全局连接度最高的枢纽所在学科，取该枢纽 + 其「同科邻居」构成局部子图。
+// 同科节点被学科聚类力拉向同一锚点，天然紧致成一簇；fit 后铺满屏幕、其余学科簇落到屏幕外（Obsidian 式局部进入）。
+// 标签是否显示由 draw() 的「视口内可见节点数」自动决定（少则全显、多则全隐），不依赖 focusSet 本身。
 function computeInitialFocus() {
     initialFocusIds = [];
     focusSet = new Set();
@@ -3067,15 +3087,17 @@ function computeInitialFocus() {
         deg.set(e.from, (deg.get(e.from) || 0) + 1);
         deg.set(e.to, (deg.get(e.to) || 0) + 1);
     });
-    ['soc', 'econ', 'psy'].forEach(disc => {
-        const cand = nodes.filter(n => n.disc === disc && (n.cat === 'thinker' || n.cat === 'theory'));
-        cand.sort((a, b) => (deg.get(b.id) || 0) - (deg.get(a.id) || 0));
-        cand.slice(0, 1).forEach(n => {        // 每学科取 1 个枢纽（"几个核心节点"），兼顾可读与不过密
-            initialFocusIds.push(n.id);
-            focusSet.add(n.id);
-            getConnected(n.id).forEach(id => focusSet.add(id));
-        });
-    });
+    let best = null, bestDeg = -1;
+    nodes.forEach(n => { const d = deg.get(n.id) || 0; if (d > bestDeg) { bestDeg = d; best = n; } });
+    if (best) {
+        const disc = best.disc;
+        initialFocusIds.push(best.id);
+        focusSet.add(best.id);
+        // 同科邻居优先（保证局部紧致、fit 后其余簇在屏外），上限 50 控制进入时节点数（≤阈值→通盘显名）
+        const sameDisc = [...getConnected(best.id)].map(getNode).filter(Boolean).filter(x => x.disc === disc);
+        sameDisc.slice(0, 50).forEach(x => focusSet.add(x.id));
+        if (focusSet.size < 20) [...getConnected(best.id)].forEach(id => focusSet.add(id));  // 同科太少则放宽
+    }
 }
 
 function reheat(a = 1) { alpha = Math.max(alpha, a); }
@@ -3235,16 +3257,25 @@ function centerOnGraph(mult) {
     view.oy = H / 2 - cy * view.scale;
 }
 // 自适应「全图」：按当前可见节点的包围盒算缩放，使整图居中铺满视口（Obsidian 风格一键全貌）
-function fitToView(pad) {
+// subset：可选节点 id 数组，仅按这些节点包围盒 fit（用于「进页面只呈现局部、其余在屏幕外」与「聚焦某节点+邻居」）
+function fitToView(pad, subset) {
     pad = pad || 40;
+    const sub = (subset && subset.length) ? new Set(subset) : null;
     let minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity, c = 0;
-    nodes.forEach(n => {
-        if (!isNodeVisible(n)) return;
-        minX = Math.min(minX, n.baseX); maxX = Math.max(maxX, n.baseX);
-        minY = Math.min(minY, n.baseY); maxY = Math.max(maxY, n.baseY);
-        c++;
-    });
+    const scan = (allowAll) => {
+        minX = Infinity; maxX = -Infinity; minY = Infinity; maxY = -Infinity; c = 0;
+        nodes.forEach(n => {
+            if (!isNodeVisible(n)) return;
+            if (sub && !allowAll && !sub.has(n.id)) return;
+            minX = Math.min(minX, n.baseX); maxX = Math.max(maxX, n.baseX);
+            minY = Math.min(minY, n.baseY); maxY = Math.max(maxY, n.baseY);
+            c++;
+        });
+    };
+    scan(false);
+    if (sub && !c) scan(true);   // subset 全被类别筛选隐藏，退回全图
     if (!c) return;
+    lastFitCount = c; lastFitSubset = !!(sub);
     const gw = Math.max(1, maxX - minX), gh = Math.max(1, maxY - minY);
     const scale = Math.max(0.35, Math.min(4, Math.min((W - 2 * pad) / gw, (H - 2 * pad) / gh)));
     view.scale = scale;
@@ -3258,6 +3289,18 @@ function centerOnNode(node) {
     view.scale = Math.max(view.scale, 1.2);
     view.ox = W / 2 - node.baseX * view.scale;
     view.oy = H / 2 - node.baseY * view.scale;
+}
+// 进入局部视图：把焦点节点居中并以固定较高倍率放大，使其邻域铺满屏幕、其余簇自然落到屏幕外
+// （图整体仅约一个屏宽，fit 包围盒会被高度限制、无法排除他簇，故用「定倍率居中」而非 fit）
+function focusEntryView(scale) {
+    scale = scale || 3.2;
+    const id = initialFocusIds[0];
+    const n = id ? getNode(id) : null;
+    if (!n) { fitToView(50, null); return; }
+    view.scale = Math.max(0.8, Math.min(4, scale));
+    view.ox = W / 2 - n.baseX * view.scale;
+    view.oy = H / 2 - n.baseY * view.scale;
+    mobileFitted = true;
 }
 
 function drawEdge(e, highlight) {
@@ -3325,7 +3368,8 @@ function drawNode(n) {
     const isSelected = selectedNode === n;
     const isDimmed = (selectedNode || hoveredNode) && !isSelected && !isConnected && (selectedNode !== null || hoveredNode !== n);
 
-    const r = effR(n);   // 当前可见尺度下的实际半径（节点越多越小）
+    const sr = Math.max(2.2, Math.min(effR(n) * view.scale, 5));  // 屏幕像素半径，Obsidian 式极小点（缩放不膨胀）
+    const r = sr / view.scale;                                     // 转回世界坐标供 ctx 绘制
     const floatY = Math.sin(time * 0.012 + n.baseX * 0.01) * 3;
     const nx = n.baseX;
     const ny = n.baseY + floatY;
@@ -3392,12 +3436,11 @@ function drawNode(n) {
     }
 
     // label (with soft halo for readability)
-    // 桌面：思想家/理论流派常显标签，其余节点在 nodeScale 足够大（缩放到较疏）时才显，避免糊成一团。
-    // 手机：语义缩放——默认只画色点不画字；仅当选中/悬停/聚焦邻域，或用户放大到 1.8× 以上时才浮现标签，
-    //       彻底消除小屏上"密密麻麻的字"。聚焦时连带显示邻居标签，使局部关系可读。
-    const showLabel = isMobile
-        ? (focusSet.has(n.id) || isSelected || isHovered || (selectedNode && isConnected) || view.scale >= 1.8)
-        : ((n.cat === 'thinker' || n.cat === 'theory') || (isHovered || isSelected) || nodeScale >= 0.72);
+    // Obsidian 式标签策略（移动/桌面统一）：draw() 每帧统计视口内可见节点数，
+    //   - 可见节点少（≤ LABEL_THRESHOLD）→ labelAll=true，通盘显示名称（局部探索时清晰可读）；
+    //   - 可见节点多（缩放全图）→ labelAll=false，全部隐名（只剩极小色点，保持简洁）。
+    // 悬停/选中/选中节点的邻居 始终显示名称，便于精确定位。
+    const showLabel = labelAll || isHovered || isSelected || (selectedNode && isConnected);
     if (showLabel) {
         ctx.textAlign = 'center';
         ctx.textBaseline = 'top';
@@ -3483,6 +3526,16 @@ function draw() {
         if (isHighlight) drawEdge(e, true);
     });
 
+    // 标签策略（Obsidian 式）：统计当前视口内可见节点数，少则全显名、多则全隐
+    let _vis = 0; const _m = 40;
+    nodes.forEach(n => {
+        if (!isNodeVisible(n)) return;
+        const sx = n.baseX * view.scale + view.ox, sy = n.baseY * view.scale + view.oy;
+        if (sx >= -_m && sx <= W + _m && sy >= -_m && sy <= H + _m) _vis++;
+    });
+    labelAll = _vis <= LABEL_THRESHOLD;
+    lastVisCount = _vis;
+
     // Draw nodes (dimmed first, then highlighted)
     const dimmedNodes = [];
     const activeNodes = [];
@@ -3517,6 +3570,9 @@ function draw() {
         if (window.console) console.error('[graph] draw recovered from render error:', err);
     }
     time++;
+    if (location.search.indexOf('debug=1') >= 0) {
+        window.__dbg = { labelAll, visCount: lastVisCount, scale: view.scale, focusSetSize: focusSet.size, fitCount: lastFitCount, fitSubset: lastFitSubset, isMobile, W, H };
+    }
     animFrame = requestAnimationFrame(draw);
 }
 
@@ -4491,7 +4547,7 @@ window.focusNode = function(id, fromNewsId) {
     if (!document.getElementById('page-map').classList.contains('active')) switchPage('page-map');
     selectedNode = node;
     showPanel(node);
-    centerOnNode(node);
+    view.scale = 1.8; centerOnNode(node);   // 聚焦节点并以固定倍率放大，邻域铺满、其余屏外
     draw();
 };
 
@@ -4752,8 +4808,8 @@ function switchPage(pageId) {
                     activeCategories = new Set(['thinker', 'theory', 'concept']);
                     document.querySelectorAll('.map-legend-cat input[type="checkbox"]').forEach(cb => { cb.checked = (cb.dataset.cat !== 'topic'); });
                     updateNodeScale();
-                    // 首进：等布局略收敛后自动 fit 铺满全屏（桌面+移动统一）；先铺一次防初屏空白，稳定后再 fit 更准
-                    const doFit = () => { fitToView(40); draw(); };
+                    // 首进：移动端定倍率居中到枢纽邻域（局部进入、其余簇屏外）；桌面仍铺满全图。先 fit 一次防初屏空白，稳定后再 fit 更准。
+                    const doFit = () => { isMobile ? focusEntryView(3.2) : fitToView(50, null); draw(); };
                     doFit();
                     setTimeout(doFit, 500);
                     if (isMobile) {
