@@ -3314,12 +3314,10 @@ function drawEdge(e, highlight) {
         !Number.isFinite(to.baseX) || !Number.isFinite(to.baseY)) return;
 
     const dx = to.baseX - from.baseX, dy = to.baseY - from.baseY;
-    const cx = (from.baseX + to.baseX) / 2 + dy * 0.12;
-    const cy = (from.baseY + to.baseY) / 2 - dx * 0.12;
 
     ctx.beginPath();
     ctx.moveTo(from.baseX, from.baseY);
-    ctx.quadraticCurveTo(cx, cy, to.baseX, to.baseY);
+    ctx.lineTo(to.baseX, to.baseY);
 
     if (highlight) {
         const grad = ctx.createLinearGradient(from.baseX, from.baseY, to.baseX, to.baseY);
@@ -3327,7 +3325,7 @@ function drawEdge(e, highlight) {
         grad.addColorStop(1, to.color);
         ctx.strokeStyle = grad;
         ctx.globalAlpha = 0.85;
-        ctx.lineWidth = 2.2;
+        ctx.lineWidth = 1.2;
         ctx.setLineDash([]);
         ctx.stroke();
         ctx.globalAlpha = 1;
@@ -3343,11 +3341,8 @@ function drawEdge(e, highlight) {
         grad.addColorStop(0, dc + aHex);
         grad.addColorStop(1, tc + aHex);
         ctx.strokeStyle = grad;
-        ctx.lineWidth = (cross ? 0.8 : 0.7) + s * (cross ? 1.4 : 1.1);
-        ctx.setLineDash([2, 6]);
-        ctx.lineDashOffset = -time * 0.6;
+        ctx.lineWidth = (cross ? 0.6 : 0.5) + s * 0.5;
         ctx.stroke();
-        ctx.setLineDash([]);
     }
 }
 
@@ -3374,60 +3369,18 @@ function drawNode(n) {
     const nx = n.baseX;
     const ny = n.baseY + floatY;
 
-    // selected pulsing ring
-    if (isSelected) {
-        const pr = r + 6 + (Math.sin(time * 0.08) + 1) * 5;
-        ctx.beginPath();
-        ctx.arc(nx, ny, pr, 0, Math.PI * 2);
-        ctx.strokeStyle = n.color + '66';
-        ctx.lineWidth = 1.5;
-        ctx.stroke();
-    }
-
-    // glow
-    if (isSelected || isHovered) {
-        const gradient = ctx.createRadialGradient(nx, ny, r * 0.5, nx, ny, r * 3.2);
-        gradient.addColorStop(0, n.color + '44');
-        gradient.addColorStop(1, n.color + '00');
-        ctx.fillStyle = gradient;
-        ctx.beginPath();
-        ctx.arc(nx, ny, r * 3.2, 0, Math.PI * 2);
-        ctx.fill();
-    }
-
-    // body (radial gradient for depth)
+    // body（Obsidian 式纯填充圆，无外环无光晕）
     const g = ctx.createRadialGradient(nx - r*0.3, ny - r*0.3, r*0.2, nx, ny, r);
     g.addColorStop(0, lighten(n.color, 0.30));
     g.addColorStop(1, n.color);
     ctx.beginPath();
-    ctx.arc(nx, ny, r + (isHovered ? 3 : 0), 0, Math.PI * 2);
+    ctx.arc(nx, ny, r, 0, Math.PI * 2);
     ctx.globalAlpha = isDimmed ? 0.18 : 1;
     ctx.fillStyle = g;
     ctx.fill();
     ctx.globalAlpha = 1;
 
-    // 学科外环：更粗更亮 + 轻微外发光，使学科区分一目了然（不再依赖页面级分带）
-    ctx.save();
-    ctx.beginPath();
-    ctx.arc(nx, ny, r + 4, 0, Math.PI * 2);
-    ctx.strokeStyle = DISC_COLORS[n.disc];
-    ctx.lineWidth = 5;
-    ctx.globalAlpha = isDimmed ? 0.3 : 1;
-    ctx.shadowColor = DISC_COLORS[n.disc];
-    ctx.shadowBlur = isDimmed ? 0 : 8;
-    ctx.stroke();
-    ctx.restore();
-
-    if (isSelected) {
-        ctx.strokeStyle = '#fff';
-        ctx.lineWidth = 2.5;
-        ctx.stroke();
-    } else if (isHovered) {
-        ctx.strokeStyle = n.color;
-        ctx.lineWidth = 2;
-        ctx.stroke();
-    }
-
+    // thinker 内圈（白色小圆点标识思想家）
     if (n.cat === 'thinker') {
         ctx.beginPath();
         ctx.arc(nx, ny, r * 0.42, 0, Math.PI * 2);
