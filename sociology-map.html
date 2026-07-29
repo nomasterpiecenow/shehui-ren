@@ -326,6 +326,17 @@
             white-space: nowrap;
         }
         .map-touch-hint.show { opacity: 1; }
+        .map-fit-btn {
+            position: absolute; right: 12px; bottom: 14px; z-index: 35;
+            background: rgba(254,252,248,.9); color: var(--text);
+            border: 1px solid rgba(45,48,75,.18); border-radius: 999px;
+            font-size: 12px; font-weight: 600; padding: 8px 14px; cursor: pointer;
+            box-shadow: 0 4px 14px rgba(45,48,75,.12);
+            -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px);
+            transition: all .18s;
+        }
+        .map-fit-btn:hover { background: #fff; border-color: var(--teal); color: var(--teal); }
+        .map-fit-btn:active { transform: scale(.95); }
         .tp-cat {
             font-family: var(--font-mono);
             font-size: 10px; font-weight: 500;
@@ -533,7 +544,7 @@
             .nav-links a { padding: 5px 10px; font-size: 12px; }
             .nav-guide { margin-left: 2px; padding: 5px 10px; font-size: 12px; }
             .section { padding: 60px 18px; }
-            .map-container { height: 450px; }
+            .map-container { height: calc(100vh - 56px); height: calc(100dvh - 56px); }
             .theory-panel { width: 100%; }
             .detail-panel { width: 100%; right: -100%; }
             .map-section .section-header { padding: 0 18px; }
@@ -743,7 +754,7 @@
             .nav-links a { padding: 5px 10px; font-size: 12px; }
             .nav-guide { margin-left: 2px; padding: 5px 10px; font-size: 12px; }
             .section { padding: 28px 18px; }
-            .map-container { height: 450px; }
+            .map-container { height: calc(100vh - 56px); height: calc(100dvh - 56px); }
             /* 头部：手机端强制单行（标题 16 字 / 副标题 25 字，靠小字号 + nowrap） */
             .section-title { font-size: 19px; white-space: nowrap; letter-spacing: 0; }
             .section-subtitle { font-size: 12.5px; white-space: nowrap; margin-top: 10px; }
@@ -847,8 +858,8 @@
     <div class="map-container">
         <canvas id="theoryMap"></canvas>
         <div class="map-legend map-legend-cat">
-            <label class="map-legend-chk"><input type="checkbox" data-cat="thinker"><span class="ldot" style="background:var(--navy)"></span>思想家</label>
-            <label class="map-legend-chk"><input type="checkbox" data-cat="theory"><span class="ldot" style="background:var(--red)"></span>理论流派</label>
+            <label class="map-legend-chk"><input type="checkbox" data-cat="thinker" checked><span class="ldot" style="background:var(--navy)"></span>思想家</label>
+            <label class="map-legend-chk"><input type="checkbox" data-cat="theory" checked><span class="ldot" style="background:var(--red)"></span>理论流派</label>
             <label class="map-legend-chk"><input type="checkbox" data-cat="concept" checked><span class="ldot" style="background:var(--teal)"></span>核心概念</label>
             <label class="map-legend-chk"><input type="checkbox" data-cat="topic"><span class="ldot" style="background:#8B7EC8"></span>研究领域</label>
         </div>
@@ -864,6 +875,7 @@
             <p id="ttDesc"></p>
         </div>
         <div class="map-touch-hint" id="mapTouchHint">双指捏合缩放 · 单指拖动平移</div>
+        <button class="map-fit-btn" id="mapFitBtn" title="重置视角 / 全图">⟳ 全图</button>
         <!-- Theory detail panel -->
         <div class="theory-panel" id="theoryPanel">
             <button class="theory-panel-close" id="panelClose">✕</button>
@@ -2869,7 +2881,7 @@ let hoveredNode = null;
 let selectedNode = null;
 let mouseX = 0, mouseY = 0;
 let animFrame;
-let activeCategories = new Set(['concept']);   // 默认仅显示核心概念，用户勾选后揭示其它类型
+let activeCategories = new Set(['thinker', 'theory', 'concept']);   // 默认显示结构骨干（思想家/理论/概念），研究领域默认隐藏，用户可勾选揭示
 let activeDiscipline = 'all';
 let time = 0;
 let timeAxisOn = false;                          // 时间轴排布：可选开关（默认关）
@@ -2877,6 +2889,8 @@ let view = { scale: 1, ox: 0, oy: 0 };          // pan/zoom：逻辑坐标→屏
 let graphInitialized = false;
 let isMobile = window.matchMedia('(max-width: 768px)').matches;
 let mobileFitted = false;
+let initialFocusIds = [];
+let focusSet = new Set();
 let currentNewsItem = null;   // 当前打开的新闻条目（供「返回新闻」重开 A8）
 let returnNewsId = null;      // 从新闻进入节点详情时的来源新闻 id（渲染返回入口）
 
@@ -3036,10 +3050,34 @@ function initNodes() {
     alpha       = Math.min(0.7,  0.5  * Math.sqrt(n0 / 310)); // 大图初始温度略高，上限 0.7
     seedPositions();
     updateNodeScale();
+    computeInitialFocus();
     reheat(0.5); // 不再强制拉回 1；与上面自适应 alpha 配合，大图取 max(自适应值, 0.5)
 }
 
 // ---- 力导向布局引擎（Obsidian 风格有机布局，替代原刚性网格）----
+
+// 初始聚焦集：直接进入图谱时，自动挑选三学科各连接度最高的思想家/理论作为核心节点，
+// 连同它们的邻居一并纳入 focusSet —— 这些节点在移动端默认显示名称，保证进页面即具备可读性；
+// 其余节点只显色点（放大到 1.8× 或选中/悬停时再显名），避免小屏糊成一团。
+function computeInitialFocus() {
+    initialFocusIds = [];
+    focusSet = new Set();
+    const deg = new Map();
+    edges.forEach(e => {
+        deg.set(e.from, (deg.get(e.from) || 0) + 1);
+        deg.set(e.to, (deg.get(e.to) || 0) + 1);
+    });
+    ['soc', 'econ', 'psy'].forEach(disc => {
+        const cand = nodes.filter(n => n.disc === disc && (n.cat === 'thinker' || n.cat === 'theory'));
+        cand.sort((a, b) => (deg.get(b.id) || 0) - (deg.get(a.id) || 0));
+        cand.slice(0, 1).forEach(n => {        // 每学科取 1 个枢纽（"几个核心节点"），兼顾可读与不过密
+            initialFocusIds.push(n.id);
+            focusSet.add(n.id);
+            getConnected(n.id).forEach(id => focusSet.add(id));
+        });
+    });
+}
+
 function reheat(a = 1) { alpha = Math.max(alpha, a); }
 
 function seedPositions() {
@@ -3144,8 +3182,11 @@ function tick() {
             n.vx = 0; n.vy = 0;
         }
         const m = effR(n) + 6;
-        n.baseX = Math.max(m, Math.min(W - m, n.baseX));
-        n.baseY = Math.max(m, Math.min(H - m, n.baseY));
+        // 宽松世界盒：节点可自由铺散在三屏范围（中心为 (W/2,H/2)），不再被死夹进固定屏幕长条；
+        // 缩放/平移即可自由探索（Obsidian 风格）。居中力仍把图拉回中心，节点不会撞到边界。
+        const BX0 = -W, BX1 = 2 * W, BY0 = -H, BY1 = 2 * H;
+        n.baseX = Math.max(BX0 + m, Math.min(BX1 - m, n.baseX));
+        n.baseY = Math.max(BY0 + m, Math.min(BY1 - m, n.baseY));
     });
     alpha += (0 - alpha) * ALPHA_DECAY;
 }
@@ -3192,6 +3233,24 @@ function centerOnGraph(mult) {
     view.scale = Math.max(0.35, Math.min(4, mult));
     view.ox = W / 2 - cx * view.scale;
     view.oy = H / 2 - cy * view.scale;
+}
+// 自适应「全图」：按当前可见节点的包围盒算缩放，使整图居中铺满视口（Obsidian 风格一键全貌）
+function fitToView(pad) {
+    pad = pad || 40;
+    let minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity, c = 0;
+    nodes.forEach(n => {
+        if (!isNodeVisible(n)) return;
+        minX = Math.min(minX, n.baseX); maxX = Math.max(maxX, n.baseX);
+        minY = Math.min(minY, n.baseY); maxY = Math.max(maxY, n.baseY);
+        c++;
+    });
+    if (!c) return;
+    const gw = Math.max(1, maxX - minX), gh = Math.max(1, maxY - minY);
+    const scale = Math.max(0.35, Math.min(4, Math.min((W - 2 * pad) / gw, (H - 2 * pad) / gh)));
+    view.scale = scale;
+    view.ox = W / 2 - ((minX + maxX) / 2) * scale;
+    view.oy = H / 2 - ((minY + maxY) / 2) * scale;
+    mobileFitted = true;
 }
 // 把指定节点居中到视口中央，并至少放大到 1.2 倍
 function centerOnNode(node) {
@@ -3337,7 +3396,7 @@ function drawNode(n) {
     // 手机：语义缩放——默认只画色点不画字；仅当选中/悬停/聚焦邻域，或用户放大到 1.8× 以上时才浮现标签，
     //       彻底消除小屏上"密密麻麻的字"。聚焦时连带显示邻居标签，使局部关系可读。
     const showLabel = isMobile
-        ? (isSelected || isHovered || (selectedNode && isConnected) || view.scale >= 1.8)
+        ? (focusSet.has(n.id) || isSelected || isHovered || (selectedNode && isConnected) || view.scale >= 1.8)
         : ((n.cat === 'thinker' || n.cat === 'theory') || (isHovered || isSelected) || nodeScale >= 0.72);
     if (showLabel) {
         ctx.textAlign = 'center';
@@ -3603,6 +3662,23 @@ canvas.addEventListener('touchend', (e) => {
     }
     touchState = null;
 }, { passive: false });
+
+// 重置视角 / 全图按钮：一键 fit 铺满（拯救缩放到迷失的状态）
+const mapFitBtn = document.getElementById('mapFitBtn');
+if (mapFitBtn) mapFitBtn.addEventListener('click', () => { fitToView(40); draw(); });
+
+// [debug] 仅在 ?debug=1 时暴露内部状态，便于自动化验证（生产环境无副作用）
+if (location.search.indexOf('debug=1') >= 0) {
+    window.__graph = {
+        get focusSet() { return focusSet; },
+        get view() { return view; },
+        get nodes() { return nodes; },
+        get selectedNode() { return selectedNode; },
+        isMobile: () => isMobile,
+        getConnected: (id) => getConnected(id),
+        fitToView: (p) => fitToView(p)
+    };
+}
 
 // Legend — 学科单选筛选（保留可选筛选能力，仅去掉页面级分带）
 // 注意：时间轴按钮(axisToggle)也带 map-legend-btn 类且位于此容器内，必须排除，
@@ -4665,19 +4741,26 @@ function switchPage(pageId) {
                 else {
                     // 仅夹取到新边界并重新加热，保留当前布局（不重新随机播撒）
                     const m = 6;
-                    nodes.forEach(n => { n.baseX = Math.max(m, Math.min(W - m, n.baseX)); n.baseY = Math.max(m, Math.min(H - m, n.baseY)); });
+                    const BX0 = -W, BX1 = 2 * W, BY0 = -H, BY1 = 2 * H;
+                    nodes.forEach(n => { n.baseX = Math.max(BX0 + m, Math.min(BX1 - m, n.baseX)); n.baseY = Math.max(BY0 + m, Math.min(BY1 - m, n.baseY)); });
                     reheat(0.4);
                 }
                 draw();
-                if (isMobile && !mobileFitted) {
+                if (!mobileFitted) {
                     mobileFitted = true;
-                    // 首进移动端：等布局略收敛后居中放大，并提示可缩放/平移
-                    setTimeout(() => {
-                        centerOnGraph(1.4);
-                        draw();
+                    // 首进：揭示结构骨干（思想家/理论/概念），使进入即具备可读性；研究领域默认仍隐藏避免过密
+                    activeCategories = new Set(['thinker', 'theory', 'concept']);
+                    document.querySelectorAll('.map-legend-cat input[type="checkbox"]').forEach(cb => { cb.checked = (cb.dataset.cat !== 'topic'); });
+                    updateNodeScale();
+                    // 首进：等布局略收敛后自动 fit 铺满全屏（桌面+移动统一）；先铺一次防初屏空白，稳定后再 fit 更准
+                    const doFit = () => { fitToView(40); draw(); };
+                    doFit();
+                    setTimeout(doFit, 500);
+                    if (isMobile) {
                         const hint = document.getElementById('mapTouchHint');
                         if (hint) { hint.classList.add('show'); setTimeout(() => hint.classList.remove('show'), 3200); }
-                    }, 500);
+                    }
+                    setTimeout(doFit, 1500);
                 }
             }, 50);
         });
