@@ -1,0 +1,1596 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>社会人 - 功能模块说明文档</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --bg: #F5F0E8;
+            --bg-card: #FEFCF8;
+            --text: #2D304B;
+            --text-light: #6B6F8A;
+            --text-muted: #9B97A8;
+            --red: #C84B3A;
+            --red-soft: rgba(200, 75, 58, 0.12);
+            --teal: #3A8C8C;
+            --teal-soft: rgba(58, 140, 140, 0.12);
+            --navy: #3D4F8F;
+            --navy-soft: rgba(61, 79, 143, 0.12);
+            --purple: #8B7EC8;
+            --border: #E5DFD4;
+            --border-light: #EDE8DE;
+            --font-display: 'Georgia', serif;
+            --font-body: 'Segoe UI', -apple-system, sans-serif;
+            --font-mono: 'Consolas', monospace;
+        }
+        body {
+            font-family: var(--font-body);
+            background: #FAFAF8;
+            color: var(--text);
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Left Sidebar Navigation */
+        .sidebar {
+            width: 260px;
+            background: var(--bg);
+            border-right: 1px solid var(--border);
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100vh;
+            overflow-y: auto;
+            padding: 24px 0;
+            z-index: 10;
+        }
+        .sidebar-title {
+            font-family: var(--font-display);
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text);
+            padding: 0 20px 20px;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .sidebar-title .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--red); }
+        .sidebar-section {
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 0.08em;
+            color: var(--text-muted);
+            padding: 16px 20px 8px;
+            text-transform: uppercase;
+        }
+        .sidebar-link {
+            display: block;
+            padding: 8px 20px 8px 28px;
+            font-size: 13px;
+            color: var(--text-light);
+            text-decoration: none;
+            transition: all 0.2s;
+            border-left: 3px solid transparent;
+        }
+        .sidebar-link:hover {
+            color: var(--text);
+            background: rgba(45,48,75,0.04);
+        }
+        .sidebar-link.active {
+            color: var(--text);
+            background: var(--red-soft);
+            border-left-color: var(--red);
+            font-weight: 600;
+        }
+        .sidebar-link .mod-id {
+            font-family: var(--font-mono);
+            font-size: 10px;
+            color: var(--red);
+            margin-right: 6px;
+        }
+
+        /* Main Content */
+        .content {
+            margin-left: 260px;
+            flex: 1;
+            padding: 40px 48px 80px;
+            max-width: 960px;
+        }
+        .content h1 {
+            font-family: var(--font-display);
+            font-size: 32px;
+            font-weight: 400;
+            color: var(--text);
+            margin-bottom: 8px;
+        }
+        .content h1 em { color: var(--red); font-style: italic; font-weight: 500; }
+        .content .subtitle {
+            font-size: 15px;
+            color: var(--text-light);
+            margin-bottom: 40px;
+            padding-bottom: 24px;
+            border-bottom: 1px solid var(--border);
+        }
+        .content h2 {
+            font-family: var(--font-display);
+            font-size: 24px;
+            font-weight: 400;
+            color: var(--text);
+            margin: 48px 0 16px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid var(--red);
+            display: inline-block;
+        }
+        .content h3 {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--teal);
+            margin: 32px 0 12px;
+        }
+        .content p {
+            font-size: 14px;
+            line-height: 1.8;
+            color: var(--text);
+            margin-bottom: 16px;
+        }
+        .content .meta {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-bottom: 24px;
+        }
+        .content .meta span {
+            display: inline-block;
+            padding: 2px 10px;
+            border-radius: 10px;
+            margin-right: 8px;
+        }
+        .meta-location { background: var(--teal-soft); color: var(--teal); }
+        .meta-type { background: var(--navy-soft); color: var(--navy); }
+
+        /* Screenshot containers */
+        .screenshot {
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            overflow: hidden;
+            margin: 20px 0 28px;
+            box-shadow: 0 2px 12px rgba(45,48,75,0.06);
+            background: #fff;
+        }
+        .screenshot-label {
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 0.06em;
+            color: var(--text-muted);
+            padding: 10px 16px;
+            background: var(--bg);
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        /* Page mockups */
+        .page-mockup {
+            position: relative;
+            background: var(--bg);
+            overflow: hidden;
+        }
+        .mock-nav {
+            height: 44px;
+            background: rgba(245,240,232,0.95);
+            border-bottom: 1px solid var(--border-light);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+        }
+        .mock-nav-logo {
+            font-family: var(--font-display);
+            font-weight: 700;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .mock-nav-logo .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--red); }
+        .mock-nav-links { display: flex; gap: 4px; }
+        .mock-nav-link {
+            font-size: 11px;
+            padding: 4px 10px;
+            border-radius: 14px;
+            color: var(--text-light);
+        }
+        .mock-nav-link.active {
+            color: var(--text);
+            background: rgba(45,48,75,0.06);
+            font-weight: 600;
+        }
+        .mock-body { padding: 0; }
+
+        /* Hot topics page mockup */
+        .hotpage-layout {
+            display: flex;
+            min-height: 400px;
+        }
+        .hotpage-sidebar {
+            width: 140px;
+            background: var(--bg-card);
+            border-right: 1px solid var(--border-light);
+            padding: 16px 12px;
+            flex-shrink: 0;
+        }
+        .hotpage-sidebar-title {
+            font-size: 10px;
+            font-weight: 600;
+            color: var(--text-muted);
+            letter-spacing: 0.06em;
+            margin-bottom: 12px;
+        }
+        .hotpage-date {
+            font-family: var(--font-mono);
+            font-size: 11px;
+            padding: 5px 10px;
+            border-radius: 12px;
+            color: var(--text-light);
+            margin-bottom: 4px;
+            cursor: pointer;
+        }
+        .hotpage-date.active {
+            background: var(--red);
+            color: #fff;
+        }
+        .hotpage-main {
+            flex: 1;
+            padding: 20px;
+        }
+        .hotpage-header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .hotpage-header h2 {
+            font-family: var(--font-display);
+            font-size: 20px;
+            font-weight: 400;
+            border: none;
+            margin: 0;
+            padding: 0;
+        }
+        .hotpage-header p {
+            font-size: 11px;
+            color: var(--text-light);
+            margin: 4px 0 0;
+        }
+        .hotpage-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+        }
+        .hotpage-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-light);
+            border-radius: 10px;
+            padding: 14px;
+        }
+        .hotpage-card-rank {
+            font-family: var(--font-display);
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--red);
+            margin-bottom: 6px;
+        }
+        .hotpage-card-title {
+            font-family: var(--font-display);
+            font-size: 12px;
+            font-weight: 600;
+            line-height: 1.4;
+            margin-bottom: 8px;
+        }
+        .hotpage-card-meta {
+            font-size: 9px;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+        }
+        .hotpage-card-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px;
+        }
+        .hotpage-tag {
+            font-size: 8px;
+            padding: 2px 6px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            color: var(--teal);
+            background: var(--teal-soft);
+        }
+        .hotpage-detail {
+            position: absolute;
+            right: 0;
+            top: 44px;
+            bottom: 0;
+            width: 280px;
+            background: var(--bg-card);
+            border-left: 1px solid var(--border-light);
+            box-shadow: -4px 0 16px rgba(45,48,75,0.08);
+            padding: 20px 16px;
+            overflow: hidden;
+        }
+        .hotpage-detail-close {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            width: 24px;
+            height: 24px;
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            color: var(--text-light);
+        }
+        .hotpage-detail-cat {
+            font-family: var(--font-mono);
+            font-size: 9px;
+            padding: 3px 8px;
+            border-radius: 10px;
+            background: var(--red-soft);
+            color: var(--red);
+            display: inline-block;
+            margin-bottom: 8px;
+        }
+        .hotpage-detail-title {
+            font-family: var(--font-display);
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+        .hotpage-detail-meta {
+            font-family: var(--font-mono);
+            font-size: 10px;
+            color: var(--text-muted);
+            margin-bottom: 16px;
+        }
+        .hotpage-detail-section {
+            margin-bottom: 14px;
+        }
+        .hotpage-detail-section-title {
+            font-size: 9px;
+            font-weight: 600;
+            letter-spacing: 0.06em;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            margin-bottom: 6px;
+            padding-bottom: 4px;
+            border-bottom: 1px solid var(--border-light);
+        }
+        .hotpage-detail-text {
+            font-size: 11px;
+            line-height: 1.6;
+            color: var(--text);
+        }
+        .hotpage-perspective {
+            padding: 8px 10px;
+            background: var(--bg);
+            border-radius: 6px;
+            margin-bottom: 8px;
+            border-left: 3px solid var(--red);
+        }
+        .hotpage-perspective h6 {
+            font-size: 10px;
+            font-weight: 600;
+            color: var(--red);
+            margin-bottom: 3px;
+        }
+        .hotpage-perspective p {
+            font-size: 10px;
+            color: var(--text-light);
+            line-height: 1.5;
+            margin: 0;
+        }
+
+        /* Knowledge map page mockup */
+        .mappage-hero {
+            text-align: center;
+            padding: 30px 20px 20px;
+            background: var(--bg);
+        }
+        .mappage-hero h2 {
+            font-family: var(--font-display);
+            font-size: 28px;
+            font-weight: 400;
+            border: none;
+            margin: 0;
+        }
+        .mappage-hero h2 em { color: var(--red); font-style: italic; }
+        .mappage-hero p {
+            font-size: 12px;
+            color: var(--text-light);
+            margin: 8px 0 0;
+        }
+        .mappage-hero .hint {
+            font-family: var(--font-mono);
+            font-size: 10px;
+            color: var(--text-muted);
+            margin-top: 12px;
+        }
+        .mappage-canvas {
+            position: relative;
+            height: 420px;
+            background: var(--bg-card);
+            border-top: 1px solid var(--border-light);
+            border-bottom: 1px solid var(--border-light);
+            overflow: hidden;
+        }
+        .mappage-era {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .mappage-era-label {
+            font-size: 10px;
+            font-weight: 700;
+            margin-top: 8px;
+            opacity: 0.6;
+        }
+        .mappage-era-period {
+            font-family: var(--font-mono);
+            font-size: 9px;
+            opacity: 0.4;
+            margin-top: 2px;
+        }
+        .mappage-era.c { left: 2%; width: 23%; background: rgba(61,79,143,0.03); }
+        .mappage-era.c .mappage-era-label { color: var(--navy); }
+        .mappage-era.s { left: 26%; width: 23%; background: rgba(58,140,140,0.03); }
+        .mappage-era.s .mappage-era-label { color: var(--teal); }
+        .mappage-era.cri { left: 51%; width: 23%; background: rgba(200,75,58,0.03); }
+        .mappage-era.cri .mappage-era-label { color: var(--red); }
+        .mappage-era.con { left: 75%; width: 23%; background: rgba(139,126,200,0.03); }
+        .mappage-era.con .mappage-era-label { color: var(--purple); }
+
+        .mappage-node {
+            position: absolute;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 8px;
+            font-weight: 600;
+            color: #fff;
+            z-index: 2;
+        }
+        .mappage-node.thinker { width: 36px; height: 36px; font-size: 9px; }
+        .mappage-node.theory { width: 30px; height: 30px; }
+        .mappage-node.concept { width: 24px; height: 24px; font-size: 7px; }
+        .mappage-node.topic { width: 20px; height: 20px; font-size: 6px; }
+        .mappage-node.navy { background: var(--navy); }
+        .mappage-node.red { background: var(--red); }
+        .mappage-node.teal { background: var(--teal); }
+        .mappage-node.purple { background: var(--purple); }
+
+        .mappage-node-label {
+            position: absolute;
+            font-size: 8px;
+            color: var(--text);
+            white-space: nowrap;
+            z-index: 3;
+            font-weight: 500;
+        }
+
+        .mappage-legend {
+            position: absolute;
+            bottom: 12px;
+            left: 12px;
+            display: flex;
+            gap: 4px;
+            z-index: 5;
+        }
+        .mappage-legend-btn {
+            font-size: 9px;
+            padding: 3px 8px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            background: var(--bg-card);
+            color: var(--text-light);
+        }
+        .mappage-legend-btn.active {
+            border-color: var(--text);
+            color: var(--text);
+        }
+        .mappage-legend-dot {
+            display: inline-block;
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            margin-right: 3px;
+        }
+
+        .mappage-row-label {
+            position: absolute;
+            left: 4px;
+            font-family: var(--font-mono);
+            font-size: 8px;
+            color: var(--text-muted);
+            opacity: 0.5;
+            writing-mode: vertical-rl;
+            z-index: 4;
+        }
+
+        /* Module index table */
+        .module-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 12px;
+        }
+        .module-table th {
+            background: var(--navy);
+            color: #fff;
+            padding: 8px 12px;
+            text-align: left;
+            font-size: 11px;
+        }
+        .module-table td {
+            padding: 8px 12px;
+            border-bottom: 1px solid var(--border-light);
+        }
+        .module-table tr:hover td {
+            background: rgba(45,48,75,0.02);
+        }
+        .module-table .mod-id-cell {
+            font-family: var(--font-mono);
+            font-weight: 700;
+            color: var(--red);
+            font-size: 11px;
+        }
+        .module-table .mod-page-cell {
+            font-size: 11px;
+            color: var(--teal);
+        }
+
+        /* Info boxes */
+        .info-box {
+            background: var(--bg-card);
+            border: 1px solid var(--border-light);
+            border-radius: 10px;
+            padding: 16px 20px;
+            margin: 16px 0;
+        }
+        .info-box.tip {
+            border-left: 4px solid var(--teal);
+        }
+        .info-box.warn {
+            border-left: 4px solid var(--red);
+        }
+        .info-box-title {
+            font-size: 12px;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+        .info-box p {
+            font-size: 12px;
+            margin: 0;
+        }
+
+        /* Code blocks */
+        .code-block {
+            background: #2D304B;
+            color: #E5DFD4;
+            border-radius: 8px;
+            padding: 14px 18px;
+            font-family: var(--font-mono);
+            font-size: 12px;
+            line-height: 1.6;
+            overflow-x: auto;
+            margin: 12px 0;
+        }
+        .code-block .kw { color: #C84B3A; }
+        .code-block .fn { color: #3A8C8C; }
+        .code-block .str { color: #8B7EC8; }
+        .code-block .cmt { color: #6B6F8A; font-style: italic; }
+
+        /* Version badge */
+        .version-badge {
+            display: inline-block;
+            padding: 3px 12px;
+            border-radius: 12px;
+            background: var(--teal-soft);
+            color: var(--teal);
+            font-size: 11px;
+            font-weight: 600;
+            margin-bottom: 24px;
+        }
+
+        /* Changelog collapse */
+        .changelog-toggle {
+            display: inline-block;
+            margin: 4px 0 16px;
+            padding: 6px 16px;
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            background: var(--bg-card);
+            color: var(--teal);
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background .15s ease, color .15s ease;
+        }
+        .changelog-toggle:hover {
+            background: var(--teal);
+            color: #fff;
+        }
+        /* 默认折叠：前 3 条之后隐藏，加 .expanded 到 <table> 后全部显示 */
+        #changelog table tbody tr.cl-hidden { display: none; }
+        #changelog table.expanded tbody tr.cl-hidden { display: table-row; }
+    </style>
+</head>
+<body>
+
+<!-- ===== LEFT SIDEBAR NAVIGATION ===== -->
+<nav class="sidebar">
+    <div class="sidebar-title">
+        <span class="dot"></span>
+        社会人 · 功能说明
+    </div>
+
+    <div class="sidebar-section">概览</div>
+    <a href="#overview" class="sidebar-link active">产品概述</a>
+    <a href="#pages" class="sidebar-link">双页面架构</a>
+
+    <div class="sidebar-section">页面一：社会热点</div>
+    <a href="#page-hotspots" class="sidebar-link">页面布局截图</a>
+    <a href="#A10" class="sidebar-link"><span class="mod-id">A10</span>日期导航边栏</a>
+    <a href="#A11" class="sidebar-link"><span class="mod-id">A11</span>新闻卡片网格</a>
+    <a href="#A8-hot" class="sidebar-link"><span class="mod-id">A8</span>新闻详情面板</a>
+
+    <div class="sidebar-section">页面二：知识图谱</div>
+    <a href="#page-map" class="sidebar-link">页面布局截图</a>
+    <a href="#A5" class="sidebar-link"><span class="mod-id">A5</span>知识图谱 Canvas</a>
+    <a href="#A6" class="sidebar-link"><span class="mod-id">A6</span>图例筛选</a>
+    <a href="#A7" class="sidebar-link"><span class="mod-id">A7</span>节点 Tooltip</a>
+    <a href="#A14" class="sidebar-link"><span class="mod-id">A14</span>知识节点详情卡片</a>
+
+    <div class="sidebar-section">全局模块</div>
+    <a href="#A2" class="sidebar-link"><span class="mod-id">A2</span>导航栏</a>
+    <a href="#A1" class="sidebar-link"><span class="mod-id">A1</span>设计变量</a>
+    <a href="#A4" class="sidebar-link"><span class="mod-id">A4</span>页面容器</a>
+    <a href="#A13" class="sidebar-link"><span class="mod-id">A13</span>响应式</a>
+
+    <div class="sidebar-section">数据层</div>
+    <a href="#C1" class="sidebar-link"><span class="mod-id">C1</span>图谱数据</a>
+    <a href="#C2" class="sidebar-link"><span class="mod-id">C2</span>新闻数据</a>
+
+    <div class="sidebar-section">JavaScript 引擎</div>
+    <a href="#C3" class="sidebar-link"><span class="mod-id">C3</span>Canvas 渲染</a>
+    <a href="#C4" class="sidebar-link"><span class="mod-id">C4</span>图谱交互</a>
+    <a href="#C5" class="sidebar-link"><span class="mod-id">C5</span>新闻系统</a>
+    <a href="#C6" class="sidebar-link"><span class="mod-id">C6</span>页面切换</a>
+    <a href="#C7" class="sidebar-link"><span class="mod-id">C7</span>初始化入口</a>
+
+    <div class="sidebar-section">参考</div>
+    <a href="#index" class="sidebar-link">模块索引总表</a>
+    <a href="#changelog" class="sidebar-link">更新日志</a>
+</nav>
+
+<!-- ===== MAIN CONTENT ===== -->
+<main class="content">
+
+    <!-- OVERVIEW -->
+    <section id="overview">
+        <h1>社会人 <em>功能模块说明</em></h1>
+        <p class="subtitle">帮助初学者理解社会科学理论的可视化网站 · 本文档是功能契约，所有改动需同步更新</p>
+        <span class="version-badge">v1.23 · 2026-07-28</span>
+
+        <h3>产品定位</h3>
+        <p><strong>用社会科学看社会</strong> —— 将高大上的理论落地到社会生活的实践中。网站包含两个页面：</p>
+        <div class="info-box tip">
+            <div class="info-box-title">📌 命名约定</div>
+            <p><strong>"HTML"</strong> = 本功能说明文档（契约文件）<br><strong>"网站"</strong> = sociology-map.html（实际产品）</p>
+        </div>
+
+        <ul style="padding-left:20px;margin:16px 0;font-size:14px;line-height:2">
+            <li><strong>社会热点（首页）</strong>：每日抓取新闻，用社会科学理论解读，让理论接地气</li>
+            <li><strong>知识图谱</strong>：<strong>311个节点</strong>（社会学107·经济学102·心理学102；社会学含思想家33·理论21·概念35·领域18，经济/心理各思想家29·理论21·概念34·领域18），采用力导向有机布局（学科以外环颜色区分、<strong>可选时间轴 X 约束——刻度仅在有节点的年段绘制</strong>），展示社会科学三大领域理论的发展脉络与跨学科网络</li>
+        </ul>
+    </section>
+
+    <!-- PAGES OVERVIEW -->
+    <section id="pages">
+        <h2>双页面架构</h2>
+        <p>网站采用双页面架构，通过顶部 Tab 切换。两个页面共享同一套 CSS 变量和部分组件（如详情面板），但各自独立渲染。</p>
+        <div class="code-block">
+<span class="cmt">// 页面切换逻辑</span>
+<span class="kw">function</span> <span class="fn">switchPage</span>(pageId) {
+    <span class="cmt">// 1. 隐藏所有 .page</span>
+    <span class="cmt">// 2. 显示目标 .page</span>
+    <span class="cmt">// 3. 更新 Tab 高亮</span>
+    <span class="cmt">// 4. 若切到知识图谱 → resizeCanvas() + draw()</span>
+}
+        </div>
+    </section>
+
+    <!-- PAGE 1: SOCIAL HOTSPOTS -->
+    <section id="page-hotspots">
+        <h2>页面一：社会热点（首页）</h2>
+        <p>打开网站后首先看到社会热点页面。左侧是日期导航边栏，右侧是新闻卡片网格。点击卡片从右侧滑出详情面板。</p>
+
+        <div class="screenshot">
+            <div class="screenshot-label"> 社会热点页面 — 整体布局</div>
+            <div class="page-mockup" style="height:520px;">
+                <div class="mock-nav">
+                    <div class="mock-nav-logo"><span class="dot"></span>社会人</div>
+                    <div class="mock-nav-links">
+                        <div class="mock-nav-link active">社会热点</div>
+                        <div class="mock-nav-link">知识图谱</div>
+                    </div>
+                </div>
+                <div class="hotpage-layout">
+                    <div class="hotpage-sidebar">
+                        <div class="hotpage-sidebar-title">📅 选择日期</div>
+                        <div class="hotpage-date active">2026-07-15</div>
+                        <div class="hotpage-date">2026-07-14</div>
+                        <div class="hotpage-date">2026-07-12</div>
+                    </div>
+                    <div class="hotpage-main">
+                        <div class="hotpage-header">
+                            <h2>用社会学看新闻</h2>
+                            <p>每日更新 · 点击卡片查看社会学视角解读</p>
+                        </div>
+                        <div class="hotpage-grid">
+                            <div class="hotpage-card">
+                                <div class="hotpage-card-rank">01</div>
+                                <div class="hotpage-card-title">青年就业压力增大：考公考研成为新趋势</div>
+                                <div class="hotpage-card-meta">社会 · 2026-07-15</div>
+                                <div class="hotpage-card-tags">
+                                    <span class="hotpage-tag">教育社会学</span>
+                                    <span class="hotpage-tag">反思性</span>
+                                    <span class="hotpage-tag">社会分层</span>
+                                </div>
+                            </div>
+                            <div class="hotpage-card">
+                                <div class="hotpage-card-rank">02</div>
+                                <div class="hotpage-card-title">AI绘画版权之争：机器创作归谁所有</div>
+                                <div class="hotpage-card-meta">科技 · 2026-07-15</div>
+                                <div class="hotpage-card-tags">
+                                    <span class="hotpage-tag">后结构主义</span>
+                                    <span class="hotpage-tag">资本形式</span>
+                                </div>
+                            </div>
+                            <div class="hotpage-card">
+                                <div class="hotpage-card-rank">03</div>
+                                <div class="hotpage-card-title">外卖骑手困在系统里</div>
+                                <div class="hotpage-card-meta">社会 · 2026-07-15</div>
+                                <div class="hotpage-card-tags">
+                                    <span class="hotpage-tag">理性化</span>
+                                    <span class="hotpage-tag">冲突理论</span>
+                                    <span class="hotpage-tag">数字社会学</span>
+                                </div>
+                            </div>
+                            <div class="hotpage-card" style="opacity:0.5">
+                                <div class="hotpage-card-rank" style="color:var(--text-muted)">04</div>
+                                <div class="hotpage-card-title">学区房新政...</div>
+                                <div class="hotpage-card-meta">教育 · 2026-07-15</div>
+                                <div class="hotpage-card-tags"><span class="hotpage-tag">教育社会学</span></div>
+                            </div>
+                            <div class="hotpage-card" style="opacity:0.3">
+                                <div class="hotpage-card-rank" style="color:var(--text-muted)">...</div>
+                                <div class="hotpage-card-title">更多新闻</div>
+                            </div>
+                            <div class="hotpage-card" style="opacity:0.3">
+                                <div class="hotpage-card-rank" style="color:var(--text-muted)">...</div>
+                                <div class="hotpage-card-title">更多新闻</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- A10: Date Navigation -->
+    <section id="A10">
+        <h2>[A10] 日期导航边栏</h2>
+        <div class="meta">
+            <span class="meta-location">📍 社会热点页面 · 左侧边栏</span>
+            <span class="meta-type">HTML + CSS</span>
+        </div>
+        <p>以年月日分组显示所有可查日期。最新日期在最上方并高亮显示（红色背景白色文字）。点击日期切换显示该日的15条新闻。</p>
+        <p><strong>设计要求：</strong>当日期较多时，按月份分组折叠显示。例如"2026年7月"下展开显示所有7月的日期。</p>
+
+        <div class="screenshot">
+            <div class="screenshot-label">📸 A10 日期导航边栏 — 当前状态</div>
+            <div style="padding:20px;display:flex;gap:20px;align-items:flex-start;">
+                <div style="width:160px;background:var(--bg-card);border:1px solid var(--border-light);border-radius:10px;padding:16px 12px;">
+                    <div style="font-size:10px;font-weight:600;color:var(--text-muted);letter-spacing:0.06em;margin-bottom:12px;">📅 选择日期查看历史热点</div>
+                    <div style="font-family:var(--font-mono);font-size:11px;padding:5px 10px;border-radius:12px;background:var(--red);color:#fff;margin-bottom:4px;">2026-07-15</div>
+                    <div style="font-family:var(--font-mono);font-size:11px;padding:5px 10px;border-radius:12px;color:var(--text-light);margin-bottom:4px;">2026-07-14</div>
+                    <div style="font-family:var(--font-mono);font-size:11px;padding:5px 10px;border-radius:12px;color:var(--text-light);">2026-07-12</div>
+                </div>
+                <div class="info-box tip" style="flex:1;margin:0;">
+                    <div class="info-box-title">✅ 已实现（A10 完成）</div>
+                    <p>当前为左侧垂直边栏，日期按"年-月"分组、可折叠展开，最新日期高亮在最上方。点击切换显示该日 15 条新闻。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- A11: News Cards -->
+    <section id="A11">
+        <h2>[A11] 新闻卡片网格</h2>
+        <div class="meta">
+            <span class="meta-location">📍 社会热点页面 · 右侧主区域</span>
+            <span class="meta-type">HTML + CSS + JS (C5)</span>
+        </div>
+        <p>每个日期显示 <strong>15条不重复</strong> 的新闻，以3列网格排列（3列×5行）。每张卡片包含：序号（前3名红色高亮）、新闻标题、来源标签、日期、关联理论标签。</p>
+
+        <div class="screenshot">
+            <div class="screenshot-label">📸 A11 新闻卡片 — 单张卡片结构</div>
+            <div style="padding:20px;">
+                <div style="width:280px;background:var(--bg-card);border:1px solid var(--border-light);border-radius:10px;padding:16px;box-shadow:0 4px 16px rgba(45,48,75,0.08);">
+                    <div style="display:flex;align-items:flex-start;gap:10px;margin-bottom:10px;">
+                        <span style="font-family:var(--font-display);font-size:20px;font-weight:700;color:var(--red);line-height:1;">01</span>
+                        <div style="font-family:var(--font-display);font-size:13px;font-weight:600;line-height:1.4;">青年就业压力增大：考公考研成为新趋势</div>
+                    </div>
+                    <div style="font-size:10px;color:var(--text-muted);margin-bottom:10px;">社会 · 2026-07-15</div>
+                    <div style="display:flex;flex-wrap:wrap;gap:4px;">
+                        <span style="font-size:9px;padding:2px 7px;border-radius:8px;border:1px solid var(--border);background:var(--teal-soft);color:var(--teal);">教育社会学</span>
+                        <span style="font-size:9px;padding:2px 7px;border-radius:8px;border:1px solid var(--border);background:var(--teal-soft);color:var(--teal);">反思性</span>
+                        <span style="font-size:9px;padding:2px 7px;border-radius:8px;border:1px solid var(--border);background:var(--teal-soft);color:var(--teal);">社会分层</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="info-box tip">
+            <div class="info-box-title">📊 数据统计</div>
+            <p>当前共 <strong>105条</strong> 不重复新闻，分 7 个日期（每日期 15 条）。涵盖社会、科技、教育、财经、文化、城市、政策等领域。</p>
+        </div>
+    </section>
+
+    <!-- A8: News Detail Panel -->
+    <section id="A8-hot">
+        <h2>[A8] 新闻详情面板</h2>
+        <div class="meta">
+            <span class="meta-location">📍 两页面通用 · 右侧滑出覆盖层</span>
+            <span class="meta-type">HTML + CSS + JS</span>
+        </div>
+        <p>点击新闻卡片后从右侧滑出（宽440px），显示完整的新闻解读。面板内容分4个区块：</p>
+        <ol style="padding-left:20px;font-size:13px;line-height:2;margin:12px 0;">
+            <li><strong>💡 一句话立论</strong> — <code>gist</code>：开篇用一句大白话点明这条新闻背后的社会科学内核（替代旧版"背景"长段）。</li>
+            <li><strong>🧵 事件脉络</strong> — <code>thread</code>：把"背景-发展-结果"串成有序时间线（每步含时间点 <code>t</code> + 说明 <code>x</code>），让读者一秒看清来龙去脉。</li>
+            <li><strong>🔍 社科视角解读</strong> — 以<strong>读者真问题</strong>驱动的 <code>interpretations</code> 数组（取代旧版 perspectives），每条解读分：
+                <ul style="padding-left:20px;margin-top:4px;">
+                    <li>❓ <strong>真问题 q</strong>（你真正会问的疑问，如"为什么大家突然不说话了？"）</li>
+                    <li>🚫 <strong>常识误判 naive</strong>（"常以为…"的直觉误区）</li>
+                    <li>🔎 <strong>透镜 badge</strong>：用「理论名」解读的标签（<code>lens</code> / <code>lensId</code> ∈ 节点集）</li>
+                    <li>📚 <strong>学术解读 body</strong>（含 <code>&lt;b&gt;理论名&lt;/b&gt;</code> 高亮，引用理论家）</li>
+                    <li>💡 <strong>顿悟 aha</strong>：以"所以…"收尾的恍然大悟</li>
+                    <li>📄 <strong>前沿研究（内嵌，可选）</strong> — 若某解读有直接相关的前沿国内外研究，该解读内直接内嵌研究卡（标题/外链/年份·期刊·作者/一句白话解读），并附其<strong>上游知识节点</strong>的「溯源 → B」按钮（<code>focusNode(B)</code> 跳知识图谱）+ 一句 B 的知识解读。研究由自动化按 <a href="#C2">C2</a> 审核标准 <strong>S9</strong> 每日 best-effort 挂载，须与对应解读/新闻直接相关，无研究时该解读不渲染此块。<strong>不新增图谱节点</strong>。</li>
+                </ul>
+            </li>
+            <li><strong>关联理论按钮（⤢）</strong> — 点击弹出<strong>局部网络弹窗</strong>：以该理论为中心、1跳关联节点按圆周排布的网状子图（Canvas 渲染，连线同款渐变流动）；弹窗内可悬停高亮、点击任意节点查看富化详情；底部「在知识图谱中展开 →」可一键跳转主图并定位选中该节点。
+                <ul style="padding-left:20px;margin-top:6px;">
+                    <li>🧩 <strong>概念中文映射</strong>：详情中的核心概念/关联理论优先显示中文名，未匹配节点时经 <code>CONCEPT_LABELS</code> 映射表兜底（如 <code>liquid_modernity</code>→液态现代性），不再出现裸英文 id。</li>
+                    <li>📐 <strong>Canvas 自适应缩放</strong>：<code>drawModal</code> 按当前画布尺寸自动计算缩放系数，保证所有节点（含半径+标签）100% 落在画布内可点击；<code>resizeTmCanvas</code> 在弹出动画结束后补测，并接 <code>ResizeObserver</code> 响应窗口/响应式变化。</li>
+                    <li>🎯 <strong>打开即选中</strong>：弹窗打开时自动选中你点击的关联理论节点（中心节点），右侧详情区<strong>直接渲染该理论的完整释义</strong>（思想家：著作+思想+关联理论；理论：一句话理解+深入解读+代表人物+核心概念；概念：解释+生活例子），无需再点一次；点击图中其他节点可即时切换查看。</li>
+                    <li>🎨 <strong>详情样式对齐 A14</strong>：弹窗内节点详情的 <code>.tp-*</code> 样式已<strong>全局化</strong>，与 <a href="#A14">[A14] 知识节点详情卡片</a> 完全一致（类别药丸、著作/思想 chips、一句话理解高亮块、生活例子块、展开按钮等），两者共用同一套样式源，保证视觉统一。<br><span style="color:var(--text-muted);font-size:12px;">注：此前"按钮对齐 A11 青色药丸"的决定被此统一取代——弹窗内小按钮现采用 A14 的中性描边风（hover 转红），不再单独使用 A11 青色。</span></li>
+                    <li>📏 <strong>分栏稳定</strong>：弹窗左右分栏加 <code>min-width:0</code>，flex 比例固定 1.2:1，内容少时右侧详情不会被左侧图区挤压消失。</li>
+                </ul>
+            </li>
+        </ol>
+
+        <div class="screenshot">
+            <div class="screenshot-label">📸 A8 新闻详情面板 — 完整结构</div>
+            <div style="padding:20px;">
+                <div style="width:340px;background:var(--bg-card);border:1px solid var(--border-light);border-radius:10px;overflow:hidden;box-shadow:0 4px 20px rgba(45,48,75,0.1);">
+                    <div style="padding:16px;border-bottom:1px solid var(--border-light);position:relative;">
+                        <div style="position:absolute;top:12px;right:12px;width:24px;height:24px;border:1px solid var(--border);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--text-light);">✕</div>
+                        <div style="font-family:var(--font-mono);font-size:9px;padding:3px 8px;border-radius:10px;background:var(--red-soft);color:var(--red);display:inline-block;margin-bottom:8px;">社会热点</div>
+                        <div style="font-family:var(--font-display);font-size:16px;font-weight:600;margin-bottom:4px;">外卖骑手困在系统里</div>
+                        <div style="font-family:var(--font-mono);font-size:10px;color:var(--text-muted);">社会 · 2026-07-15</div>
+                    </div>
+                    <div style="padding:14px 16px;">
+                        <div style="margin-bottom:12px;">
+                            <div style="font-size:9px;font-weight:600;letter-spacing:0.06em;color:var(--text-muted);text-transform:uppercase;margin-bottom:6px;padding-bottom:4px;border-bottom:1px solid var(--border-light);">📋 背景</div>
+                            <div style="font-size:11px;line-height:1.6;color:var(--text);">平台经济崛起，外卖骑手成为新型劳动者，但权益保障缺失。</div>
+                        </div>
+                        <div style="margin-bottom:12px;">
+                            <div style="font-size:9px;font-weight:600;letter-spacing:0.06em;color:var(--text-muted);text-transform:uppercase;margin-bottom:6px;padding-bottom:4px;border-bottom:1px solid var(--border-light);"> 事件</div>
+                            <div style="font-size:11px;line-height:1.6;color:var(--text);">骑手因算法压缩配送时间频繁超时...</div>
+                        </div>
+                        <div style="margin-bottom:12px;">
+                            <div style="font-size:9px;font-weight:600;letter-spacing:0.06em;color:var(--text-muted);text-transform:uppercase;margin-bottom:6px;padding-bottom:4px;border-bottom:1px solid var(--border-light);">🔍 社会学视角解读</div>
+                            <div style="padding:8px 10px;background:var(--bg);border-radius:6px;margin-bottom:6px;border-left:3px solid var(--red);">
+                                <div style="font-size:10px;font-weight:600;color:var(--red);margin-bottom:3px;">1. 理性化</div>
+                                <div style="font-size:9px;font-weight:600;color:var(--red);margin:4px 0 2px;">💡 通俗理解</div>
+                                <div style="font-size:10px;color:var(--text);line-height:1.5;">韦伯预言的理性化铁笼...</div>
+                                <div style="font-size:9px;font-weight:600;color:var(--teal);margin:4px 0 2px;">📚 学术视角</div>
+                                <div style="font-size:10px;color:var(--text-light);line-height:1.5;">工具理性主导下...</div>
+                            </div>
+                        </div>
+                        <div>
+                            <div style="font-size:9px;font-weight:600;letter-spacing:0.06em;color:var(--text-muted);text-transform:uppercase;margin-bottom:6px;">关联理论</div>
+                            <div style="display:flex;gap:4px;flex-wrap:wrap;">
+                                <span style="font-size:9px;padding:3px 8px;border-radius:12px;border:1px solid var(--border);color:var(--text-light);">理性化</span>
+                                <span style="font-size:9px;padding:3px 8px;border-radius:12px;border:1px solid var(--border);color:var(--text-light);">冲突理论</span>
+                                <span style="font-size:9px;padding:3px 8px;border-radius:12px;border:1px solid var(--border);color:var(--text-light);">数字社会学</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PAGE 2: KNOWLEDGE MAP -->
+    <section id="page-map">
+        <h2>页面二：知识图谱</h2>
+        <p>通过顶部导航栏点击"知识图谱"切换。页面以 Canvas 绘制社会科学三大领域（社会学 / 经济学 / 心理学）的知识网络图谱，采用 <strong>力导向有机布局</strong>（Obsidian 风格，节点自由聚簇、可拖拽平移/滚轮缩放），学科不再做页面级分带，仅以<strong>节点外环颜色</strong>区分；时间轴为<strong>可选开关</strong>（默认关）。</p>
+
+        <div class="screenshot">
+            <div class="screenshot-label">📸 知识图谱页面 — 整体布局（310节点 · 力导向有机布局 + 学科外环 + 类别多选 + 时间轴可选，示意图）</div>
+            <div class="page-mockup">
+                <div class="mock-nav">
+                    <div class="mock-nav-logo"><span class="dot"></span>社会人</div>
+                    <div class="mock-nav-links">
+                        <div class="mock-nav-link">社会热点</div>
+                        <div class="mock-nav-link active">知识图谱</div>
+                    </div>
+                </div>
+                <div class="mappage-hero">
+                    <h2>探索<em>社会学</em>的知识宇宙</h2>
+                    <p>每个人都是社会的产品，却很少理解塑造我们的力量。点击图谱中的节点，进入每一个理论的世界。</p>
+                    <div class="hint">↓ 在下方图谱中点击任意节点开始探索</div>
+                </div>
+                <div class="mappage-canvas">
+                    <!-- Era bands -->
+                    <div class="mappage-era c">
+                        <div class="mappage-era-label">古典社会学</div>
+                        <div class="mappage-era-period">1850-1920</div>
+                    </div>
+                    <div class="mappage-era s">
+                        <div class="mappage-era-label">结构社会学</div>
+                        <div class="mappage-era-period">1900-1960</div>
+                    </div>
+                    <div class="mappage-era cri">
+                        <div class="mappage-era-label">批判社会学</div>
+                        <div class="mappage-era-period">1950-1980</div>
+                    </div>
+                    <div class="mappage-era con">
+                        <div class="mappage-era-label">当代社会学</div>
+                        <div class="mappage-era-period">1980+</div>
+                    </div>
+
+                    <!-- Row labels -->
+                    <div class="mappage-row-label" style="top:60px;">思想家</div>
+                    <div class="mappage-row-label" style="top:160px;">理论</div>
+                    <div class="mappage-row-label" style="top:260px;">概念</div>
+                    <div class="mappage-row-label" style="top:350px;">领域</div>
+
+                    <!-- Classical nodes -->
+                    <div class="mappage-node thinker navy" style="left:5.5%;top:65px;">马</div>
+                    <div class="mappage-node-label" style="left:5.5%;top:105px;transform:translateX(-50%);">马克思</div>
+                    <div class="mappage-node thinker navy" style="left:10%;top:65px;">涂</div>
+                    <div class="mappage-node-label" style="left:10%;top:105px;transform:translateX(-50%);">涂尔干</div>
+                    <div class="mappage-node thinker navy" style="left:14.5%;top:65px;">韦</div>
+                    <div class="mappage-node-label" style="left:14.5%;top:105px;transform:translateX(-50%);">韦伯</div>
+                    <div class="mappage-node thinker navy" style="left:19%;top:65px;">齐</div>
+                    <div class="mappage-node-label" style="left:19%;top:105px;transform:translateX(-50%);">齐美尔</div>
+
+                    <div class="mappage-node theory red" style="left:5.5%;top:165px;">冲</div>
+                    <div class="mappage-node-label" style="left:5.5%;top:198px;transform:translateX(-50%);font-size:7px;">冲突理论</div>
+                    <div class="mappage-node theory red" style="left:12.5%;top:165px;">功</div>
+                    <div class="mappage-node-label" style="left:12.5%;top:198px;transform:translateX(-50%);font-size:7px;">功能主义</div>
+                    <div class="mappage-node theory red" style="left:19%;top:165px;">理</div>
+                    <div class="mappage-node-label" style="left:19%;top:198px;transform:translateX(-50%);font-size:7px;">理性化</div>
+
+                    <!-- Structural nodes -->
+                    <div class="mappage-node thinker navy" style="left:29%;top:65px;">米</div>
+                    <div class="mappage-node-label" style="left:29%;top:105px;transform:translateX(-50%);">米德</div>
+                    <div class="mappage-node thinker navy" style="left:35%;top:65px;">帕</div>
+                    <div class="mappage-node-label" style="left:35%;top:105px;transform:translateX(-50%);">帕森斯</div>
+                    <div class="mappage-node thinker navy" style="left:41%;top:65px;">默</div>
+                    <div class="mappage-node-label" style="left:41%;top:105px;transform:translateX(-50%);">默顿</div>
+
+                    <div class="mappage-node theory red" style="left:29%;top:165px;">符</div>
+                    <div class="mappage-node-label" style="left:29%;top:198px;transform:translateX(-50%);font-size:7px;">符号互动</div>
+                    <div class="mappage-node theory red" style="left:37%;top:165px;">构</div>
+                    <div class="mappage-node-label" style="left:37%;top:198px;transform:translateX(-50%);font-size:7px;">结构主义</div>
+                    <div class="mappage-node theory red" style="left:44%;top:165px;">选</div>
+                    <div class="mappage-node-label" style="left:44%;top:198px;transform:translateX(-50%);font-size:7px;">理性选择</div>
+
+                    <!-- Critical nodes -->
+                    <div class="mappage-node thinker navy" style="left:54%;top:65px;">福</div>
+                    <div class="mappage-node-label" style="left:54%;top:105px;transform:translateX(-50%);">福柯</div>
+                    <div class="mappage-node thinker navy" style="left:59%;top:65px;">布</div>
+                    <div class="mappage-node-label" style="left:59%;top:105px;transform:translateX(-50%);">布迪厄</div>
+                    <div class="mappage-node thinker navy" style="left:64%;top:65px;">贝</div>
+                    <div class="mappage-node-label" style="left:64%;top:105px;transform:translateX(-50%);">贝克尔</div>
+                    <div class="mappage-node thinker navy" style="left:69%;top:65px;">巴</div>
+                    <div class="mappage-node-label" style="left:69%;top:105px;transform:translateX(-50%);">巴特勒</div>
+
+                    <div class="mappage-node theory red" style="left:54%;top:165px;">后</div>
+                    <div class="mappage-node-label" style="left:54%;top:198px;transform:translateX(-50%);font-size:7px;">后结构</div>
+                    <div class="mappage-node theory red" style="left:62%;top:165px;">批</div>
+                    <div class="mappage-node-label" style="left:62%;top:198px;transform:translateX(-50%);font-size:7px;">批判理论</div>
+                    <div class="mappage-node theory red" style="left:69%;top:165px;">女</div>
+                    <div class="mappage-node-label" style="left:69%;top:198px;transform:translateX(-50%);font-size:7px;">女性主义</div>
+
+                    <!-- Contemporary nodes -->
+                    <div class="mappage-node thinker navy" style="left:78%;top:65px;">吉</div>
+                    <div class="mappage-node-label" style="left:78%;top:105px;transform:translateX(-50%);">吉登斯</div>
+                    <div class="mappage-node thinker navy" style="left:83%;top:65px;">鲍</div>
+                    <div class="mappage-node-label" style="left:83%;top:105px;transform:translateX(-50%);">鲍曼</div>
+                    <div class="mappage-node thinker navy" style="left:88%;top:65px;">萨</div>
+                    <div class="mappage-node-label" style="left:88%;top:105px;transform:translateX(-50%);">萨义德</div>
+                    <div class="mappage-node thinker navy" style="left:93%;top:65px;">拉</div>
+                    <div class="mappage-node-label" style="left:93%;top:105px;transform:translateX(-50%);">拉图尔</div>
+
+                    <div class="mappage-node theory red" style="left:78%;top:165px;">晚</div>
+                    <div class="mappage-node-label" style="left:78%;top:198px;transform:translateX(-50%);font-size:7px;">晚期现代</div>
+                    <div class="mappage-node theory red" style="left:84%;top:165px;">建</div>
+                    <div class="mappage-node-label" style="left:84%;top:198px;transform:translateX(-50%);font-size:7px;">社会建构</div>
+                    <div class="mappage-node theory red" style="left:90%;top:165px;">殖</div>
+                    <div class="mappage-node-label" style="left:90%;top:198px;transform:translateX(-50%);font-size:7px;">后殖民</div>
+                    <div class="mappage-node theory red" style="left:95.5%;top:165px;">酷</div>
+                    <div class="mappage-node-label" style="left:95.5%;top:198px;transform:translateX(-50%);font-size:7px;">酷儿</div>
+
+                    <!-- Bottom row: topics -->
+                    <div class="mappage-node topic purple" style="left:32%;top:345px;"></div>
+                    <div class="mappage-node-label" style="left:32%;top:368px;transform:translateX(-50%);font-size:7px;">社会分层</div>
+                    <div class="mappage-node topic purple" style="left:38%;top:345px;"></div>
+                    <div class="mappage-node-label" style="left:38%;top:368px;transform:translateX(-50%);font-size:7px;">教育</div>
+
+                    <div class="mappage-node topic purple" style="left:57%;top:345px;"></div>
+                    <div class="mappage-node-label" style="left:57%;top:368px;transform:translateX(-50%);font-size:7px;">家庭</div>
+                    <div class="mappage-node topic purple" style="left:64%;top:345px;"></div>
+                    <div class="mappage-node-label" style="left:64%;top:368px;transform:translateX(-50%);font-size:7px;">工作</div>
+
+                    <div class="mappage-node topic purple" style="left:78%;top:345px;"></div>
+                    <div class="mappage-node-label" style="left:78%;top:368px;transform:translateX(-50%);font-size:7px;">城市</div>
+                    <div class="mappage-node topic purple" style="left:84%;top:345px;"></div>
+                    <div class="mappage-node-label" style="left:84%;top:368px;transform:translateX(-50%);font-size:7px;">数字</div>
+                    <div class="mappage-node topic purple" style="left:90%;top:345px;"></div>
+                    <div class="mappage-node-label" style="left:90%;top:368px;transform:translateX(-50%);font-size:7px;">环境</div>
+                    <div class="mappage-node topic purple" style="left:95.5%;top:345px;"></div>
+                    <div class="mappage-node-label" style="left:95.5%;top:368px;transform:translateX(-50%);font-size:7px;">健康</div>
+
+                    <!-- Legend -->
+                    <div class="mappage-legend">
+                        <div class="mappage-legend-btn active"><span class="mappage-legend-dot" style="background:var(--text)"></span>全部</div>
+                        <div class="mappage-legend-btn"><span class="mappage-legend-dot" style="background:var(--navy)"></span>思想家</div>
+                        <div class="mappage-legend-btn"><span class="mappage-legend-dot" style="background:var(--red)"></span>理论流派</div>
+                        <div class="mappage-legend-btn"><span class="mappage-legend-dot" style="background:var(--teal)"></span>核心概念</div>
+                        <div class="mappage-legend-btn"><span class="mappage-legend-dot" style="background:var(--purple)"></span>研究领域</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- A5: Canvas -->
+    <section id="A5">
+        <h2>[A5] 知识图谱 Canvas</h2>
+        <div class="meta">
+            <span class="meta-location">📍 知识图谱页面 · 全屏 Canvas 区域</span>
+            <span class="meta-type">HTML5 Canvas + JS (C3)</span>
+        </div>
+        <p>使用 HTML5 Canvas 绘制 <strong>311个节点</strong>（社会学107·经济学102·心理学102）与 <strong>约638条连线</strong>（含跨学科桥接边，以及<strong>概念↔概念、思想家↔思想家</strong>两类同级直连）。布局采用<strong>力导向有机布局（Obsidian 风格）</strong>，学科<strong>不做页面级分带</strong>、仅以节点外环颜色区分，支持<strong>拖拽平移 + 滚轮缩放</strong>。核心机制：</p>
+        <ul style="padding-left:20px;margin:12px 0;font-size:13.5px;line-height:1.9;">
+            <li><strong>力导向</strong>：每帧 <code>tick()</code> 执行斥力 + 连线弹簧 + 居中力 + <strong>学科聚类力</strong>（非时间轴模式：把同属一学科的节点拉向该学科横向锚点 W×0.2/0.5/0.8，使三学科分成左右三簇；居中力横向分量相应减弱到 *0.4 让聚类力主导横向分布）+（可选）时间轴 X 软约束；<code>alpha</code> 随节点数自适应冷却，进入页面约 0.5s 停稳；单帧速度设 <code>VMAX</code> 上限防爆炸。</li>
+            <li><strong>播种</strong>：初始采用<strong>洗牌式网格播种</strong>（确定性打散网格单元、三学科交错混排），节点自然聚簇、互不重叠。</li>
+            <li><strong>时间轴</strong>：开启时直接将节点 X 预置到年份位置（Y 不变），杜绝贴角聚集；<strong>刻度仅在有节点的 50 年段绘制</strong>，不显示无节点的空白年段。</li>
+            <li><strong>连线渲染</strong>：按关联强度 <code>s</code> 分层（强关联更粗更亮、弱关联更细更淡）；同级直连边在 <code>addE</code> 内无向去重（同对边保留较强强度 s）。</li>
+            <li><strong>跨学科成网</strong>：学科间跨科边 <strong>34 条</strong>（心理学贡献 26，含"社会化"节点与精神分析/本我自我超我/依恋/刻板印象/损失厌恶等桥接），三科真正成网。</li>
+            <li><strong>视觉增强</strong>：叠加渐变发光节点、流动虚线连线、正弦浮动动画等。</li>
+        </ul>
+        <p><strong>节点颜色规则：</strong></p>
+        <ul style="padding-left:20px;margin:8px 0 0;font-size:13.5px;line-height:1.9;">
+            <li>节点本体：思想家=深蓝(#3D4F8F)、理论=红(#C84B3A)、概念=青(#3A8C8C)、领域=紫(#8B7EC8)。</li>
+            <li>学科外环：社会学=蓝(#5B6FB5)、经济学=金(#D4A017)、心理学=绿(#2FA37C)——外环加粗至 4px 并带轻微同色发光。</li>
+        </ul>
+
+        <div class="info-box tip">
+            <div class="info-box-title">📊 节点统计（共 311 个：社会学 107、经济学 102、心理学 102；社会学含思想家33，其余思想家29，理论/概念/领域均为 21/35/18）</div>
+            <p style="color:var(--text-light);font-size:13px;">下列明细为<strong>社会学</strong>一科（经济学 econ_*、心理学 psy_* 各有平行的 29/21/34/18 节点，id 以 <code>econ_</code>/<code>psy_</code> 前缀区分）：</p>
+            <p><strong>思想家(29)：</strong>马克思、涂尔干、韦伯、齐美尔、米德、帕森斯、默顿、福柯、布迪厄、吉登斯、鲍曼、贝克尔、巴特勒、萨义德、拉图尔、戈夫曼、哈贝马斯、阿多诺、马尔库塞、波伏娃、胡克斯、德里达、德勒兹、斯皮瓦克、沃勒斯坦、科尔曼、伯格、卢克曼、贝克<br>
+            <strong>理论(21)：</strong>冲突理论、功能主义、理性化、符号互动论、结构主义、理性选择、后结构主义、批判理论、女性主义、晚期现代性、社会建构论、后殖民理论、酷儿理论、行动者网络、拟剧论、交往行动理论、风险社会、网络分析、新制度主义、形貌社会学<br>
+            <strong>概念(34)：</strong>阶级斗争、失范、理想类型、社会团结、社会事实、越轨、权力-知识、惯习、资本形式、反思性、社会建构、全球化、交叉性、文化资本、社会资本、符号暴力、全景敞视、表演性、东方主义、他者化、核心-边缘、优绩主义、情绪劳动、注意力经济、不稳定无产阶级、生活机会、社会流动等<br>
+            <strong>领域(18)：</strong>社会分层、教育、城市、数字、家庭、工作、宗教、健康、环境、移民、媒介、法律、科学、青年、犯罪、贫困、性别、技术</p>
+        </div>
+    </section>
+
+    <!-- A6: Legend -->
+    <section id="A6">
+        <h2>[A6] 图例筛选</h2>
+        <div class="meta">
+            <span class="meta-location">📍 知识图谱页面 · Canvas 左下角</span>
+            <span class="meta-type">HTML + JS (C4)</span>
+        </div>
+        <p>类别筛选改为<strong>多选复选框</strong>（思想家 / 理论流派 / 核心概念 / 研究领域），<strong>默认仅勾选「核心概念」</strong>，用户按需勾选其余类型逐步揭示；筛选后<strong>只显示选中类型节点及其相互之间的连线</strong>（连向隐藏类型节点的悬空线不再绘制，已修复）。学科筛选（全部/社会学/经济学/心理学）保留为可选单选，仅去视觉分带。另新增<strong>「时间轴」开关</strong>（默认关）：开启后 X 轴软约束到年份、Y 轴由力导向自由散开。</p>
+        <div class="screenshot">
+            <div class="screenshot-label">📸 A6 类别多选复选框（默认核心概念）+ 学科单选 + 时间轴开关</div>
+            <div style="padding:12px 20px;">
+                <div style="display:inline-flex;gap:4px;flex-wrap:wrap;">
+                    <span style="font-size:10px;padding:4px 10px;border-radius:14px;border:1px solid var(--border);background:var(--bg-card);color:var(--text-light);">☑ 思想家</span>
+                    <span style="font-size:10px;padding:4px 10px;border-radius:14px;border:1px solid var(--border);background:var(--bg-card);color:var(--text-light);">☑ 理论流派</span>
+                    <span style="font-size:10px;padding:4px 10px;border-radius:14px;border:1px solid var(--teal);background:var(--bg-card);color:var(--text);font-weight:600;">☑ 核心概念</span>
+                    <span style="font-size:10px;padding:4px 10px;border-radius:14px;border:1px solid var(--border);background:var(--bg-card);color:var(--text-light);">☑ 研究领域</span>
+                    <span style="font-size:10px;padding:4px 10px;border-radius:14px;border:1px solid var(--border);background:var(--bg-card);color:var(--text-light);">全部学科</span>
+                    <span style="font-size:10px;padding:4px 10px;border-radius:14px;border:1px solid var(--border);background:var(--bg-card);color:var(--text-light);">时间轴：关</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- A7: Tooltip -->
+    <section id="A7">
+        <h2>[A7] 节点 Tooltip</h2>
+        <div class="meta">
+            <span class="meta-location">📍 知识图谱页面 · 跟随鼠标</span>
+            <span class="meta-type">HTML + JS (C4)</span>
+        </div>
+        <p>鼠标悬停在节点上时显示浮动提示框：节点名称（大字加粗）+ 一句话描述（小字灰色）。</p>
+        <div class="screenshot">
+            <div class="screenshot-label"> A7 Tooltip 样式</div>
+            <div style="padding:20px;">
+                <div style="display:inline-block;background:var(--bg-card);border:1px solid var(--border);border-radius:8px;padding:10px 14px;box-shadow:0 4px 16px rgba(45,48,75,0.1);">
+                    <div style="font-family:var(--font-display);font-size:13px;font-weight:600;margin-bottom:3px;">马克思</div>
+                    <div style="font-size:11px;color:var(--text-light);line-height:1.4;">历史唯物主义的创立者，阶级斗争理论的奠基人</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- A14: Knowledge Node Detail Panel -->
+    <section id="A14">
+        <h2>[A14] 知识节点详情卡片</h2>
+        <div class="meta">
+            <span class="meta-location">📍 知识图谱页面 · 右侧滑出面板（宽 420px）</span>
+            <span class="meta-type">HTML + CSS + JS (C4)</span>
+        </div>
+        <p>在知识图谱页面<strong>点击任意节点</strong>后，从右侧滑出的知识卡片（容器 <code>#theoryPanel</code>，样式 <code>.theory-panel</code>）。由 <code>showPanel(node)</code> 调用 <code>buildDetailHTML(node)</code> 动态渲染，<strong>四类节点各有不同内容结构</strong>：</p>
+        <div class="info-box tip">
+            <div class="info-box-title">📇 四类节点的卡片内容（页面可纵向滑动，篇幅不限）</div>
+            <p>
+            <strong>🔵 思想家</strong>：真实照片（取自维基共享资源，29 位中 25 位已配真实头像，其余 4 位降级为首字渐变初始头像）+ 主要著作（📖 列表）+ <strong>核心思想（逐条展开讲解，不再只给关键词 chips）</strong> + 生平与贡献 + 关键理论（可点击跳转）<br>
+            <strong>🔴 理论流派</strong>：简介 + 一句话理解（🔴 红色高亮框）+ 深入解读 + 代表人物 + 核心概念（均可点击）<br>
+            <strong>🟢 核心概念</strong>：简介 + 详细解释 + 生活里的例子（💡 青色高亮框，<strong>已为全部 34 个概念补齐生活化例子</strong>）<br>
+            <strong>🟣 研究领域</strong>：领域概览 + 关联理论（可点击）<br>
+            <strong>通用尾部</strong>：关联节点（药丸按钮）
+            </p>
+        </div>
+        <div class="info-box">
+            <div class="info-box-title">🔗 词条标题链接到维基百科</div>
+            <p>卡片<strong>标题已变为可点击链接</strong>，指向该词条对应的维基百科页面（优先中文维基，无中文词条时回退英文维基），新标签页打开。数据通过 Wikipedia API 批量获取并写入 <code>NODE_META</code>，在 <code>initNodes</code> 中随 ENRICH 一并合并进 <code>node.data.wiki</code>；思想家头像 URL 同样来自 Wikipedia（<code>node.data.photo</code>），图片加载失败时经 <code>onerror</code> 自动回退到首字初始头像。</p>
+        </div>
+        <div class="info-box">
+            <div class="info-box-title">↗️ 「在知识图谱中展开 →」按钮的归属</div>
+            <p>该按钮<strong>仅出现在 [A8] 新闻详情面板的关联理论弹窗</strong>中（<code>buildDetailHTML(node, 'modal')</code> 传入 context）。[A14] 知识节点卡片本身已在知识图谱内，<strong>不再包含此按钮</strong>（<code>buildDetailHTML(node, 'panel')</code> 不渲染）。该按钮为 <strong>navy 实底、hover 上浮阴影</strong>的醒目主按钮，与上方详情间距 28px。</p>
+        </div>
+        <div class="screenshot">
+            <div class="screenshot-label">📸 A14 知识节点详情卡片 — 思想家示例（含头像与展开式核心思想，无展开按钮）</div>
+            <div style="max-width:340px;margin:0 auto;background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:20px;box-shadow:0 8px 28px rgba(45,48,75,0.12);text-align:left;">
+                <div style="display:flex;align-items:center;gap:14px;margin-bottom:16px;">
+                    <div style="width:56px;height:56px;border-radius:50%;flex-shrink:0;background:linear-gradient(135deg,#3D4F8F,#C84B3A);color:#fff;display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-size:26px;font-weight:600;">韦</div>
+                    <div>
+                        <div style="font-size:10px;font-weight:600;letter-spacing:0.06em;padding:3px 10px;border-radius:12px;background:var(--navy-soft);color:#3D4F8F;text-transform:uppercase;display:inline-block;">思想家</div>
+                        <div style="font-family:var(--font-display);font-size:22px;font-weight:600;margin:6px 0 2px;">马克斯·韦伯</div>
+                        <div style="font-size:11px;color:var(--text-muted);opacity:0.7;">Max Weber · 1864-1920</div>
+                    </div>
+                </div>
+                <div style="font-size:11px;font-weight:600;letter-spacing:0.08em;color:var(--text-muted);text-transform:uppercase;margin-bottom:8px;">主要著作</div>
+                <div style="font-size:12.5px;color:var(--text);padding:7px 12px 7px 28px;background:var(--bg);border:1px solid var(--border-light);border-radius:8px;position:relative;margin-bottom:6px;">📖 《新教伦理与资本主义精神》</div>
+                <div style="font-size:12.5px;color:var(--text);padding:7px 12px 7px 28px;background:var(--bg);border:1px solid var(--border-light);border-radius:8px;position:relative;margin-bottom:14px;">📖 《经济与社会》</div>
+                <div style="font-size:11px;font-weight:600;letter-spacing:0.08em;color:var(--text-muted);text-transform:uppercase;margin-bottom:8px;">核心思想（逐条展开讲解）</div>
+                <div style="font-size:13px;color:var(--text-light);line-height:1.7;padding:12px 14px;background:var(--bg);border:1px solid var(--border-light);border-left:3px solid #3D4F8F;border-radius:8px;margin-bottom:10px;">
+                    <span style="font-family:var(--font-display);font-size:14px;font-weight:600;color:#3D4F8F;display:block;margin-bottom:4px;">理性化</span>
+                    现代社会从传统权威走向法理权威、从价值理性走向目的理性，最终可能陷入"理性化铁笼"。
+                </div>
+                <div style="font-size:13px;color:var(--text-light);line-height:1.7;padding:12px 14px;background:var(--bg);border:1px solid var(--border-light);border-left:3px solid #3D4F8F;border-radius:8px;margin-bottom:14px;">
+                    <span style="font-family:var(--font-display);font-size:14px;font-weight:600;color:#3D4F8F;display:block;margin-bottom:4px;">理想类型</span>
+                    为便于分析而建构的"纯粹"概念模型（如科层制），不是对现实的描摹，而是衡量现实的尺子。
+                </div>
+                <div style="font-size:11px;font-weight:600;letter-spacing:0.08em;color:var(--text-muted);text-transform:uppercase;margin-bottom:8px;">关键理论</div>
+                <div style="display:flex;flex-wrap:wrap;gap:6px;">
+                    <span style="font-size:12px;padding:5px 12px;border-radius:16px;border:1px solid var(--border);color:var(--text-light);">理性化</span>
+                    <span style="font-size:12px;padding:5px 12px;border-radius:16px;border:1px solid var(--border);color:var(--text-light);">科层制</span>
+                </div>
+            </div>
+        </div>
+        <div class="info-box">
+            <div class="info-box-title">🔗 与 A8 弹窗的区别</div>
+            <p><strong>A14</strong> 是<strong>知识图谱页面</strong>点击节点弹出的右侧滑出卡片（<code>.theory-panel</code> / <code>#theoryPanel</code>）；<strong>A8</strong> 是<strong>新闻详情面板</strong>里点「关联理论⤢」弹出的局部网络弹窗（<code>.theory-modal</code>）。两者共用 <code>buildDetailHTML()</code> 渲染节点详情，但容器、触发入口与布局不同。概念的英文 id 均经 <code>CONCEPT_LABELS</code> 映射为中文显示。</p>
+        </div>
+        <div class="info-box tip">
+            <div class="info-box-title">🔬 前沿研究聚合（与 [A8] 联动）</div>
+            <p>由于知识图谱节点的「源节点 B」会被新闻各视角 <code>perspectives[].research[].fromNode</code> 引用，<strong>该节点的 A14 卡片尾部会反向聚合所有引用它的前沿研究</strong>（标题 + 年份·期刊 + 外链，最多展示 6 条）。即：新闻的某视角内点「溯源 → B」跳到节点 B，节点 B 的卡片里又能看到「哪些新闻的哪个视角引用了这项研究」——形成新闻↔知识的双向可达。无引用时该聚合块不渲染。</p>
+        </div>
+    </section>
+
+    <!-- A2: Navigation -->
+    <section id="A2">
+        <h2>[A2] 导航栏</h2>
+        <div class="meta">
+            <span class="meta-location">📍 全局 · 页面顶部固定</span>
+            <span class="meta-type">HTML + CSS</span>
+        </div>
+        <p>固定在页面顶部（56px高），显示网站 Logo 和两个 Tab 切换按钮。<strong>社会热点排在左侧（第一个），为默认激活状态。</strong></p>
+        <div class="screenshot">
+            <div class="screenshot-label">📸 A2 导航栏</div>
+            <div style="padding:0;">
+                <div class="mock-nav" style="height:44px;">
+                    <div class="mock-nav-logo"><span class="dot"></span>社会人</div>
+                    <div class="mock-nav-links">
+                        <div class="mock-nav-link active">社会热点</div>
+                        <div class="mock-nav-link">知识图谱</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- A1: Design Variables -->
+    <section id="A1">
+        <h2>[A1] 设计变量</h2>
+        <div class="meta">
+            <span class="meta-location">📍 全局 · CSS :root</span>
+            <span class="meta-type">CSS</span>
+        </div>
+        <p>定义全局颜色、字体、圆角、阴影等设计变量。所有组件通过这些变量保持一致的视觉语言。</p>
+        <div class="code-block">
+<span class="kw">:root</span> {
+    <span class="cmt">/* 背景色 */</span>
+    --bg: <span class="str">#F5F0E8</span>;        <span class="cmt">/* 暖米色页面背景 */</span>
+    --bg-card: <span class="str">#FEFCF8</span>;    <span class="cmt">/* 白色卡片背景 */</span>
+
+    <span class="cmt">/* 文字色 */</span>
+    --text: <span class="str">#2D304B</span>;       <span class="cmt">/* 深蓝灰主文字 */</span>
+    --text-light: <span class="str">#6B6F8A</span>;   <span class="cmt">/* 次要文字 */</span>
+
+    <span class="cmt">/* 强调色 */</span>
+    --red: <span class="str">#C84B3A</span>;        <span class="cmt">/* 红色 - 理论/热点 */</span>
+    --teal: <span class="str">#3A8C8C</span>;       <span class="cmt">/* 青色 - 概念 */</span>
+    --navy: <span class="str">#3D4F8F</span>;       <span class="cmt">/* 深蓝 - 思想家 */</span>
+    --purple: <span class="str">#8B7EC8</span>;     <span class="cmt">/* 紫色 - 领域 */</span>
+
+    <span class="cmt">/* 字体 */</span>
+    --font-display: <span class="str">'Fraunces'</span>;  <span class="cmt">/* 标题字体 */</span>
+    --font-body: <span class="str">'Inter'</span>;        <span class="cmt">/* 正文字体 */</span>
+    --font-mono: <span class="str">'JetBrains Mono'</span>; <span class="cmt">/* 等宽字体 */</span>
+}
+        </div>
+    </section>
+
+    <!-- A4: Page Container -->
+    <section id="A4">
+        <h2>[A4] 页面容器</h2>
+        <div class="meta">
+            <span class="meta-location">📍 全局 · HTML 结构</span>
+            <span class="meta-type">HTML + CSS</span>
+        </div>
+        <p>两个页面容器 <code>#page-map</code> 和 <code>#page-topics</code>，通过 CSS <code>.page</code> / <code>.page.active</code> 控制显示/隐藏。默认 <code>#page-topics</code> 为 active。</p>
+        <div class="code-block">
+<span class="cmt">/* 页面切换核心 CSS */</span>
+.page { display: none; }
+.page.active { display: block; }
+
+<span class="cmt">/* 知识图谱页面 — 全屏 */</span>
+#page-map { height: 100vh; overflow: hidden; padding-top: 56px; }
+
+<span class="cmt">/* 社会热点页面 — 带滚动 */</span>
+#page-topics { min-height: 100vh; padding-top: 56px; }
+        </div>
+    </section>
+
+    <!-- A13: Responsive -->
+    <section id="A13">
+        <h2>[A13] 响应式</h2>
+        <div class="meta">
+            <span class="meta-location">📍 全局 · CSS @media</span>
+            <span class="meta-type">CSS</span>
+        </div>
+        <p>移动端适配（≤768px）：导航栏隐藏 Tab、Canvas 高度降低、网格变单列、详情面板全宽。</p>
+    </section>
+
+    <!-- C1: Knowledge Data -->
+    <section id="C1">
+        <h2>[C1] 图谱数据</h2>
+        <div class="meta">
+            <span class="meta-location">📍 JavaScript · 数据层</span>
+            <span class="meta-type">JS 常量</span>
+        </div>
+        <p>4个数据数组，定义知识图谱的所有节点信息。修改数据不影响渲染逻辑。</p>
+        <div class="info-box tip">
+            <div class="info-box-title">📊 当前数据量</div>
+            <p><code>THINKERS</code> = 29人 · <code>THEORIES</code> = 21个 · <code>CONCEPTS</code> = 34个 · <code>TOPICS</code> = 18个<br>
+            合计 <strong>102个</strong> 数据条目，全部在图谱中显示。连线由元数据（keyThinkers / concepts / influence / TOPIC_THEORIES / EXTRA_EDGES / EXTRA_CONCEPT_LINKS）自动生成，共 <strong>231条</strong>。</p>
+        </div>
+    </section>
+
+    <!-- C2: News Data -->
+    <section id="C2">
+        <h2>[C2] 新闻数据</h2>
+        <div class="meta">
+            <span class="meta-location"> JavaScript · 数据层</span>
+            <span class="meta-type">JS 文件 · 全自动（每日两次抓取 + AI 审核 + 自动入库）</span>
+        </div>
+        <p><code>NEWS_DATA</code> 对象，按日期分组存储新闻，<strong>外置为独立 <code>news-data.js</code></strong>（由 sociology-map.html 通过 <code>&lt;script src="news-data.js"&gt;</code> 引入），自动化只改写这个小数据文件，不再触碰主文件。由 <strong>WorkBuddy 自动化每日 9:06 与 21:06 自动触发</strong>，自己完成<strong>抓取 + 审核 + 入库</strong>——抓取 ≥4 个热榜指数 + 综合新闻，按 <code>NEWS_REVIEW_STANDARD.md</code>（S0–S9）审核（合规硬闸 / 特大跨平台识别 / 学科交叉 / 关联强度反向核实 / 时效去重 / 字段与链接校验 / 前沿研究 best-effort 内嵌解读），直接写入 <code>news-data.js</code>（新增当日日期键、保留最近 7 天），并产出 <code>news-review-log.json</code> 审核日志供抽查。每条新闻采用<strong>疑问驱动结构</strong>：<code>gist</code> 一句话立论 + <code>thread</code> 事件脉络 + <code>interpretations[]</code>（真问题 q → 常识误判 naive → 透镜 lens/lensId → 学术解读 body → 顿悟 aha，可内嵌 <code>research</code> 前沿研究），并标注真实图谱节点 <code>theories[]</code>（id ∈ 全节点集，label=节点名）用于"关联知识"。当前每日期 15 条。</p>
+        <div class="code-block">
+<span class="kw">var</span> NEWS_DATA = { <span class="cmt">// 外置于 news-data.js，自动化直接写入</span>
+  <span class="str">'2026-07-22'</span>: [ <span class="cmt">// 15条新闻（v1.16 新结构）</span>
+    {
+      id: 1,
+      title: <span class="str">'青年就业压力增大...'</span>,
+      source: <span class="str">'社会'</span>,
+      url: <span class="str">'https://...'</span>,            <span class="cmt">// 原文直链（HTTP 200）</span>
+      kicker: <span class="str">'职场 · 社会学 / 经济学'</span>, <span class="cmt">// 可选小标签</span>
+      gist: <span class="str">'该焦虑不是个人不努力，而是结构性机会收缩下，年轻人把"考公考研"当成避险舱...'</span>,  <span class="cmt">// 一句话立论</span>
+      thread: [ { t:<span class="str">'背景'</span>, x:<span class="str">'高校毕业生达1200万...'</span> }, ... ],  <span class="cmt">// 事件脉络时间线</span>
+      interpretations: [               <span class="cmt">// 疑问驱动解读（取代旧版 perspectives）</span>
+        {
+          q: <span class="str">'为什么大家都在考公考研？'</span>,          <span class="cmt">// 读者真问题</span>
+          naive: <span class="str">'常以为：是个人不够努力...'</span>,        <span class="cmt">// 常识误判</span>
+          lens: <span class="str">'教育社会学'</span>, lensId:<span class="str">'education'</span>, <span class="cmt">// 透镜（lensId∈节点集）</span>
+          body: <span class="str">'教育从培养人才变成筛选工具...'</span>,     <span class="cmt">// 学术解读（含 &lt;b&gt;理论名&lt;/b&gt;）</span>
+          aha: <span class="str">'所以考试热实质是结构性的避险...'</span>,     <span class="cmt">// 顿悟收尾</span>,
+          research: { title:<span class="str">'...'</span>, url:<span class="str">'...'</span>, fromNode:<span class="str">'education'</span> }  <span class="cmt">// 可选·前沿研究（S9 best-effort 内嵌）</span>
+        },
+        ...
+      ],
+      theories: [{id:<span class="str">'education'</span>,label:<span class="str">'教育社会学'</span>}, ...]  <span class="cmt">// 关联知识图谱节点</span>
+    },
+    ... <span class="cmt">// 共15条</span>
+  ],
+  <span class="str">'2026-07-21'</span>: [ ... ]   <span class="cmt">// 15条（历史批次仍为旧结构，前端兼容渲染）</span>
+};
+        </div>
+    </section>
+
+    <!-- C3: Canvas Render -->
+    <section id="C3">
+        <h2>[C3] Canvas 渲染引擎</h2>
+        <div class="meta">
+            <span class="meta-location">📍 JavaScript · 渲染层</span>
+            <span class="meta-type">JS 函数</span>
+        </div>
+        <p>负责在 Canvas 上绘制所有视觉元素。修改渲染逻辑不影响数据和交互。</p>
+        <div class="code-block">
+<span class="fn">resizeCanvas</span>()    <span class="cmt">// 设置Canvas尺寸，页面隐藏时用window尺寸兜底</span>
+<span class="fn">initNodes</span>()       <span class="cmt">// 创建311个节点（社会学107/经济学102/心理学102）的位置数据与约638条连线（含概念↔概念、思想家↔思想家同级直连）；addE 无向去重、同对边保留较强强度；并按节点数 N 自适应设定 ALPHA_DECAY(≤0.12) 与初始 alpha(≤0.7)，再调 seedPositions()</span>
+<span class="fn">seedPositions</span>()   <span class="cmt">// 按<strong>洗牌</strong>后的网格单元铺开+适度抖动（确定性打散使三学科交错混排、还原"混在一起"观感，且 N 驱动后续加节点自动铺开）；仅未定位节点播种，resize/重进页面保留现有布局</span>
+<span class="fn">tick</span>()            <span class="cmt">// 力导向一步：斥力+连线弹簧+居中力+（可选）时间轴x约束；积分段对单帧速度做 VMAX(90) 上限夹取防爆炸；alpha 随节点数自适应冷却后停</span>
+<span class="fn">reheat</span>(a)         <span class="cmt">// 重新加热仿真（切换筛选/时间轴/resize 时调用；温和值：时间轴0.4、筛选/面板0.4、resize0.5）</span>
+<span class="fn">draw</span>()            <span class="cmt">// 主渲染循环：tick→清屏→pan/zoom复合变换→(时间轴刻度)→点阵→连线→节点→屏幕空间学科图例</span>
+<span class="fn">drawEdge</span>(e, hl)   <span class="cmt">// 绘制贝塞尔曲线连线；两端任一不可见则跳过（已修复悬空线）；非高亮时按关联强度 e.s 控制线宽与透明度（强边粗亮、弱边细淡）</span>
+<span class="fn">drawNode</span>(n)       <span class="cmt">// 绘制节点圆圈+4px学科发光外环+内点+标签；半径用 effR(n)=n.r*nodeScale 动态缩放，拥挤时自动隐藏概念/领域标签</span>
+<span class="fn">computeNodeScale</span>() <span class="cmt">// 按可见节点数 sqrt(REF/N) 计算缩放比例（REF=55，夹取[0.55,1.1]）</span>
+<span class="fn">effR</span>(n)            <span class="cmt">// 当前尺度下实际绘制/命中半径 = n.r * nodeScale</span>
+<span class="fn">updateNodeScale</span>()   <span class="cmt">// 筛选/时间轴/resize 变化时重算缩放；变化超阈值则 reheat 让布局重新收敛</span>
+<span class="fn">drawModal</span>()        <span class="cmt">// A8弹窗内局部子图渲染循环（圆周布局+自适应缩放，保证节点落界内）</span>
+        </div>
+    </section>
+
+    <!-- C4: Map Interaction -->
+    <section id="C4">
+        <h2>[C4] 知识图谱交互</h2>
+        <div class="meta">
+            <span class="meta-location">📍 JavaScript · 交互层</span>
+            <span class="meta-type">JS 函数</span>
+        </div>
+        <div class="code-block">
+<span class="fn">hitTest</span>(mx, my)        <span class="cmt">// 碰撞检测：鼠标是否命中节点</span>
+<span class="fn">showPanel</span>(node)       <span class="cmt">// A14：打开知识节点详情卡片（右侧滑出）</span>
+<span class="fn">buildDetailHTML</span>(node) <span class="cmt">// A14/A8共用：按节点类型生成富化详情HTML（含CONCEPT_LABELS中文兜底）</span>
+<span class="fn">closePanel</span>()          <span class="cmt">// 关闭详情卡片</span>
+<span class="fn">navigateTo</span>(id)        <span class="cmt">// 跳转到指定节点并打开详情</span>
+<span class="fn">getNode</span>(id)           <span class="cmt">// 按ID查找节点</span>
+<span class="fn">getConnected</span>(id)      <span class="cmt">// 获取关联节点集合（用于高亮）</span>
+<span class="fn">isNodeVisible</span>(n)      <span class="cmt">// 判断节点是否可见（图例筛选）</span>
+<span class="fn">openTheoryModal</span>(id)   <span class="cmt">// A8：打开关联理论局部网络弹窗</span>
+<span class="fn">closeTheoryModal</span>()    <span class="cmt">// 关闭弹窗</span>
+<span class="fn">focusNode</span>(id)         <span class="cmt">// 关弹窗→切图谱页→选中并draw（"在知识图谱中展开"）</span>
+        </div>
+    </section>
+
+    <!-- C5: News System -->
+    <section id="C5">
+        <h2>[C5] 新闻系统</h2>
+        <div class="meta">
+            <span class="meta-location">📍 JavaScript · 交互层</span>
+            <span class="meta-type">JS 函数</span>
+        </div>
+        <div class="code-block">
+<span class="fn">renderNews</span>()              <span class="cmt">// 初始化日期导航，渲染最新日期的新闻</span>
+<span class="fn">renderNewsForDate</span>(date)     <span class="cmt">// 渲染指定日期的15条新闻卡片</span>
+<span class="fn">showNewsDetail</span>(id)          <span class="cmt">// 打开新闻详情面板（背景/事件/结果/理论分析）</span>
+<span class="fn">closeNewsDetail</span>()           <span class="cmt">// 关闭新闻详情面板</span>
+<span class="fn">showTheoryInGraph</span>(theoryId) <span class="cmt">// 切换到知识图谱并高亮对应理论节点</span>
+<span class="fn">openTheoryModal</span>(theoryId)   <span class="cmt">// A8关联理论按钮：弹出局部网络弹窗（替代原直接跳转）</span>
+        </div>
+    </section>
+
+    <!-- C6: Page Switch -->
+    <section id="C6">
+        <h2>[C6] 页面切换</h2>
+        <div class="meta">
+            <span class="meta-location">📍 JavaScript · 交互层</span>
+            <span class="meta-type">JS 函数</span>
+        </div>
+        <div class="code-block">
+<span class="fn">switchPage</span>(pageId) {
+    <span class="cmt">// 1. 隐藏所有 .page</span>
+    <span class="cmt">// 2. 显示目标 .page</span>
+    <span class="cmt">// 3. 更新 Tab 高亮</span>
+    <span class="cmt">// 4. 若切到知识图谱 → requestAnimationFrame → resizeCanvas() + initNodes() + draw()</span>
+}
+        </div>
+    </section>
+
+    <!-- C7: Init -->
+    <section id="C7">
+        <h2>[C7] 初始化入口</h2>
+        <div class="meta">
+            <span class="meta-location">📍 JavaScript · 入口</span>
+            <span class="meta-type">JS 函数</span>
+        </div>
+        <div class="code-block">
+<span class="cmt">// DOMContentLoaded 时执行</span>
+<span class="fn">init</span>() {
+    <span class="fn">renderNews</span>();       <span class="cmt">// 渲染社会热点（默认页）</span>
+    <span class="fn">observeElements</span>();  <span class="cmt">// 滚动动画观察器</span>
+    <span class="fn">resizeCanvas</span>();     <span class="cmt">// 初始化Canvas尺寸</span>
+    <span class="fn">initNodes</span>();        <span class="cmt">// 创建节点数据</span>
+    <span class="cmt">// draw() 只在 page-map 为 active 时调用</span>
+}
+
+<span class="cmt">// Tab 点击事件绑定</span>
+<span class="cmt">// window.resize 事件绑定</span>
+        </div>
+    </section>
+
+    <!-- MODULE INDEX TABLE -->
+    <section id="index">
+        <h2>模块索引总表</h2>
+        <p>所有19个模块一览，点击模块ID跳转到对应章节。</p>
+        <table class="module-table">
+            <thead>
+                <tr><th>模块ID</th><th>模块名称</th><th>所属页面</th><th>类型</th><th>说明</th></tr>
+            </thead>
+            <tbody>
+                <tr><td class="mod-id-cell"><a href="#A1">A1</a></td><td>设计变量</td><td class="mod-page-cell">全局</td><td>CSS</td><td>颜色、字体、圆角、阴影变量</td></tr>
+                <tr><td class="mod-id-cell"><a href="#A2">A2</a></td><td>导航栏</td><td class="mod-page-cell">全局</td><td>HTML+CSS</td><td>顶部Tab切换，社会热点在前</td></tr>
+                <tr><td class="mod-id-cell">A3</td><td>Tab样式</td><td class="mod-page-cell">全局</td><td>CSS</td><td>Tab按钮高亮状态</td></tr>
+                <tr><td class="mod-id-cell"><a href="#A4">A4</a></td><td>页面容器</td><td class="mod-page-cell">全局</td><td>HTML+CSS</td><td>.page 显示/隐藏控制</td></tr>
+                <tr><td class="mod-id-cell"><a href="#A5">A5</a></td><td>知识图谱Canvas</td><td class="mod-page-cell">知识图谱</td><td>Canvas+JS</td><td>311节点（社会学107/经济学102/心理学102）+约638连线（含跨学科桥接、概念↔概念、思想家↔思想家同级直连），力导向有机布局（Obsidian风格）+学科外环（4px发光）+拖拽平移/滚轮缩放+<strong>节点半径按可见数量动态缩放</strong>+<strong>连线按关联强度分层渲染</strong>（强关联粗亮、弱关联细淡）+视觉增强+<strong>时间轴刻度仅在有节点的年段绘制</strong>，节点可点击；维基链接经 API 全量审核（311/311 可解析）</td></tr>
+                <tr><td class="mod-id-cell"><a href="#A6">A6</a></td><td>图例筛选</td><td class="mod-page-cell">知识图谱</td><td>HTML+JS</td><td>类别多选复选框（默认仅核心概念）+学科可选单选+时间轴开关</td></tr>
+                <tr><td class="mod-id-cell"><a href="#A7">A7</a></td><td>Tooltip</td><td class="mod-page-cell">知识图谱</td><td>HTML+JS</td><td>节点悬浮提示框</td></tr>
+                <tr><td class="mod-id-cell"><a href="#A14">A14</a></td><td>知识节点详情卡片</td><td class="mod-page-cell">知识图谱</td><td>HTML+CSS+JS</td><td>点击节点右侧滑出，四类节点富化内容(buildDetailHTML)</td></tr>
+                <tr><td class="mod-id-cell"><a href="#A8-hot">A8</a></td><td>详情面板</td><td class="mod-page-cell">通用</td><td>HTML+CSS+JS</td><td>右侧滑出面板</td></tr>
+                <tr><td class="mod-id-cell"><a href="#A10">A10</a></td><td>日期导航</td><td class="mod-page-cell">社会热点</td><td>HTML+CSS+JS</td><td>左侧日期边栏，按年月分组、可折叠（已完成）</td></tr>
+                <tr><td class="mod-id-cell"><a href="#A11">A11</a></td><td>新闻卡片</td><td class="mod-page-cell">社会热点</td><td>HTML+CSS+JS</td><td>3列网格，每日期15条不重复</td></tr>
+                <tr><td class="mod-id-cell">A12</td><td>新闻透视</td><td class="mod-page-cell">社会热点</td><td>CSS</td><td>理论分析卡片样式</td></tr>
+                <tr><td class="mod-id-cell"><a href="#A13">A13</a></td><td>响应式</td><td class="mod-page-cell">全局</td><td>CSS</td><td>移动端适配</td></tr>
+                <tr><td class="mod-id-cell"><a href="#C1">C1</a></td><td>图谱数据</td><td class="mod-page-cell">JS数据层</td><td>JS常量</td><td>思想家29/理论21/概念34/领域18（共102，231连线）</td></tr>
+                <tr><td class="mod-id-cell"><a href="#C2">C2</a></td><td>新闻数据</td><td class="mod-page-cell">JS数据层</td><td>JS文件(外置news-data.js)</td><td>全自动（抓取+AI审核+入库）；每日期15条，保留最近7天，附NEWS_REVIEW_STANDARD.md与news-review-log.json</td></tr>
+                <tr><td class="mod-id-cell"><a href="#C3">C3</a></td><td>Canvas渲染</td><td class="mod-page-cell">JS引擎</td><td>JS函数</td><td>力导向tick+绘制节点/连线/点阵/屏幕空间学科图例（pan/zoom复合变换）</td></tr>
+                <tr><td class="mod-id-cell"><a href="#C4">C4</a></td><td>图谱交互</td><td class="mod-page-cell">JS交互</td><td>JS函数</td><td>点击/悬停/拖拽平移/滚轮缩放/多选筛选/跳转</td></tr>
+                <tr><td class="mod-id-cell"><a href="#C5">C5</a></td><td>新闻系统</td><td class="mod-page-cell">JS交互</td><td>JS函数</td><td>渲染/详情/日期切换</td></tr>
+                <tr><td class="mod-id-cell"><a href="#C6">C6</a></td><td>页面切换</td><td class="mod-page-cell">JS交互</td><td>JS函数</td><td>Tab切换逻辑</td></tr>
+                <tr><td class="mod-id-cell"><a href="#C7">C7</a></td><td>初始化</td><td class="mod-page-cell">JS入口</td><td>JS函数</td><td>启动绑定事件</td></tr>
+            </tbody>
+        </table>
+    </section>
+
+    <!-- CHANGELOG -->
+    <section id="changelog">
+        <h2>更新日志</h2>
+        <span class="changelog-toggle" id="clToggle">查看全部记录 ▾</span>
+        <table class="module-table" id="clTable">
+            <thead><tr><th>日期</th><th>版本</th><th>改动内容</th><th>涉及模块</th></tr></thead>
+            <tbody>
+                <tr><td>2026-07-28</td><td>v1.23</td><td><strong>[手机端知识图谱可读性] 参考 Obsidian 全图可读范式，回应"手机上图谱太凌乱"的反馈：</strong>① <strong>三学科空间聚簇</strong>——新增学科聚类力 <code>FORCE.cluster=0.05</code>：非时间轴模式下，把社会学/经济学/心理学节点分别拉向画布横向三锚点（W×0.2 / W×0.5 / W×0.8），同时把居中力横向分量降为 *0.4，使三学科自然分成左右三簇（实测手机端质心 soc≈135 / econ≈197 / psy≈247.5，桌面端 soc≈442.6 / econ≈646.2 / psy≈820.8，均有序且互不串带）；跨学科桥接节点仍允许越界以保持网络连通。② <strong>语义缩放（手机端）</strong>——<code>drawNode</code> 标签改为语义缩放：手机默认只画色点不画字，仅当选中/悬停/聚焦邻域或放大到 1.8× 以上时才浮现标签，消除小屏文字噪点；桌面保持思想家/理论流派常显、其余按缩放级别显隐。③ <strong>学科色环加粗发光</strong>——节点外环 <code>lineWidth</code> 4→5、<code>shadowBlur</code> 6→8，三学科配色（soc #5B6FB5 / econ #D4A017 / psy #2FA37C）在小屏更醒目、更易凭色区分。④ service worker 缓存 <code>shehui-ren-v4</code>→<code>shehui-ren-v5</code> 强制手机端丢弃旧缓存。校验：无头 Chromium 390×844（手机）+ 1280（桌面）双视口——三学科横向质心有序分离、手机语义缩放生效（未选中且 scale&lt;1.8 时无标签）、选中聚焦开详情面板、学科筛选（仅社会学）其余学科节点全隐、零 pageerror</td><td>A5, A6, C3, C4, 移动端</td></tr>
+                <tr><td>2026-07-24</td><td>v1.22</td><td><strong>[知识图谱] 手机端触屏交互补全 + 浏览路径打通：</strong>① <strong>手机图谱"完整图谱+强缩放"策略</strong>——Web 端保持完整图谱不变；手机端此前无任何触屏处理（仅 mousedown/wheel/click），缩放/平移在触屏完全失效。新增 touchstart/move/end 处理：单指拖拽平移、双指捏合缩放（围绕中点，范围 0.35–4）、轻点选中节点（容差移动端 +14）；effR 移动端 ×1.35 放大节点更易点中。新增辅助 centerOnGraph(mult)（首进移动端居中放大 1.4× 并浮现"双指捏合缩放·单指拖动平移"提示 3.2s）、centerOnNode(node)（聚焦关联节点时居中）。isMobile 全局判定 + resize 跨断点重适配。② <strong>浏览路径断裂修复</strong>——原 A8「关联节点」按钮 focusNode(id) 跳到节点详情后，详情卡仅有 ✕、无返回入口，路径断裂。现 focusNode(id, fromNewsId) 记录来源新闻 id 并关 A8；buildDetailHTML 在从新闻进入时渲染「← 返回新闻」按钮（backToNews()：关面板+切回新闻页+重开 A8）；closePanel() 清来源；showNewsDetail 记 currentNewsItem；关联节点/溯源按钮传 item.id。顺延探索关联节点时保留来源不丢返回入口。service worker 缓存 shehui-ren-v3→shehui-ren-v4 强制刷新。校验：无头 Chromium 390×844 + 1280——移动端初始 scale=1.4、拖拽改 view.ox、捏合 scale 1.4→3.73、新闻→关联节点→详情面板开且含返回按钮且 returnNewsId 置位、点返回回到 A8(mapActive=false, newsOpen=true)；桌面点节点开面板但无返回按钮（无新闻来源）、零 pageerror</td><td>A3, A8, 图谱, 移动端</td></tr>
+                <tr><td>2026-07-24</td><td>v1.21</td><td><strong>[PWA 真正可安装 + 新闻页头部优化] 回应"吸底 banner 是否可用 / 头部文案丑且空"：</strong>① <strong>PWA 安装引导做成真正可用</strong>——原 `#pwaHint` 只有文案+关闭、点了不会安装（无 `beforeinstallprompt`、无 iOS 引导、无 `appinstalled`）。重写 PWA IIFE：接 `beforeinstallprompt` 捕获 `deferredPrompt`，Android/Chrome 点「添加」按钮弹原生安装；iOS Safari（无该事件）延迟 1.5s 显示「点右上角 分享⤴ → 添加到主屏幕」引导并隐藏「添加」按钮；`appinstalled` 后自动隐藏；已 `display-mode:standalone` 不再提示；关闭写入 `localStorage('pwaHintDismissed')`。新增 HTML `#pwaHintAdd` + CSS `.pwa-hint-add`（红底圆角）。service worker 缓存 `shehui-ren-v2`→`shehui-ren-v3` 强制手机端丢弃旧缓存。② <strong>头部字体</strong>——标题原本用 `--font-display`（Fraunces 纯拉丁、无中文字形）→ 中文回退系统宋体显丑；head 字体 `<link>` 追加 `Noto+Serif+SC:wght@600;700;900`（经 fonts.loli.net 镜像、`display=swap`、仅三字重，免费不侵权），`--font-display` 改为 `'Fraunces','Noto Serif SC',Georgia,serif`（拉丁仍 Fraunces、中文回退思源宋体，全站中文标题一起变精致）。③ <strong>标题/副标题单行</strong>——`.section-title` 改 `clamp(22px,3.2vw,32px)`、`font-weight:700`、`white-space:nowrap`；`.section-subtitle` 改 `font-size:14px`、`max-width:640px`、`white-space:nowrap`；移动端（≤768）标题 19px / 副标题 12.5px 仍单行，≤340px 极窄屏放行折行防横向溢出。④ <strong>压缩空白</strong>——`.section` 上 padding `100px`→`36px`（页面容器 `#page-topics` 已有 `padding-top:56px` 清导航，故原 156px 顶部留白大幅削减）、`.section-header` 下 margin `64px`→`28px`、`.section-num` 下 margin `12px`→`8px`；移动端 `.section` padding `48px`→`28px`。校验：无头 Chromium 390×844 / 1280 / 320 三视口——标题与副标题均单行（320px 优雅折行、`docScrollW==winW` 无横向滚动）、思源宋体已进入 font-family 栈、PWA「添加」按钮在 Android 模拟下可见可点、iPhone UA 下显示「分享→添加到主屏幕」引导且「添加」隐藏、桌面模态(z300)仍盖导航(z100)无回归</td><td>A2, PWA, 移动端, 头部</td></tr>
+                <tr><td>2026-07-24</td><td>v1.20</td><td><strong>[移动端] 回应手机实测两类 iOS Safari 专项回归：</strong>① <strong>日期抽屉盖过导航栏</strong>——根因是 iOS Safari 中导航栏的 <code>backdrop-filter: blur</code> 会破坏 <code>position:fixed</code> 兄弟元素的 z-index 层叠，使低 z-index 的抽屉反而盖住导航（Chromium 正常、iOS 异常，故本地/部署测均"正确"却手机异常）。改为<strong>抽屉整体下沉到导航栏之下</strong>：移动端 `.date-sidebar` 由 `top:0; height:100vh; padding-top:56px` 改为 `top:56px; height:calc(100dvh - 56px); padding:0 12px 16px`，从结构上永不与导航区（y:0–56）重叠，导航常驻可见；同时抽屉 z-index 60→90、遮罩 55→80、详情面板 50，三者仍均低于导航 100。② <strong>无限下滑</strong>——iOS 的 `100vh` 含地址栏后的大视口，会使固定浮层高于可见区、且橡皮筋留白显"无限"；浮层高度改 `100dvh`（保留 `100vh` 兜底），并给 `html/body` 加 `overflow-x:hidden`、body 加 `overscroll-behavior-y:contain` 抑制橡皮筋。③ 顺带 bump service worker 缓存版本（<code>shehui-ren-v1</code>→<code>shehui-ren-v2</code>）强制手机端刷新掉旧缓存 HTML。校验：无头 Chromium 390×844 + 1280 双视口复测——抽屉 <code>top=56</code> 不压导航（<code>drawerOverlapsNav:false</code>）、A8 点卡片满宽滑入正常、桌面模态(z200/300)仍盖导航(z100)、日期侧栏仍 sticky 无回归；文档高度=内容高度无多余空白</td><td>A10, A8, A2, 移动端</td></tr>
+                <tr><td>2026-07-24</td><td>v1.19</td><td><strong>[移动端适配重构] 回应手机实测三类问题（A10/A8/多余滚动）：</strong>① <strong>根因</strong>——原 `@media(max-width:768px)` 块位置在 `.detail-panel`/`.topics-layout`/`.date-sidebar` 等基础规则之前，同特异度下被源序压住导致移动端覆盖部分失效；改为把所有移动端规则集中放到 `<style>` 末尾，确保覆盖必胜。② <strong>问题1（A10 日期侧栏）</strong>——移动端由常驻顶部窄块改为<strong>左侧滑入抽屉</strong>：主区直接显示 A11 新闻列表，顶部"📅 选择日期"按钮点开抽屉选日期、选后自动收起（含遮罩 backdrop）；桌面端维持原左列不变。③ <strong>问题2（A8 详情面板）</strong>——移动端由 `width:440px` 右对齐（致左裁右宽）改为 `#newsPanel{width:100%}` 满宽，dp-header/dp-body 内边距收到 18px，左右等宽。④ <strong>问题3（多余滚动）</strong>——抽屉 fixed 移出正常流后页面高度=新闻列表高度，消除滑到底的空白；新闻网格移动端单栏（`grid-template-columns:1fr`）。新增 HTML：`#dateTrigger`/`#dateBackdrop`/`#dateSidebar` + JS `setupDateDrawer()`/`updateDateTrigger()`（init 调用）。校验：HTML 标签零失衡、node --check 主脚本通过、部署后线上触发按钮显示"📅 选择日期：2026-07-24 ▾"确认 JS 生效</td><td>A10, A8, A11, 移动端</td></tr>
+                <tr><td>2026-07-24</td><td>v1.18</td><td><strong>[E+F 步] 正式上线 + 每日自动部署（回应"发布到线上+尝试推广"）：</strong>① <strong>E 步上线</strong>——Netlify 拖拽部署 sociology-map 文件夹，得生产站点 `clinquant-profiterole-f9bd62`；阿里云购域名 `shehui-ren.com`（.com 信任度最高、微信/搜索不拦截）+ 实名通过 + 改 DNS 为 Netlify NS，正式站 <strong>https://shehui-ren.com 已上线</strong>（WebFetch 验证含 7/24 最新新闻、SSL 自动签发）。② <strong>F 步每日自动上线已接</strong>——本机装 netlify-cli（managed node workspace），新建 `ctrip-claw/deploy-netlify.js`（读 `ctrip-claw/.netlify_token` Netlify Personal Access Token → `netlify deploy --prod --dir=<sociology-map> --site=<真实SiteID>`），手动跑通验证 `Deploy is live!`；自动化 `automation-1784183014346` 新增步骤14「自动部署上线」，每天 9:06/21:06 跑完即自动发布，无需人工拖拽。③ sitemap.xml / robots.txt 占位域名已改真实 `shehui-ren.com` 并随部署上线。④ 新建文件：`_redirects`（根路径 rewrite 到 sociology-map.html，无 index.html 也能根访问，PWA 正常）</td><td>上线 / 部署</td></tr>
+                <tr><td>2026-07-23</td><td>v1.17</td><td><strong>[上线准备 Phase 0] 面向高中生作文素材定位 + 正式发布加固：</strong>① <strong>定位重构</strong>——主标题/英雄区文案翻转为"高中生时事作文素材库（社科视角硬核解读）"，SEO 关键词切到 作文素材/高考作文/时事素材；新增"怎么用"引导弹窗（3 步说明如何把每日热点变成可积累素材）。② <strong>SEO/分享加固</strong>——补 meta description / keywords / OG+Twitter 卡片 / theme-color / favicon，Google Fonts 换国内可访问镜像 fonts.loli.net 并保留系统字体兜底。③ <strong>PWA（像 App 一样用）</strong>——新增 manifest.webmanifest + sw.js（应用外壳缓存、news-data.js 网络优先保新鲜、离线可看）+ 移动端"添加到主屏幕"引导条。④ <strong>移动端修复</strong>——原 @media 把导航标签 display:none 导致手机切不到知识图谱，改为保留紧凑标签；详情面板移动端改全宽。新增资源文件：favicon.svg / favicon-maskable.svg / og-image.svg / manifest.webmanifest / sw.js / sitemap.xml / robots.txt。校验：node --check sw.js 通过、manifest JSON 合法、HTML 标签零失衡、关键注入点就位</td><td>A1, A8, C2, 上线准备</td></tr>
+                <tr><td>2026-07-23</td><td>v1.16.1</td><td><strong>[C2] 新闻数据质量加固（回应源质量问题反馈）：</strong>① <strong>来源可信度分层（S0 新增）</strong>——编辑源/机构/政府可直接用；"热议话题"须另有 ≥1 条编辑源报道、<code>source/url</code> 指向编辑源，微头条/抖音个人/小红书/知乎回答/微博个人/营销号等 UGC 个人帖原则上排除（不得把个人帖当新闻主源、不得把个人号冒充媒体出处）。② <strong>标题/立论事实一致性（S6 新增，入库前硬闸）</strong>——重抓主源核对 <code>title/gist</code> 关键事实与源文一致，引用专业路径/制度时不得自相矛盾（如「高考 + 中本贯通」）。③ <strong>已修正 2026-07-23 两条脏数据</strong>：id6「男生高考681分…中本贯通」→ 实为中考生（源文明确「中考681分」），改「中考」并修正 gist/脉络/优绩主义阶梯表述、source 由聚合站光明网改为真实出处大河报；id12「上班后消费观变了」来源由今日头条微头条 UGC 个人帖改为消费日报编辑源（xfrb.com.cn）。④ <strong>校验同步</strong>：<code>news-validate.js</code> 加 UGC 源软告警（命中 toutiao.com/w、小红书/抖音/微博个人帖、知乎回答等模式时 WARN，热榜索引页 s.weibo.com/top/summary 不误报）；自动化 <code>automation-1784183014346</code> 步骤3 加来源类型标注、步骤8 加「重抓主源核对标题事实」、红线新增两道闸。校验：news-validate 0 失败（3 条历史 soc-only 告警预期）、_test_research 15/15、_validate_v11 10/10、_bugtest_axis/axis2 无回归</td><td>C2, A8</td></tr>
+                <tr><td>2026-07-22</td><td>v1.16</td><td><strong>[A8/C2] 新闻结构整合升级（响应"把 news-pilot 的新结构 + 前沿研究预览整合进正式新闻页"）：</strong>① <strong>新新闻结构全量落地</strong>——将 news-pilot 试验的<strong>疑问驱动结构</strong>整合进正式网站：每条新闻由旧版 <code>background/event/outcome/perspectives</code> 升级为 <code>kicker / gist(一句话立论) / thread(事件脉络时间线) / interpretations[]</code>（每条 = 读者真问题 q → 常识误判 naive → 透镜 lens/lensId → 学术解读 body(含 &lt;b&gt;理论名&lt;/b&gt;) → 顿悟 aha）；最新批次 2026-07-22 的 15 条已用新结构重写（id1–3 精写移植、id4–15 重构），历史 6 个日期因在扩科前生成保留旧结构、前端兼容降级渲染（<code>showNewsDetail</code> 按 <code>hasNew = gist||interpretations</code> 分支）。② <strong>前沿研究内嵌解读（与 v1.15 一致）</strong>——<code>research</code> 嵌套于最匹配的 <code>interpretation</code>（而非旧版 perspective），该解读正文即用研究，并附「溯源 → B」按钮；A14 节点卡片尾部仍反向聚合所有以它为 <code>interpretations[].research.fromNode</code> 的新闻研究（新闻↔知识双向可达）。③ <strong>新闻卡片与详情 CSS 新增</strong>：<code>.dp-gist / .dp-thread / .dp-interp*</code> 等样式，呈现立论块、脉络时间线、疑问驱动解读卡。④ <strong>契约与标准同步</strong>——<code>NEWS_REVIEW_STANDARD.md</code> schema 表重写为新结构 + S6 校验 gist/thread/interpretations、S9 研究嵌套于 interpretation；<code>news-validate.js</code> 改为"新(interpretations)/旧(perspectives)二选一"结构识别，逐结构校验（research 仅 warn）；自动化 <code>automation-1784183014346</code> 步骤8/9/10 改写为新结构（S6 校验 gist/thread/interpretations、S9 研究挂到最匹配 interpretation）。校验：news-validate 0 失败（4 条历史 soc-only 告警，无关）、_test_research.js 注入改 interpretations[0] 全绿、_validate_v11 10/10、_bugtest_axis/axis2 图谱回归无回归（311 节点/638 边/0 孤儿）</td><td>A8, C2, A14</td></tr>
+                <tr><td>2026-07-22</td><td>v1.15</td><td><strong>[A8/A14/C2] 前沿研究层重构：从"独立区块"改为"内嵌于社科视角解读"（回应两点反馈：① 研究不应单独成块，本就是社科视角解读的一部分；② 预览种子 Morrison 论文与"办公室不说话"关联偏弱）：</strong>① <strong>数据模型嵌套</strong>——删除新闻顶层 <code>research[]</code>，改为每个 <code>perspective</code> 可带可选 <code>research</code>（title/url/year/venue/authors/summary/fromNode）；研究直接挂到最匹配的那个视角，该视角的"学术视角"正文即用该研究。② <strong>上游知识内嵌呈现</strong>——视角内除展示研究（标题外链+年份·期刊·作者+白话解读）外，附其<strong>上游知识节点 B</strong>的「溯源 → B」按钮（<code>focusNode(B)</code> 跳知识图谱）+ B 的一句知识解读，实现"解读用研究 + 附带上游知识"二者不冲突。③ <strong>A14 反向聚合保留</strong>：节点 B 卡片尾部仍聚合所有以它为 <code>perspectives[].research[].fromNode</code> 的新闻研究（新闻↔知识双向可达不变）。④ <strong>种子替换+标准收紧</strong>——预览种子换成与"办公室不说话"直接相关的 Hao 等 2022《When Is Silence Golden?》员工沉默元分析（fromNode:'work'，DOI 10.1007/s10869-021-09788-7）；<code>NEWS_REVIEW_STANDARD.md</code> 的 <strong>S9</strong> 重写为研究嵌套于视角、核心闸门收紧为"须与对应视角/新闻直接相关，否则剔除"、fromNode=真实上游节点。⑤ <strong>校验与自动化同步</strong>——<code>news-validate.js</code> 改为逐视角校验 research（违规仅 warn）；自动化 <code>automation-1784183014346</code> 步骤9 改写为"为最相关视角挂载 1 条直接相关研究、fromNode=真实上游节点、不达标则剔除"。校验：news-validate 0 失败、_test_research.js（改注入视角内）全绿、_bugtest_axis/axis2 图谱回归无回归</td><td>A8, A14, C2</td></tr>
+                <tr><td>2026-07-21</td><td>v1.14</td><td><strong>[A8/A14/C2] 新闻页新增「🔬 前沿研究」层（回应"有限经典节点解释每日新闻略显落后"的诉求）：</strong>① <strong>数据层不新增图谱节点</strong>——每条新闻可挂可选 <code>research[]</code>（标题/外链 url/年份 year/期刊 venue/作者 authors/一句解读 summary/源节点 fromNode），由自动化按 <a href="#C2">C2</a> 审核标准 <strong>S9</strong> 每日 best-effort 检索挂载真实可核验研究（best-effort 加分项，不阻塞入库）。② <strong>A8 新闻详情面板新增「🔬 前沿研究」区块</strong>（perspectives 与「关联知识」之间），每条研究渲染标题外链 + 年份·期刊·作者 + 白话解读，并带<strong>「溯源 → B」</strong>按钮经 <code>focusNode(B)</code> 跳转到知识图谱定位其源节点 B；研究的 fromNode 还会被合并进下方「关联知识」列表，使研究脉络进入关联点。③ <strong>A14 节点卡片反向聚合</strong>：节点 B 的卡片尾部聚合所有以它为 fromNode 的新闻研究，形成新闻↔知识的双向可达。④ <strong>校验与标准</strong>——<code>news-validate.js</code> 新增 research 可选校验（url 合法 / fromNode 在图谱节点集 / year 合理区间，违规仅 warn 不阻断）；<code>NEWS_REVIEW_STANDARD.md</code> 新增 <strong>S9 前沿研究</strong> 章节（发现方式、fromNode 映射、5 条校验闸门、best-effort 不阻塞、国际研究同受 S0）。⑤ 已种入 1 条真实研究种子（Morrison &amp; Milliken 2000《Organizational silence》，fromNode:'work'）用于预览。校验：_test_research.js（jsdom 渲染）9/9 全绿（前沿研究板块/标题/外链/溯源按钮/出处年份均现、无 research 的新闻不出现板块、节点页聚合生效）、news-validate 0 失败、_bugtest_axis/axis2 图谱回归无回归（311 节点/638 边/0 孤儿）</td><td>A8, A14, C2, A11</td></tr>
+                <tr><td>2026-07-21</td><td>v1.13</td><td><strong>[A5] 修复两类排布/关联问题（用户反馈"进入页面三科分带上中下、心理学与另两科基本无关联"）：</strong>① <strong>消除三科竖向分带</strong>——根因是 <code>seedPositions()</code> 按节点下标 <code>i</code> 填网格，而 <code>initNodes</code> 按"社会学→经济学→心理学"顺序压入，宽画布下三科各占上/中/下几行，再被快速冷却冻结成三条横带。修复——播种前用<strong>确定性洗牌</strong>把节点打散到网格单元，使三学科在种子阶段就<strong>交错混排</strong>，力导向随后形成相互穿插的簇，还原"混在一起"的观感（同时保留铺开式、互不重叠）。已量化校验：三科 Y 区间完全重叠、Y 中位数跨度仅占画布 0.12–0.20（阈值 &lt;0.55），确无分带。② <strong>修复心理学跨科关联失效 + 补建桥接</strong>——用引用完整性脚本揪出 <strong>37 个幽灵引用</strong>，其中 <code>socialization</code>（社会化）本应存在却被漏建，导致 4 条心理↔社会跨科边（从众/依恋/Bandura/Erikson→socialization）与多位社会学思想家 influence <strong>被静默丢弃</strong>；现已补建"社会化"社会学概念节点（度数 17，直接连 13 个心理学节点），并新增 14 条本应有却被漏掉的桥接（精神分析/潜意识/本我自我超我/依恋类型/刻板印象/大五/基本归因错误/自我效能→社会化；内外群体→冲突；习得性无助→失范；集体潜意识→符号；损失厌恶/锚定→理性选择），心理学跨科边由失效恢复至 <strong>26 条</strong>、全图跨科边 34 条，三科真正成网。注：剩余 36 个幽灵引用（如官僚制/剩余价值/父权制等核心社会学概念、德里达等思想家 influence 指向的未建节点）为既有数据存量问题，已列入待办清单，不在本次越界扩写。校验：_validate_v11 10/10（311节点/638边/0孤儿）、news-validate 0 失败、_bugtest_axis 时间轴无贴角、_bugtest_axis2 学科筛选未反选、_test_axis3 沉降30帧(0.5s)+wrongClamp=0（N=311 与 N=933 扩量复跑均通过）、新增 _test_mix 混合度+心理学连通性专项全绿</td><td>A5, C1, C3</td></tr>
+                <tr><td>2026-07-21</td><td>v1.12</td><td><strong>[A5] 动态抖动治理（用户反馈"进入页面乱动太久 / 打开时间轴疯狂乱动且聚集左上角"）：</strong>① <strong>铺开式网格播种</strong>——<code>seedPositions()</code> 由"中心 40–260px 随机"改为<strong>按画布长宽比网格铺开+适度抖动</strong>，初始重叠极低，杜绝斥力爆炸式炸开；且完全由节点数 N 驱动，后续加节点自动铺开、无需手动定位。② <strong>冷却提速 + 初始温度下调</strong>——<code>alpha</code> 初始 1→0.5、<code>ALPHA_DECAY</code> 0.022→0.08，进入页面约 <strong>0.5s 停稳</strong>（原 ~2.25s）。③ <strong>速度上限 VMAX=90</strong>——积分段对单帧速度夹取 ±90px，杜绝时间轴切换/初始布局时节点冲过目标被夹到画布边缘。④ <strong>时间轴开启预置 X 到位</strong>——点击开关瞬间将所有节点 <code>baseX</code> 直接设为 <code>yearToX(year)*W</code>（Y 不变），不依赖物理滑动预算，<strong>从根本上消除"贴角聚集/滑不到位"</strong>，任意节点规模下时间轴定位都准确。⑤ <strong>冷却随节点数自适应（可扩展防线）</strong>——<code>initNodes</code> 内按 <code>sqrt(310/N)</code> 重算 <code>ALPHA_DECAY</code>（≤0.12）与初始 <code>alpha</code>（≤0.7）：小图依旧~0.5s 静止，大图自动多给迭代预算，不会"没散开就冻结"。<code>reheat</code> 各调用点统一降为温和值（时间轴 0.4、筛选/面板 0.4、resize 0.5）。校验：_validate_v11 10/10、news-validate 0 失败、_bugtest_axis 时间轴无贴角全绿、_bugtest_axis2 学科筛选未反选、_test_axis3 沉降30帧(0.5s)+时间轴 wrongClamp=0（N=310 与 N=930 扩量复跑均通过）</td><td>A5, C3</td></tr>
+                <tr><td>2026-07-21</td><td>v1.11</td><td><strong>[A5/A14] 知识节点优化三件套（回应用户三点诉求）：</strong>① <strong>节点丰富度大幅提升</strong>——经济学、心理学各由 40 扩充至 <strong>102 节点</strong>（与社会学对齐，每科结构一致：思想家29 / 理论21 / 概念34 / 领域18），三科共 <strong>306 节点</strong>；同步补齐 <code>ECON_/PSY_TOPIC_THEORIES</code>、<code>CONCEPT_LINKS</code>、<code>THINKER_LINKS</code> 与跨学科桥接边，总边数增至 <strong>600</strong>，并修复历史遗留的 <code>structuralism</code> 孤立节点（新增 poststructuralism→structuralism 边）。② <strong>维基链接全量审核修正</strong>——用 Wikipedia API 批量检测 306 条链接，修正 <strong>37 处不准确链接</strong>：10 处指向消歧义页（如<strong>异化→专指马克思异化，改指 <code>Marx's theory of alienation</code></strong>；理性化、惯习、场域、越轨、功能主义等改指对应社会学专条）、26 处指向不存在的臆造英文条目（如世界体系理论、社会事实、文化资本、各研究领域社会学等改指真实条目）、1 处中文消歧义（反思性→反身性）；并为 <code>rationalization_theory</code> 补上缺失的 wiki。审核结果：306/306 全部可解析、0 消歧义、0 失效（15 条重定向均能正确跳转，保留）。③ <strong>时间轴范围裁剪</strong>——最早刻度由 1750 收敛到实际有节点的年份区间（1723–2000），无对应节点的时间刻度不再展示。校验：_validate_v11 10/10、_validate9 回归、news-validate 0 失败、时间轴/学科筛选回归测试全绿</td><td>A5, A14, A6, C1, C3</td></tr>
+                <tr><td>2026-07-21</td><td>v1.11</td><td><strong>[A5] 时间轴早期空白 + 早期奠基人补全（用户反馈"看到的节点全部在1800之后"）：</strong>① <strong>时间轴刻度改为"节点感知"</strong>——<code>recalcYearRange</code> 缓存所有节点年份 <code>YEAR_NODES</code>，绘制刻度时仅当该 50 年段内<strong>确有节点</strong>才画线+标年份，彻底消除"无对应节点的时间刻度"（此前虽声称裁剪，实际仍是固定 50 年刻度 1700–2000）。② <strong>补齐缺失的早期社会学奠基人</strong>——新增 <strong>圣西门(1760)·孔德(1798)·托克维尔(1805)·斯宾塞(1820)</strong> 四位思想家（社会学之父孔德、空想社会主义先驱圣西门此前竟未收录），并接入 <code>THINKER_ERA</code>/<code>THINKER_LINKS</code>/<code>NODE_META</code>（中文维基，均经 API 核验可解析）。现 1800 年前节点由 3 个（均经济学家）增至 <strong>5 个</strong>（新增圣西门、孔德），社会学思想家 29→33，总节点 306→<strong>310</strong>、总边 600→<strong>616</strong>。校验：_validate_v11 10/10、wiki 全量审核 310/310 零问题</td><td>A5, A14</td></tr>
+                <tr><td>2026-07-21</td><td>v1.11</td><td><strong>[A5] 时间轴约束力修正（用户复核发现"斯密/圣西门等早期人物仍显示在1800之后"）：</strong>根因——时间轴 x 约束 <code>FORCE.timeX=0.06</code> 远弱于<strong>居中力</strong>（画布中心≈年份1850位置）与<strong>连线弹簧</strong>，早期节点被整体拽向画布中部、挤在1800刻度附近，年份→位置映射虽对、约束却被碾压。修复——开启时间轴时：① 将 <code>timeX</code> 提升至 <strong>0.5</strong>（x 由年份强力主导）；② <strong>关掉居中力的横向分量</strong>（居中力仅保留纵向铺开 y），使节点真正按年份从左到右排布。验证：复刻真实"点击开关→reheat(1)→跑1000帧"流程，斯密(1723)/圣西门(1760)/马尔萨斯(1766)/李嘉图(1772) 现均落在 1800 刻度左侧且按年份自左向右铺开，孔德(1798)紧贴1800线、托克维尔(1805)/斯宾塞(1820)居其右，完全符合真实年份；_validate_v11 10/10、news-validate 0 失败、时间轴/学科筛选回归全绿</td><td>A5, A14</td></tr>
+                <tr><td>2026-07-21</td><td>v1.10</td><td><strong>[A5] 关联关系建立逻辑增强（两处）：</strong>① <strong>新增同级直连</strong>——新增 <code>CONCEPT_LINKS</code>（概念↔概念，52条）与 <code>THINKER_LINKS</code>（思想家↔思想家，52条）两张表，按三大领域系统性补"同级直连"，使"仅核心概念"/"仅思想家"视图自身也成网状（概念-view 由 5 边→52 边、思想家-view 由 5 边→52 边），不再全指向被隐藏的理论；② <strong>关联强度 s 真正生效</strong>——改写 <code>drawEdge</code> 非高亮分支，用每条边的 <code>s</code>（0.40–1.00）控制线宽与透明度（强边粗亮、弱边细淡），主图呈现视觉层次；③ 顺带修复<strong>历史遗留重复边</strong>：原 <code>addE</code> 因 <code>理论.keyThinkers</code> 与 <code>思想家.influence</code> 双向声明同一对节点会重复加边且强度不一致，现 <code>addE</code> 改为无向去重、同对边保留较强强度。总边数 338→358（去重后），0 悬空、0 重复；校验 _validate9 27/27、news-validate 0 失败</td><td>A5, C1, C3, C4</td></tr>
+                <tr><td>2026-07-20</td><td>v1.9</td><td><strong>[A5] 节点尺寸动态自适应（修复"节点一多就糊成一坨"）：</strong>新增 <code>nodeScale</code> 机制——按当前可见节点数 N 计算缩放比例 <code>sqrt(55/N)</code> 并夹取 [0.55, 1.1]；<code>effR(n)=n.r*nodeScale</code> 用于绘制与 hitTest，tick() 中斥力/连线理想长度同步乘 <code>1/sqrt(nodeScale)</code> 使节点越多越散开；筛选/时间轴/resize 变化时 <code>updateNodeScale()</code> 重算并在阈值变化时 reheat。实测：全显182节点时概念半径 12→6.6px（缩小45%）、思想家 18→9.9px，且概念/领域标签自动隐藏（仅思想家/理论流派常显，悬停/选中项始终显示），拥挤时不再文字重叠。注：此前"关联关系变少"经核验非 bug，系 v1.8 默认仅核心概念+隐藏悬空连线之设计结果——勾选全部类别即恢复 338 条连线。</td><td>A5, C3, C4</td></tr>
+                <tr><td>2026-07-20</td><td>v1.8</td><td><strong>知识图谱重设计（更灵动、更聚焦）：</strong>① 布局由"学科横向分带×时间轴网格装箱"改为<strong>力导向有机布局（Obsidian 风格）</strong>——每帧 tick() 执行斥力+连线弹簧+居中力+（可选）时间轴x约束，alpha冷却后自动停；② 默认<strong>仅展示核心概念</strong>，类别筛选改为<strong>多选复选框</strong>（思想家/理论流派/核心概念/研究领域按需勾选逐步揭示），并修复筛选后<strong>悬空连线</strong> bug（drawEdge 改为两端任一不可见即跳过，只显示选中类型节点及其相互连线）；③ 移除页面级<strong>学科分带</strong>（背景带+左侧标签），学科仅以<strong>节点外环颜色</strong>区分，外环加粗至4px并带同色发光、新增屏幕空间学科图例；④ 新增<strong>时间轴开关</strong>（默认关，开启后X软约束年份、Y由力导向自由散开）；⑤ 新增主图谱<strong>拖拽平移+滚轮缩放</strong>（复合变换矩阵+hitTest逆变换，区分点击与拖拽）；⑥ resize/重进页面改为夹取边界+重新加热，保留布局不再重置；同步更新 _validate9 断言（afx/afy→baseX/baseY）与本文档 A5/A6/C3/C4 描述</td><td>A5, A6, C3, C4</td></tr>
+                <tr><td>2026-07-20</td><td>v1.7</td><td><strong>C2 新闻数据由半自动升级为全自动：</strong>① 数据外置——将内联 <code>NEWS_DATA</code> 抽离为独立 <code>news-data.js</code>（HTML 通过 <code>&lt;script src="news-data.js"&gt;</code> 引入），自动化只改写此小文件，规避"主文件被自动化改写"风险；项目源与 ctrip-claw 镜像均已完成外置与同步。② 审核标准固化——新增 <code>NEWS_REVIEW_STANDARD.md</code>（S0 合规硬闸 / S1 条数=15 / S2 特大跨平台热榜交叉 / S3 学科交叉 / S4 关联强度反向核实 / S5 时效去重 / S6 字段与链接校验 / S7 留存≤7天与回退 / S8 可复核日志）。③ 自动化改造——原"出草稿等人审"的半自动管道重写为"抓取+审核+直接入库+同步镜像+写日志+自检"的全自动管道（每日 9:06/21:06），并保留 <code>news-validate.js</code> 校验兜底。④ 图谱节点 id 复用已修复：原共用的 <code>rationalization</code> 已拆分为 <code>rationalization_theory</code>(理性化理论) 与 <code>rationalization_concept</code>(理性化) 两个独立 id，全量引用（图谱边/新闻/ENRICH/NODE_META）同步更新，消除 getNode 不稳定与 ENRICH 重复键丢失 meaning 补丁的问题</td><td>C2, A11, A8</td></tr>
+                <tr><td>2026-07-20</td><td>v1.7</td><td><strong>[A5] 图谱节点 id 复用修复：</strong>原 <code>rationalization</code> 同时被"理性化理论"与"理性化"概念复用，导致 <code>getNode</code> 返回不稳定、且 ENRICH 重复键使理论的 meaning 补丁丢失；现已拆分为 <code>rationalization_theory</code> 与 <code>rationalization_concept</code> 两个独立 id，全量引用（图谱边 / 新闻 / ENRICH / NODE_META）已同步更新并通过校验</td><td>A5</td></tr>
+                <tr><td>2026-07-17</td><td>v1.6</td><td><strong>知识图谱严重 Bug 修复 + 三学科大改造落地：</strong>① <strong>修复节点重叠且无法点击</strong>——原 initNodes 在力导模拟后又把坐标覆盖为确定性锚点（同"学科+类别+年份"的节点完全重合），且 hitTest 用模拟坐标(x/y)与绘制坐标(baseX/baseY)不一致，导致点击落空；现改为<strong>确定性网格装箱布局</strong>（每学科一条横向分带，带内按"时间列×类别行"分配唯一格子，由构造保证互不重叠），并统一 hitTest 与绘制均使用 baseX/baseY（含浮动位移），所有节点均可点击；已在 900–1600px 宽多分辨率下校验零重叠、零点击失效。② 产品更名：社会学星图→<strong>社会人</strong>、用社会学看社会→<strong>用社会科学看社会</strong>。③ 知识图谱扩展为<strong>社会科学三巨头</strong>：新增经济学(40)/心理学(40)节点，含思想家·理论·概念·领域四类与跨学科桥接边，共 182 节点，呈现理论发展脉络与跨学科网络。④ 图例新增学科筛选、新闻关联按学科分组+计数+合并子图按钮（A8/A11）</td><td>A5, A2, A8, A11, C1, C3, C4</td></tr>
+                <tr><td>2026-07-16</td><td>v1.5</td><td>[A14] 知识节点卡片增强：① 思想家头像由首字文字头像升级为真实照片——经 Wikipedia API 批量获取 29 位思想家的维基共享资源头像（25 位成功配图，4 位无免费图片降级为首字渐变初始头像），图片加载失败经 onerror 自动回退；② 四类节点卡片标题均升级为指向对应维基百科的可点击链接（优先中文维基、回退英文维基，新标签页打开），102 个节点全覆盖；③ 新增 NODE_META 映射（photo+wiki），在 initNodes 中与 ENRICH 一并合并注入 node.data</td><td>A14, C4</td></tr>
+                <tr><td>2026-07-16</td><td>v1.4</td><td>[A14] 知识节点卡片大幅富化：① 思想家新增头像（首字初始头像降级）+ 主要著作 + 核心思想改为逐条展开讲解（不再只给关键词）+ 生平与贡献 + 关键理论（可点击跳转）；② 理论/概念/领域内容同步富化，概念生活例子（💡青框）已为全部 34 个概念补齐；③ 引入 ENRICH 富化补丁（含义/例子/思想展开）经 initNodes 合并注入，不改巨型内联数据数组；④ [A8] 关联理论弹窗详情同步相同富化（共用 buildDetailHTML）；⑤ 「在知识图谱中展开 →」按钮改为仅 A8 弹窗（modal context）渲染、A14 面板（panel context）不再显示，并重做为 navy 实底醒目主按钮、加大与上方的间距</td><td>A14, A8, C4</td></tr>
+                <tr><td>2026-07-16</td><td>v1.1</td><td>知识图谱扩容至102节点（思想家29/理论21/概念34/领域18），连线元数据化自动生成231条；重写为力导向+时代聚簇+类别分层布局，新增渐变发光节点/流动连线/时代光带/浮动动画等视觉增强</td><td>A5, C1, C3</td></tr>
+                <tr><td>2026-07-16</td><td>v1.1</td><td>知识卡片富化（buildDetailHTML）：思想家主要著作+核心思想+关联理论；理论一句话理解+深入解读+代表人物+核心概念；概念详细解释+生活例子；均支持点击关联节点与"在知识图谱中展开"</td><td>A5, C4</td></tr>
+                <tr><td>2026-07-16</td><td>v1.1</td><td>A8关联理论按钮改为弹出局部网络弹窗：中心理论+1跳邻居圆周子图（Canvas渲染）、可悬停/点击查看节点详情、可一键在知识图谱中展开定位（openTheoryModal/closeTheoryModal/focusNode）</td><td>A8, C4, C5</td></tr>
+                <tr><td>2026-07-16</td><td>v1.1</td><td>文档对齐：A10由"待改进"更新为已完成（左侧分组可折叠边栏）；A11新闻计数45→60（4日期×15）；节点统计与模块索引同步102节点</td><td>A10, A11, C1, A5</td></tr>
+                <tr><td>2026-07-16</td><td>v1.3</td><td>A8弹窗交互与样式优化：① 打开即自动选中点击的关联理论节点并在右侧直接展开详情（原为空态提示，需再点一次）；② 弹窗内节点详情的 .tp-* 样式全局化，与A14知识节点卡片完全一致（共用样式源），取代此前"按钮对齐A11青色药丸"的单独处理；③ 删除弹窗内脱节的 .tp-* 覆盖样式块</td><td>A8, A14, C4, C5</td></tr>
+                <tr><td>2026-07-16</td><td>v1.2</td><td>A8弹窗细化：① 详情概念经CONCEPT_LABELS映射显示中文名，消除裸英文id；② drawModal自适应缩放保证节点落界内可点击，resizeTmCanvas动画后补测+ResizeObserver；③ 关联节点/概念按钮对齐A11青色药丸风；④ 弹窗两栏加min-width:0，修复内容少时右侧详情被左侧挤压消失的flex回路bug</td><td>A8, C4, C5</td></tr>
+                <tr><td>2026-07-16</td><td>v1.2</td><td>补录缺失模块 A14「知识节点详情卡片」：知识图谱页面点击节点右侧滑出的富化卡片（showPanel/buildDetailHTML，思想家/理论/概念/领域四类内容结构），并区分其与A8新闻弹窗的差异；同步侧边栏与模块索引表</td><td>A14, C4</td></tr>
+                <tr><td>2026-07-16</td><td>v1.0</td><td>创建功能说明文档（HTML版）</td><td>—</td></tr>
+                <tr><td>2026-07-16</td><td>—</td><td>导航栏顺序调整：社会热点→知识图谱</td><td>A2</td></tr>
+                <tr><td>2026-07-16</td><td>—</td><td>新闻去重：45条不重复新闻，每日期15条</td><td>C2, A11</td></tr>
+                <tr><td>2026-07-16</td><td>—</td><td>修复新闻卡片点击（数据结构兼容）</td><td>C5, A8</td></tr>
+                <tr><td>2026-07-16</td><td>—</td><td>修复知识图谱渲染（Canvas尺寸兜底）</td><td>C3, C7</td></tr>
+                <tr><td>2026-07-16</td><td>—</td><td>知识图谱扩展到49节点（新增8思想家+6理论+12概念+6领域）</td><td>C1, A5</td></tr>
+                <tr><td>2026-07-16</td><td>—</td><td>节点布局优化：4时代×4行，无重叠</td><td>C3</td></tr>
+                <tr><td>2026-07-16</td><td>—</td><td>清理悬空落地页层：移除从未接入DOM的hero/理论/概念/应用/路径渲染代码及空函数（updateProgress/animateCounter/highlightNodeInGraph）</td><td>全局</td></tr>
+                <tr><td>2026-07-16</td><td>—</td><td>修复新闻数据：关联理论标签汉化、修正失效theory id（structure/socialization等→有效节点）、补齐07-14/07-12新闻透视（AI草稿待审）</td><td>C2, A11, A12</td></tr>
+                <tr><td>2026-07-16</td><td>—</td><td>视觉与一致性：修正Canvas字体CSS变量bug、取消叠加的draw渲染循环、合并重复CSS、修正模板多余}</td><td>A5, C3, A13</td></tr>
+                <tr><td>2026-07-16</td><td>—</td><td>完成日期导航A10：原"待改"的年月分组可折叠侧栏已实现</td><td>A10, C5</td></tr>
+                <tr><td>2026-07-16</td><td>—</td><td>对齐本清单：更正C2自动更新误述与新闻计数(60×4)、A10状态，本文档即功能契约</td><td>C2, A10</td></tr>
+                <tr><td>2026-07-16</td><td>—</td><td>图谱数据校验：49节点(15思想家/13理论/13概念/8领域)+46连线，与清单一致</td><td>C1, A5</td></tr>
+                <tr><td>2026-07-16</td><td>—</td><td>实现C2半自动更新管道：WorkBuddy自动化每日9:06/21:06抓取微博热搜+综合新闻→AI精选15条写pending-news.json草稿→用户审核并入NEWS_DATA。首批15条实测并入'2026-07-16'并替换该键脏数据</td><td>C2</td></tr>
+                <tr><td>2026-07-16</td><td>—</td><td>修复知识图谱tab点击失效：顶层 new IntersectionObserver 在缺该API环境抛错致整段脚本崩溃，改为特性检测+优雅降级</td><td>A5, C3（用户反馈点击无效）</td></tr>
+            </tbody>
+        </table>
+    </section>
+
+</main>
+
+<script>
+    // Sidebar active state on scroll
+    const sections = document.querySelectorAll('section[id]');
+    const links = document.querySelectorAll('.sidebar-link');
+
+    function updateActive() {
+        let current = '';
+        sections.forEach(s => {
+            if (window.scrollY >= s.offsetTop - 100) current = s.id;
+        });
+        links.forEach(l => {
+            l.classList.toggle('active', l.getAttribute('href') === '#' + current);
+        });
+    }
+
+    window.addEventListener('scroll', updateActive);
+    updateActive();
+
+    // Smooth scroll
+    links.forEach(l => {
+        l.addEventListener('click', e => {
+            e.preventDefault();
+            const target = document.querySelector(l.getAttribute('href'));
+            if (target) target.scrollIntoView({ behavior: 'smooth' });
+        });
+    });
+
+    // Changelog: show latest 3 by default, expand on click
+    (function () {
+        const tbl = document.getElementById('clTable');
+        const btn = document.getElementById('clToggle');
+        if (!tbl || !btn) return;
+        const rows = Array.from(tbl.querySelectorAll('tbody tr'));
+        const VISIBLE = 3;
+        rows.slice(VISIBLE).forEach(r => r.classList.add('cl-hidden'));
+        function updateLabel() {
+            btn.textContent = tbl.classList.contains('expanded')
+                ? '收起 ▴'
+                : '查看全部 ' + rows.length + ' 条记录 ▾';
+        }
+        updateLabel();
+        btn.addEventListener('click', () => {
+            tbl.classList.toggle('expanded');
+            updateLabel();
+        });
+    })();
+</script>
+</body>
+</html>

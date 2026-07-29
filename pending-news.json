@@ -1,0 +1,15 @@
+{
+  "meta": {
+    "date": "2026-07-16",
+    "slot": "demo-manual",
+    "generatedAt": "2026-07-16T14:30:00+08:00",
+    "fetcher": "小著作 (WorkBuddy)",
+    "sourceMix": "微博热搜 + 综合新闻（WebSearch 实时抓取）",
+    "count": 15,
+    "status": "MERGED",
+    "mergeAdvice": "建议以本批替换主数据中既有的 2026-07-16 脏数据（该批含 capital_forms / digital / reflexivity / urban 等无效 theory id）",
+    "mergedAt": "2026-07-16T14:25:00+08:00",
+    "mergedInto": "sociology-map.html NEWS_DATA['2026-07-16'] (replaced dirty block)"
+  },
+  "items": []
+}

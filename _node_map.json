@@ -1,0 +1,1586 @@
+{
+  "count": 311,
+  "map": {
+    "marx": {
+      "name": "马克思",
+      "type": "THINKERS"
+    },
+    "durkheim": {
+      "name": "涂尔干",
+      "type": "THINKERS"
+    },
+    "weber": {
+      "name": "韦伯",
+      "type": "THINKERS"
+    },
+    "simmel": {
+      "name": "齐美尔",
+      "type": "THINKERS"
+    },
+    "mead": {
+      "name": "米德",
+      "type": "THINKERS"
+    },
+    "parsons": {
+      "name": "帕森斯",
+      "type": "THINKERS"
+    },
+    "merton": {
+      "name": "默顿",
+      "type": "THINKERS"
+    },
+    "foucault": {
+      "name": "福柯",
+      "type": "THINKERS"
+    },
+    "bourdieu_t": {
+      "name": "布迪厄",
+      "type": "THINKERS"
+    },
+    "giddens": {
+      "name": "吉登斯",
+      "type": "THINKERS"
+    },
+    "bauman": {
+      "name": "鲍曼",
+      "type": "THINKERS"
+    },
+    "becker": {
+      "name": "贝克尔",
+      "type": "THINKERS"
+    },
+    "butler": {
+      "name": "巴特勒",
+      "type": "THINKERS"
+    },
+    "said": {
+      "name": "萨义德",
+      "type": "THINKERS"
+    },
+    "latour": {
+      "name": "拉图尔",
+      "type": "THINKERS"
+    },
+    "goffman": {
+      "name": "戈夫曼",
+      "type": "THINKERS"
+    },
+    "habermas": {
+      "name": "哈贝马斯",
+      "type": "THINKERS"
+    },
+    "adorno": {
+      "name": "阿多诺",
+      "type": "THINKERS"
+    },
+    "marcuse": {
+      "name": "马尔库塞",
+      "type": "THINKERS"
+    },
+    "beauvoir": {
+      "name": "波伏瓦",
+      "type": "THINKERS"
+    },
+    "hooks": {
+      "name": "贝尔·胡克斯",
+      "type": "THINKERS"
+    },
+    "derida": {
+      "name": "德里达",
+      "type": "THINKERS"
+    },
+    "deleuze": {
+      "name": "德勒兹",
+      "type": "THINKERS"
+    },
+    "spivak": {
+      "name": "斯皮瓦克",
+      "type": "THINKERS"
+    },
+    "wallerstein": {
+      "name": "沃勒斯坦",
+      "type": "THINKERS"
+    },
+    "coleman": {
+      "name": "科尔曼",
+      "type": "THINKERS"
+    },
+    "berger": {
+      "name": "伯格",
+      "type": "THINKERS"
+    },
+    "luckmann": {
+      "name": "卢克曼",
+      "type": "THINKERS"
+    },
+    "beck": {
+      "name": "贝克",
+      "type": "THINKERS"
+    },
+    "saint_simon": {
+      "name": "圣西门",
+      "type": "THINKERS"
+    },
+    "comte": {
+      "name": "孔德",
+      "type": "THINKERS"
+    },
+    "tocqueville": {
+      "name": "托克维尔",
+      "type": "THINKERS"
+    },
+    "spencer": {
+      "name": "斯宾塞",
+      "type": "THINKERS"
+    },
+    "functionalism": {
+      "name": "功能主义",
+      "type": "THEORIES"
+    },
+    "conflict": {
+      "name": "冲突理论",
+      "type": "THEORIES"
+    },
+    "symbolic": {
+      "name": "符号互动论",
+      "type": "THEORIES"
+    },
+    "rationalization_theory": {
+      "name": "理性化理论",
+      "type": "THEORIES"
+    },
+    "structuralism": {
+      "name": "结构主义",
+      "type": "THEORIES"
+    },
+    "poststructuralism": {
+      "name": "后结构主义",
+      "type": "THEORIES"
+    },
+    "critical": {
+      "name": "批判理论",
+      "type": "THEORIES"
+    },
+    "feminism": {
+      "name": "女性主义理论",
+      "type": "THEORIES"
+    },
+    "constructionism": {
+      "name": "社会建构论",
+      "type": "THEORIES"
+    },
+    "late_modern": {
+      "name": "晚期现代性理论",
+      "type": "THEORIES"
+    },
+    "rational_choice": {
+      "name": "理性选择理论",
+      "type": "THEORIES"
+    },
+    "world_systems": {
+      "name": "世界体系理论",
+      "type": "THEORIES"
+    },
+    "postcolonial": {
+      "name": "后殖民理论",
+      "type": "THEORIES"
+    },
+    "queer_theory": {
+      "name": "酷儿理论",
+      "type": "THEORIES"
+    },
+    "actor_network": {
+      "name": "行动者网络理论",
+      "type": "THEORIES"
+    },
+    "dramaturgical": {
+      "name": "拟剧理论",
+      "type": "THEORIES"
+    },
+    "communicative": {
+      "name": "交往行动理论",
+      "type": "THEORIES"
+    },
+    "risk_society": {
+      "name": "风险社会理论",
+      "type": "THEORIES"
+    },
+    "network_theory": {
+      "name": "网络分析理论",
+      "type": "THEORIES"
+    },
+    "institutionalism": {
+      "name": "新制度主义",
+      "type": "THEORIES"
+    },
+    "figuration": {
+      "name": "形貌/过程社会学",
+      "type": "THEORIES"
+    },
+    "social_fact": {
+      "name": "社会事实",
+      "type": "CONCEPTS"
+    },
+    "class_struggle": {
+      "name": "阶级斗争",
+      "type": "CONCEPTS"
+    },
+    "anomie": {
+      "name": "失范",
+      "type": "CONCEPTS"
+    },
+    "habitus": {
+      "name": "惯习",
+      "type": "CONCEPTS"
+    },
+    "capital_forms": {
+      "name": "资本形式",
+      "type": "CONCEPTS"
+    },
+    "reflexivity": {
+      "name": "反思性",
+      "type": "CONCEPTS"
+    },
+    "power_knowledge": {
+      "name": "权力-知识",
+      "type": "CONCEPTS"
+    },
+    "rationalization_concept": {
+      "name": "理性化",
+      "type": "CONCEPTS"
+    },
+    "ideal_type": {
+      "name": "理想类型",
+      "type": "CONCEPTS"
+    },
+    "social_solidarity": {
+      "name": "社会团结",
+      "type": "CONCEPTS"
+    },
+    "alienation": {
+      "name": "异化",
+      "type": "CONCEPTS"
+    },
+    "symbol": {
+      "name": "符号",
+      "type": "CONCEPTS"
+    },
+    "self_presentation": {
+      "name": "自我呈现",
+      "type": "CONCEPTS"
+    },
+    "socialization": {
+      "name": "社会化",
+      "type": "CONCEPTS"
+    },
+    "gender_system": {
+      "name": "性别制度",
+      "type": "CONCEPTS"
+    },
+    "intersectionality": {
+      "name": "交叉性",
+      "type": "CONCEPTS"
+    },
+    "social_construction": {
+      "name": "社会建构",
+      "type": "CONCEPTS"
+    },
+    "discourse": {
+      "name": "话语",
+      "type": "CONCEPTS"
+    },
+    "field": {
+      "name": "场域",
+      "type": "CONCEPTS"
+    },
+    "deviance": {
+      "name": "越轨",
+      "type": "CONCEPTS"
+    },
+    "globalization": {
+      "name": "全球化",
+      "type": "CONCEPTS"
+    },
+    "cultural_capital": {
+      "name": "文化资本",
+      "type": "CONCEPTS"
+    },
+    "social_capital": {
+      "name": "社会资本",
+      "type": "CONCEPTS"
+    },
+    "symbolic_violence": {
+      "name": "符号暴力",
+      "type": "CONCEPTS"
+    },
+    "panopticon": {
+      "name": "全景敞视",
+      "type": "CONCEPTS"
+    },
+    "performativity": {
+      "name": "操演性",
+      "type": "CONCEPTS"
+    },
+    "orientalism": {
+      "name": "东方学",
+      "type": "CONCEPTS"
+    },
+    "othering": {
+      "name": "他者化",
+      "type": "CONCEPTS"
+    },
+    "core_periphery": {
+      "name": "核心-边缘",
+      "type": "CONCEPTS"
+    },
+    "meritocracy": {
+      "name": "优绩主义",
+      "type": "CONCEPTS"
+    },
+    "emotional_labor": {
+      "name": "情绪劳动",
+      "type": "CONCEPTS"
+    },
+    "attention_economy": {
+      "name": "注意力经济",
+      "type": "CONCEPTS"
+    },
+    "precariat": {
+      "name": "不稳定无产阶级",
+      "type": "CONCEPTS"
+    },
+    "life_chances": {
+      "name": "生活机会",
+      "type": "CONCEPTS"
+    },
+    "social_mobility": {
+      "name": "社会流动",
+      "type": "CONCEPTS"
+    },
+    "stratification": {
+      "name": "社会分层",
+      "type": "TOPICS"
+    },
+    "education": {
+      "name": "教育社会学",
+      "type": "TOPICS"
+    },
+    "urban": {
+      "name": "城市社会学",
+      "type": "TOPICS"
+    },
+    "digital": {
+      "name": "数字社会学",
+      "type": "TOPICS"
+    },
+    "family": {
+      "name": "家庭社会学",
+      "type": "TOPICS"
+    },
+    "religion": {
+      "name": "宗教社会学",
+      "type": "TOPICS"
+    },
+    "health": {
+      "name": "健康社会学",
+      "type": "TOPICS"
+    },
+    "environment": {
+      "name": "环境社会学",
+      "type": "TOPICS"
+    },
+    "migration": {
+      "name": "移民社会学",
+      "type": "TOPICS"
+    },
+    "work": {
+      "name": "工作社会学",
+      "type": "TOPICS"
+    },
+    "media": {
+      "name": "媒介社会学",
+      "type": "TOPICS"
+    },
+    "law": {
+      "name": "法律社会学",
+      "type": "TOPICS"
+    },
+    "science": {
+      "name": "科学社会学",
+      "type": "TOPICS"
+    },
+    "youth": {
+      "name": "青年社会学",
+      "type": "TOPICS"
+    },
+    "crime": {
+      "name": "犯罪社会学",
+      "type": "TOPICS"
+    },
+    "poverty": {
+      "name": "贫困社会学",
+      "type": "TOPICS"
+    },
+    "gender": {
+      "name": "性别社会学",
+      "type": "TOPICS"
+    },
+    "technology": {
+      "name": "科技社会学",
+      "type": "TOPICS"
+    },
+    "econ_smith": {
+      "name": "亚当·斯密",
+      "type": "ECON_THINKERS"
+    },
+    "econ_ricardo": {
+      "name": "大卫·李嘉图",
+      "type": "ECON_THINKERS"
+    },
+    "econ_marshall": {
+      "name": "阿尔弗雷德·马歇尔",
+      "type": "ECON_THINKERS"
+    },
+    "econ_keynes": {
+      "name": "约翰·梅纳德·凯恩斯",
+      "type": "ECON_THINKERS"
+    },
+    "econ_friedman": {
+      "name": "米尔顿·弗里德曼",
+      "type": "ECON_THINKERS"
+    },
+    "econ_hayek": {
+      "name": "弗里德里希·哈耶克",
+      "type": "ECON_THINKERS"
+    },
+    "econ_schumpeter": {
+      "name": "约瑟夫·熊彼特",
+      "type": "ECON_THINKERS"
+    },
+    "econ_sen": {
+      "name": "阿马蒂亚·森",
+      "type": "ECON_THINKERS"
+    },
+    "econ_becker": {
+      "name": "加里·贝克尔",
+      "type": "ECON_THINKERS"
+    },
+    "econ_north": {
+      "name": "道格拉斯·诺斯",
+      "type": "ECON_THINKERS"
+    },
+    "econ_ostrom": {
+      "name": "埃莉诺·奥斯特罗姆",
+      "type": "ECON_THINKERS"
+    },
+    "econ_coase": {
+      "name": "罗纳德·科斯",
+      "type": "ECON_THINKERS"
+    },
+    "econ_malthus": {
+      "name": "托马斯·马尔萨斯",
+      "type": "ECON_THINKERS"
+    },
+    "econ_jsmill": {
+      "name": "约翰·斯图亚特·穆勒",
+      "type": "ECON_THINKERS"
+    },
+    "econ_menger": {
+      "name": "卡尔·门格尔",
+      "type": "ECON_THINKERS"
+    },
+    "econ_walras": {
+      "name": "里昂·瓦尔拉斯",
+      "type": "ECON_THINKERS"
+    },
+    "econ_jevons": {
+      "name": "威廉·斯坦利·杰文斯",
+      "type": "ECON_THINKERS"
+    },
+    "econ_veblen": {
+      "name": "索尔斯坦·凡勃伦",
+      "type": "ECON_THINKERS"
+    },
+    "econ_pigou": {
+      "name": "阿瑟·塞西尔·庇古",
+      "type": "ECON_THINKERS"
+    },
+    "econ_fisher": {
+      "name": "欧文·费雪",
+      "type": "ECON_THINKERS"
+    },
+    "econ_samuelson": {
+      "name": "保罗·萨缪尔森",
+      "type": "ECON_THINKERS"
+    },
+    "econ_arrow": {
+      "name": "肯尼斯·阿罗",
+      "type": "ECON_THINKERS"
+    },
+    "econ_solow": {
+      "name": "罗伯特·索洛",
+      "type": "ECON_THINKERS"
+    },
+    "econ_nash": {
+      "name": "约翰·纳什",
+      "type": "ECON_THINKERS"
+    },
+    "econ_akerlof": {
+      "name": "乔治·阿克洛夫",
+      "type": "ECON_THINKERS"
+    },
+    "econ_stiglitz": {
+      "name": "约瑟夫·斯蒂格利茨",
+      "type": "ECON_THINKERS"
+    },
+    "econ_krugman": {
+      "name": "保罗·克鲁格曼",
+      "type": "ECON_THINKERS"
+    },
+    "econ_piketty": {
+      "name": "托马斯·皮凯蒂",
+      "type": "ECON_THINKERS"
+    },
+    "econ_thaler": {
+      "name": "理查德·塞勒",
+      "type": "ECON_THINKERS"
+    },
+    "econ_classical": {
+      "name": "古典政治经济学",
+      "type": "ECON_THEORIES"
+    },
+    "econ_marginal": {
+      "name": "边际革命",
+      "type": "ECON_THEORIES"
+    },
+    "econ_keynesian": {
+      "name": "凯恩斯主义",
+      "type": "ECON_THEORIES"
+    },
+    "econ_monetarism": {
+      "name": "货币主义",
+      "type": "ECON_THEORIES"
+    },
+    "econ_austrian": {
+      "name": "奥地利学派",
+      "type": "ECON_THEORIES"
+    },
+    "econ_institution": {
+      "name": "制度经济学",
+      "type": "ECON_THEORIES"
+    },
+    "econ_public_choice": {
+      "name": "公共选择理论",
+      "type": "ECON_THEORIES"
+    },
+    "econ_info_asym": {
+      "name": "信息不对称",
+      "type": "ECON_THEORIES"
+    },
+    "econ_game": {
+      "name": "博弈论",
+      "type": "ECON_THEORIES"
+    },
+    "econ_behavioral": {
+      "name": "行为经济学",
+      "type": "ECON_THEORIES"
+    },
+    "econ_general_eq": {
+      "name": "一般均衡理论",
+      "type": "ECON_THEORIES"
+    },
+    "econ_welfare": {
+      "name": "福利经济学",
+      "type": "ECON_THEORIES"
+    },
+    "econ_neoclassical_synthesis": {
+      "name": "新古典综合",
+      "type": "ECON_THEORIES"
+    },
+    "econ_development_econ": {
+      "name": "发展经济学",
+      "type": "ECON_THEORIES"
+    },
+    "econ_endogenous_growth": {
+      "name": "内生增长理论",
+      "type": "ECON_THEORIES"
+    },
+    "econ_new_keynesian": {
+      "name": "新凯恩斯主义经济学",
+      "type": "ECON_THEORIES"
+    },
+    "econ_new_classical": {
+      "name": "新古典宏观经济学",
+      "type": "ECON_THEORIES"
+    },
+    "econ_supply_side": {
+      "name": "供给学派",
+      "type": "ECON_THEORIES"
+    },
+    "econ_environmental_econ": {
+      "name": "环境经济学",
+      "type": "ECON_THEORIES"
+    },
+    "econ_evolutionary_econ": {
+      "name": "演化经济学",
+      "type": "ECON_THEORIES"
+    },
+    "econ_new_trade": {
+      "name": "新贸易理论",
+      "type": "ECON_THEORIES"
+    },
+    "econ_invisible_hand": {
+      "name": "看不见的手",
+      "type": "ECON_CONCEPTS"
+    },
+    "econ_comparative_adv": {
+      "name": "比较优势",
+      "type": "ECON_CONCEPTS"
+    },
+    "econ_opportunity_cost": {
+      "name": "机会成本",
+      "type": "ECON_CONCEPTS"
+    },
+    "econ_rational": {
+      "name": "理性人",
+      "type": "ECON_CONCEPTS"
+    },
+    "econ_externality": {
+      "name": "外部性",
+      "type": "ECON_CONCEPTS"
+    },
+    "econ_tragedy": {
+      "name": "公地悲剧",
+      "type": "ECON_CONCEPTS"
+    },
+    "econ_prisoner": {
+      "name": "囚徒困境",
+      "type": "ECON_CONCEPTS"
+    },
+    "econ_marginal_utility": {
+      "name": "边际效用",
+      "type": "ECON_CONCEPTS"
+    },
+    "econ_liquidity_trap": {
+      "name": "流动性陷阱",
+      "type": "ECON_CONCEPTS"
+    },
+    "econ_transaction_cost": {
+      "name": "交易成本",
+      "type": "ECON_CONCEPTS"
+    },
+    "econ_free_rider": {
+      "name": "搭便车",
+      "type": "ECON_CONCEPTS"
+    },
+    "econ_signaling": {
+      "name": "信号传递",
+      "type": "ECON_CONCEPTS"
+    },
+    "econ_supply_demand": {
+      "name": "供给与需求",
+      "type": "ECON_CONCEPTS"
+    },
+    "econ_elasticity": {
+      "name": "弹性",
+      "type": "ECON_CONCEPTS"
+    },
+    "econ_inflation": {
+      "name": "通货膨胀",
+      "type": "ECON_CONCEPTS"
+    },
+    "econ_unemployment": {
+      "name": "失业",
+      "type": "ECON_CONCEPTS"
+    },
+    "econ_gdp": {
+      "name": "国内生产总值",
+      "type": "ECON_CONCEPTS"
+    },
+    "econ_marginal_cost": {
+      "name": "边际成本",
+      "type": "ECON_CONCEPTS"
+    },
+    "econ_economies_scale": {
+      "name": "规模经济",
+      "type": "ECON_CONCEPTS"
+    },
+    "econ_monopoly": {
+      "name": "垄断",
+      "type": "ECON_CONCEPTS"
+    },
+    "econ_perfect_comp": {
+      "name": "完全竞争",
+      "type": "ECON_CONCEPTS"
+    },
+    "econ_consumer_surplus": {
+      "name": "消费者剩余",
+      "type": "ECON_CONCEPTS"
+    },
+    "econ_public_goods": {
+      "name": "公共物品",
+      "type": "ECON_CONCEPTS"
+    },
+    "econ_adverse_selection": {
+      "name": "逆向选择",
+      "type": "ECON_CONCEPTS"
+    },
+    "econ_moral_hazard": {
+      "name": "道德风险",
+      "type": "ECON_CONCEPTS"
+    },
+    "econ_nash_eq": {
+      "name": "纳什均衡",
+      "type": "ECON_CONCEPTS"
+    },
+    "econ_pareto": {
+      "name": "帕累托效率",
+      "type": "ECON_CONCEPTS"
+    },
+    "econ_sunk_cost": {
+      "name": "沉没成本",
+      "type": "ECON_CONCEPTS"
+    },
+    "econ_fiscal_multiplier": {
+      "name": "财政乘数",
+      "type": "ECON_CONCEPTS"
+    },
+    "econ_human_capital": {
+      "name": "人力资本",
+      "type": "ECON_CONCEPTS"
+    },
+    "econ_creative_destruction": {
+      "name": "创造性破坏",
+      "type": "ECON_CONCEPTS"
+    },
+    "econ_rational_expectations": {
+      "name": "理性预期",
+      "type": "ECON_CONCEPTS"
+    },
+    "econ_gini": {
+      "name": "基尼系数",
+      "type": "ECON_CONCEPTS"
+    },
+    "econ_deadweight_loss": {
+      "name": "无谓损失",
+      "type": "ECON_CONCEPTS"
+    },
+    "econ_growth": {
+      "name": "经济增长",
+      "type": "ECON_TOPICS"
+    },
+    "econ_inequality": {
+      "name": "收入分配与不平等",
+      "type": "ECON_TOPICS"
+    },
+    "econ_labor": {
+      "name": "劳动力市场",
+      "type": "ECON_TOPICS"
+    },
+    "econ_finance": {
+      "name": "金融市场",
+      "type": "ECON_TOPICS"
+    },
+    "econ_trade": {
+      "name": "国际贸易",
+      "type": "ECON_TOPICS"
+    },
+    "econ_poverty": {
+      "name": "贫困与发展",
+      "type": "ECON_TOPICS"
+    },
+    "econ_monetary_policy": {
+      "name": "货币政策",
+      "type": "ECON_TOPICS"
+    },
+    "econ_fiscal_policy": {
+      "name": "财政政策",
+      "type": "ECON_TOPICS"
+    },
+    "econ_macro": {
+      "name": "宏观经济学",
+      "type": "ECON_TOPICS"
+    },
+    "econ_micro": {
+      "name": "微观经济学",
+      "type": "ECON_TOPICS"
+    },
+    "econ_industrial_org": {
+      "name": "产业组织",
+      "type": "ECON_TOPICS"
+    },
+    "econ_public_finance": {
+      "name": "公共财政",
+      "type": "ECON_TOPICS"
+    },
+    "econ_development_field": {
+      "name": "发展经济学（学科）",
+      "type": "ECON_TOPICS"
+    },
+    "econ_environmental_field": {
+      "name": "环境经济学（学科）",
+      "type": "ECON_TOPICS"
+    },
+    "econ_health_econ": {
+      "name": "卫生经济学",
+      "type": "ECON_TOPICS"
+    },
+    "econ_behavioral_finance": {
+      "name": "行为金融学",
+      "type": "ECON_TOPICS"
+    },
+    "econ_banking": {
+      "name": "货币银行学",
+      "type": "ECON_TOPICS"
+    },
+    "econ_taxation": {
+      "name": "税收学",
+      "type": "ECON_TOPICS"
+    },
+    "psy_wundt": {
+      "name": "威廉·冯特",
+      "type": "PSY_THINKERS"
+    },
+    "psy_freud": {
+      "name": "西格蒙德·弗洛伊德",
+      "type": "PSY_THINKERS"
+    },
+    "psy_pavlov": {
+      "name": "伊万·巴甫洛夫",
+      "type": "PSY_THINKERS"
+    },
+    "psy_skinner": {
+      "name": "伯尔赫斯·斯金纳",
+      "type": "PSY_THINKERS"
+    },
+    "psy_piaget": {
+      "name": "让·皮亚杰",
+      "type": "PSY_THINKERS"
+    },
+    "psy_vygotsky": {
+      "name": "列夫·维果茨基",
+      "type": "PSY_THINKERS"
+    },
+    "psy_rogers": {
+      "name": "卡尔·罗杰斯",
+      "type": "PSY_THINKERS"
+    },
+    "psy_maslow": {
+      "name": "亚伯拉罕·马斯洛",
+      "type": "PSY_THINKERS"
+    },
+    "psy_kahneman": {
+      "name": "丹尼尔·卡尼曼",
+      "type": "PSY_THINKERS"
+    },
+    "psy_milgram": {
+      "name": "斯坦利·米尔格拉姆",
+      "type": "PSY_THINKERS"
+    },
+    "psy_zimbardo": {
+      "name": "菲利普·津巴多",
+      "type": "PSY_THINKERS"
+    },
+    "psy_asch": {
+      "name": "所罗门·阿希",
+      "type": "PSY_THINKERS"
+    },
+    "psy_james": {
+      "name": "威廉·詹姆斯",
+      "type": "PSY_THINKERS"
+    },
+    "psy_jung": {
+      "name": "卡尔·荣格",
+      "type": "PSY_THINKERS"
+    },
+    "psy_adler": {
+      "name": "阿尔弗雷德·阿德勒",
+      "type": "PSY_THINKERS"
+    },
+    "psy_erikson": {
+      "name": "爱利克·埃里克森",
+      "type": "PSY_THINKERS"
+    },
+    "psy_bowlby": {
+      "name": "约翰·鲍尔比",
+      "type": "PSY_THINKERS"
+    },
+    "psy_ainsworth": {
+      "name": "玛丽·安斯沃思",
+      "type": "PSY_THINKERS"
+    },
+    "psy_bandura": {
+      "name": "阿尔伯特·班杜拉",
+      "type": "PSY_THINKERS"
+    },
+    "psy_festinger": {
+      "name": "利昂·费斯廷格",
+      "type": "PSY_THINKERS"
+    },
+    "psy_beck": {
+      "name": "亚伦·贝克",
+      "type": "PSY_THINKERS"
+    },
+    "psy_ellis": {
+      "name": "阿尔伯特·艾利斯",
+      "type": "PSY_THINKERS"
+    },
+    "psy_neisser": {
+      "name": "乌尔里克·奈瑟",
+      "type": "PSY_THINKERS"
+    },
+    "psy_loftus": {
+      "name": "伊丽莎白·洛夫特斯",
+      "type": "PSY_THINKERS"
+    },
+    "psy_seligman": {
+      "name": "马丁·塞利格曼",
+      "type": "PSY_THINKERS"
+    },
+    "psy_gardner": {
+      "name": "霍华德·加德纳",
+      "type": "PSY_THINKERS"
+    },
+    "psy_tversky": {
+      "name": "阿莫斯·特沃斯基",
+      "type": "PSY_THINKERS"
+    },
+    "psy_lewin": {
+      "name": "库尔特·勒温",
+      "type": "PSY_THINKERS"
+    },
+    "psy_allport": {
+      "name": "戈登·奥尔波特",
+      "type": "PSY_THINKERS"
+    },
+    "psy_psychoanalysis": {
+      "name": "精神分析",
+      "type": "PSY_THEORIES"
+    },
+    "psy_behaviorism": {
+      "name": "行为主义",
+      "type": "PSY_THEORIES"
+    },
+    "psy_cognitive_dev": {
+      "name": "认知发展理论",
+      "type": "PSY_THEORIES"
+    },
+    "psy_humanistic": {
+      "name": "人本主义心理学",
+      "type": "PSY_THEORIES"
+    },
+    "psy_social_learning": {
+      "name": "社会学习理论",
+      "type": "PSY_THEORIES"
+    },
+    "psy_cognitive_bias": {
+      "name": "认知偏差",
+      "type": "PSY_THEORIES"
+    },
+    "psy_prospect": {
+      "name": "前景理论",
+      "type": "PSY_THEORIES"
+    },
+    "psy_conformity": {
+      "name": "从众",
+      "type": "PSY_THEORIES"
+    },
+    "psy_obedience": {
+      "name": "服从权威",
+      "type": "PSY_THEORIES"
+    },
+    "psy_attachment": {
+      "name": "依恋理论",
+      "type": "PSY_THEORIES"
+    },
+    "psy_functionalism": {
+      "name": "功能主义",
+      "type": "PSY_THEORIES"
+    },
+    "psy_gestalt": {
+      "name": "格式塔心理学",
+      "type": "PSY_THEORIES"
+    },
+    "psy_analytical": {
+      "name": "分析心理学",
+      "type": "PSY_THEORIES"
+    },
+    "psy_individual": {
+      "name": "个体心理学",
+      "type": "PSY_THEORIES"
+    },
+    "psy_psychosocial": {
+      "name": "心理社会发展理论",
+      "type": "PSY_THEORIES"
+    },
+    "psy_cognitive": {
+      "name": "认知心理学",
+      "type": "PSY_THEORIES"
+    },
+    "psy_cbt": {
+      "name": "认知行为疗法",
+      "type": "PSY_THEORIES"
+    },
+    "psy_positive": {
+      "name": "积极心理学",
+      "type": "PSY_THEORIES"
+    },
+    "psy_multi_intelligence": {
+      "name": "多元智能理论",
+      "type": "PSY_THEORIES"
+    },
+    "psy_dissonance": {
+      "name": "认知失调理论",
+      "type": "PSY_THEORIES"
+    },
+    "psy_trait": {
+      "name": "特质理论",
+      "type": "PSY_THEORIES"
+    },
+    "psy_unconscious": {
+      "name": "潜意识",
+      "type": "PSY_CONCEPTS"
+    },
+    "psy_classical_cond": {
+      "name": "条件反射",
+      "type": "PSY_CONCEPTS"
+    },
+    "psy_operant": {
+      "name": "操作性条件反射",
+      "type": "PSY_CONCEPTS"
+    },
+    "psy_self_actual": {
+      "name": "自我实现",
+      "type": "PSY_CONCEPTS"
+    },
+    "psy_needs": {
+      "name": "需求层次",
+      "type": "PSY_CONCEPTS"
+    },
+    "psy_anchoring": {
+      "name": "锚定效应",
+      "type": "PSY_CONCEPTS"
+    },
+    "psy_loss_aversion": {
+      "name": "损失厌恶",
+      "type": "PSY_CONCEPTS"
+    },
+    "psy_cognitive_dissonance": {
+      "name": "认知失调",
+      "type": "PSY_CONCEPTS"
+    },
+    "psy_stereotype": {
+      "name": "刻板印象",
+      "type": "PSY_CONCEPTS"
+    },
+    "psy_bystander": {
+      "name": "旁观者效应",
+      "type": "PSY_CONCEPTS"
+    },
+    "psy_mirror": {
+      "name": "镜像神经元",
+      "type": "PSY_CONCEPTS"
+    },
+    "psy_psych_safety": {
+      "name": "心理安全感",
+      "type": "PSY_CONCEPTS"
+    },
+    "psy_working_memory": {
+      "name": "工作记忆",
+      "type": "PSY_CONCEPTS"
+    },
+    "psy_longterm_memory": {
+      "name": "长时记忆",
+      "type": "PSY_CONCEPTS"
+    },
+    "psy_schema": {
+      "name": "图式",
+      "type": "PSY_CONCEPTS"
+    },
+    "psy_self_efficacy": {
+      "name": "自我效能",
+      "type": "PSY_CONCEPTS"
+    },
+    "psy_learned_helplessness": {
+      "name": "习得性无助",
+      "type": "PSY_CONCEPTS"
+    },
+    "psy_flow": {
+      "name": "心流",
+      "type": "PSY_CONCEPTS"
+    },
+    "psy_growth_mindset": {
+      "name": "成长型思维",
+      "type": "PSY_CONCEPTS"
+    },
+    "psy_emotional_intelligence": {
+      "name": "情绪智力",
+      "type": "PSY_CONCEPTS"
+    },
+    "psy_big_five": {
+      "name": "大五人格",
+      "type": "PSY_CONCEPTS"
+    },
+    "psy_defense": {
+      "name": "心理防御机制",
+      "type": "PSY_CONCEPTS"
+    },
+    "psy_id_ego_superego": {
+      "name": "本我自我超我",
+      "type": "PSY_CONCEPTS"
+    },
+    "psy_collective_unconscious": {
+      "name": "集体潜意识",
+      "type": "PSY_CONCEPTS"
+    },
+    "psy_archetype": {
+      "name": "原型",
+      "type": "PSY_CONCEPTS"
+    },
+    "psy_intrinsic": {
+      "name": "内在动机",
+      "type": "PSY_CONCEPTS"
+    },
+    "psy_extrinsic": {
+      "name": "外在动机",
+      "type": "PSY_CONCEPTS"
+    },
+    "psy_confirmation_bias": {
+      "name": "确认偏误",
+      "type": "PSY_CONCEPTS"
+    },
+    "psy_availability": {
+      "name": "可得性启发",
+      "type": "PSY_CONCEPTS"
+    },
+    "psy_fae": {
+      "name": "基本归因错误",
+      "type": "PSY_CONCEPTS"
+    },
+    "psy_in_out_group": {
+      "name": "内群体外群体",
+      "type": "PSY_CONCEPTS"
+    },
+    "psy_priming": {
+      "name": "启动效应",
+      "type": "PSY_CONCEPTS"
+    },
+    "psy_neuroplasticity": {
+      "name": "神经可塑性",
+      "type": "PSY_CONCEPTS"
+    },
+    "psy_attachment_styles": {
+      "name": "依恋类型",
+      "type": "PSY_CONCEPTS"
+    },
+    "psy_decision": {
+      "name": "决策与判断",
+      "type": "PSY_TOPICS"
+    },
+    "psy_social_influence": {
+      "name": "社会影响",
+      "type": "PSY_TOPICS"
+    },
+    "psy_emotion": {
+      "name": "情绪与动机",
+      "type": "PSY_TOPICS"
+    },
+    "psy_personality": {
+      "name": "人格",
+      "type": "PSY_TOPICS"
+    },
+    "psy_mental_health": {
+      "name": "心理健康",
+      "type": "PSY_TOPICS"
+    },
+    "psy_group": {
+      "name": "群体行为",
+      "type": "PSY_TOPICS"
+    },
+    "psy_memory": {
+      "name": "记忆",
+      "type": "PSY_TOPICS"
+    },
+    "psy_learning": {
+      "name": "学习",
+      "type": "PSY_TOPICS"
+    },
+    "psy_perception": {
+      "name": "知觉",
+      "type": "PSY_TOPICS"
+    },
+    "psy_developmental": {
+      "name": "发展心理学",
+      "type": "PSY_TOPICS"
+    },
+    "psy_cognitive_field": {
+      "name": "认知心理学（学科）",
+      "type": "PSY_TOPICS"
+    },
+    "psy_clinical": {
+      "name": "临床心理学",
+      "type": "PSY_TOPICS"
+    },
+    "psy_positive_field": {
+      "name": "积极心理学（领域）",
+      "type": "PSY_TOPICS"
+    },
+    "psy_neuroscience": {
+      "name": "生理心理学与神经科学",
+      "type": "PSY_TOPICS"
+    },
+    "psy_motivation": {
+      "name": "动机",
+      "type": "PSY_TOPICS"
+    },
+    "psy_intelligence": {
+      "name": "智力",
+      "type": "PSY_TOPICS"
+    },
+    "psy_psychotherapy": {
+      "name": "心理治疗",
+      "type": "PSY_TOPICS"
+    },
+    "psy_stress": {
+      "name": "压力与应对",
+      "type": "PSY_TOPICS"
+    }
+  },
+  "byType": {
+    "THINKERS": [
+      "marx",
+      "durkheim",
+      "weber",
+      "simmel",
+      "mead",
+      "parsons",
+      "merton",
+      "foucault",
+      "bourdieu_t",
+      "giddens",
+      "bauman",
+      "becker",
+      "butler",
+      "said",
+      "latour",
+      "goffman",
+      "habermas",
+      "adorno",
+      "marcuse",
+      "beauvoir",
+      "hooks",
+      "derida",
+      "deleuze",
+      "spivak",
+      "wallerstein",
+      "coleman",
+      "berger",
+      "luckmann",
+      "beck",
+      "saint_simon",
+      "comte",
+      "tocqueville",
+      "spencer"
+    ],
+    "THEORIES": [
+      "functionalism",
+      "conflict",
+      "symbolic",
+      "rationalization_theory",
+      "structuralism",
+      "poststructuralism",
+      "critical",
+      "feminism",
+      "constructionism",
+      "late_modern",
+      "rational_choice",
+      "world_systems",
+      "postcolonial",
+      "queer_theory",
+      "actor_network",
+      "dramaturgical",
+      "communicative",
+      "risk_society",
+      "network_theory",
+      "institutionalism",
+      "figuration"
+    ],
+    "CONCEPTS": [
+      "social_fact",
+      "class_struggle",
+      "anomie",
+      "habitus",
+      "capital_forms",
+      "reflexivity",
+      "power_knowledge",
+      "rationalization_concept",
+      "ideal_type",
+      "social_solidarity",
+      "alienation",
+      "symbol",
+      "self_presentation",
+      "socialization",
+      "gender_system",
+      "intersectionality",
+      "social_construction",
+      "discourse",
+      "field",
+      "deviance",
+      "globalization",
+      "cultural_capital",
+      "social_capital",
+      "symbolic_violence",
+      "panopticon",
+      "performativity",
+      "orientalism",
+      "othering",
+      "core_periphery",
+      "meritocracy",
+      "emotional_labor",
+      "attention_economy",
+      "precariat",
+      "life_chances",
+      "social_mobility"
+    ],
+    "TOPICS": [
+      "stratification",
+      "education",
+      "urban",
+      "digital",
+      "family",
+      "religion",
+      "health",
+      "environment",
+      "migration",
+      "work",
+      "media",
+      "law",
+      "science",
+      "youth",
+      "crime",
+      "poverty",
+      "gender",
+      "technology"
+    ],
+    "ECON_THINKERS": [
+      "econ_smith",
+      "econ_ricardo",
+      "econ_marshall",
+      "econ_keynes",
+      "econ_friedman",
+      "econ_hayek",
+      "econ_schumpeter",
+      "econ_sen",
+      "econ_becker",
+      "econ_north",
+      "econ_ostrom",
+      "econ_coase",
+      "econ_malthus",
+      "econ_jsmill",
+      "econ_menger",
+      "econ_walras",
+      "econ_jevons",
+      "econ_veblen",
+      "econ_pigou",
+      "econ_fisher",
+      "econ_samuelson",
+      "econ_arrow",
+      "econ_solow",
+      "econ_nash",
+      "econ_akerlof",
+      "econ_stiglitz",
+      "econ_krugman",
+      "econ_piketty",
+      "econ_thaler"
+    ],
+    "ECON_THEORIES": [
+      "econ_classical",
+      "econ_marginal",
+      "econ_keynesian",
+      "econ_monetarism",
+      "econ_austrian",
+      "econ_institution",
+      "econ_public_choice",
+      "econ_info_asym",
+      "econ_game",
+      "econ_behavioral",
+      "econ_general_eq",
+      "econ_welfare",
+      "econ_neoclassical_synthesis",
+      "econ_development_econ",
+      "econ_endogenous_growth",
+      "econ_new_keynesian",
+      "econ_new_classical",
+      "econ_supply_side",
+      "econ_environmental_econ",
+      "econ_evolutionary_econ",
+      "econ_new_trade"
+    ],
+    "ECON_CONCEPTS": [
+      "econ_invisible_hand",
+      "econ_comparative_adv",
+      "econ_opportunity_cost",
+      "econ_rational",
+      "econ_externality",
+      "econ_tragedy",
+      "econ_prisoner",
+      "econ_marginal_utility",
+      "econ_liquidity_trap",
+      "econ_transaction_cost",
+      "econ_free_rider",
+      "econ_signaling",
+      "econ_supply_demand",
+      "econ_elasticity",
+      "econ_inflation",
+      "econ_unemployment",
+      "econ_gdp",
+      "econ_marginal_cost",
+      "econ_economies_scale",
+      "econ_monopoly",
+      "econ_perfect_comp",
+      "econ_consumer_surplus",
+      "econ_public_goods",
+      "econ_adverse_selection",
+      "econ_moral_hazard",
+      "econ_nash_eq",
+      "econ_pareto",
+      "econ_sunk_cost",
+      "econ_fiscal_multiplier",
+      "econ_human_capital",
+      "econ_creative_destruction",
+      "econ_rational_expectations",
+      "econ_gini",
+      "econ_deadweight_loss"
+    ],
+    "ECON_TOPICS": [
+      "econ_growth",
+      "econ_inequality",
+      "econ_labor",
+      "econ_finance",
+      "econ_trade",
+      "econ_poverty",
+      "econ_monetary_policy",
+      "econ_fiscal_policy",
+      "econ_macro",
+      "econ_micro",
+      "econ_industrial_org",
+      "econ_public_finance",
+      "econ_development_field",
+      "econ_environmental_field",
+      "econ_health_econ",
+      "econ_behavioral_finance",
+      "econ_banking",
+      "econ_taxation"
+    ],
+    "PSY_THINKERS": [
+      "psy_wundt",
+      "psy_freud",
+      "psy_pavlov",
+      "psy_skinner",
+      "psy_piaget",
+      "psy_vygotsky",
+      "psy_rogers",
+      "psy_maslow",
+      "psy_kahneman",
+      "psy_milgram",
+      "psy_zimbardo",
+      "psy_asch",
+      "psy_james",
+      "psy_jung",
+      "psy_adler",
+      "psy_erikson",
+      "psy_bowlby",
+      "psy_ainsworth",
+      "psy_bandura",
+      "psy_festinger",
+      "psy_beck",
+      "psy_ellis",
+      "psy_neisser",
+      "psy_loftus",
+      "psy_seligman",
+      "psy_gardner",
+      "psy_tversky",
+      "psy_lewin",
+      "psy_allport"
+    ],
+    "PSY_THEORIES": [
+      "psy_psychoanalysis",
+      "psy_behaviorism",
+      "psy_cognitive_dev",
+      "psy_humanistic",
+      "psy_social_learning",
+      "psy_cognitive_bias",
+      "psy_prospect",
+      "psy_conformity",
+      "psy_obedience",
+      "psy_attachment",
+      "psy_functionalism",
+      "psy_gestalt",
+      "psy_analytical",
+      "psy_individual",
+      "psy_psychosocial",
+      "psy_cognitive",
+      "psy_cbt",
+      "psy_positive",
+      "psy_multi_intelligence",
+      "psy_dissonance",
+      "psy_trait"
+    ],
+    "PSY_CONCEPTS": [
+      "psy_unconscious",
+      "psy_classical_cond",
+      "psy_operant",
+      "psy_self_actual",
+      "psy_needs",
+      "psy_anchoring",
+      "psy_loss_aversion",
+      "psy_cognitive_dissonance",
+      "psy_stereotype",
+      "psy_bystander",
+      "psy_mirror",
+      "psy_psych_safety",
+      "psy_working_memory",
+      "psy_longterm_memory",
+      "psy_schema",
+      "psy_self_efficacy",
+      "psy_learned_helplessness",
+      "psy_flow",
+      "psy_growth_mindset",
+      "psy_emotional_intelligence",
+      "psy_big_five",
+      "psy_defense",
+      "psy_id_ego_superego",
+      "psy_collective_unconscious",
+      "psy_archetype",
+      "psy_intrinsic",
+      "psy_extrinsic",
+      "psy_confirmation_bias",
+      "psy_availability",
+      "psy_fae",
+      "psy_in_out_group",
+      "psy_priming",
+      "psy_neuroplasticity",
+      "psy_attachment_styles"
+    ],
+    "PSY_TOPICS": [
+      "psy_decision",
+      "psy_social_influence",
+      "psy_emotion",
+      "psy_personality",
+      "psy_mental_health",
+      "psy_group",
+      "psy_memory",
+      "psy_learning",
+      "psy_perception",
+      "psy_developmental",
+      "psy_cognitive_field",
+      "psy_clinical",
+      "psy_positive_field",
+      "psy_neuroscience",
+      "psy_motivation",
+      "psy_intelligence",
+      "psy_psychotherapy",
+      "psy_stress"
+    ]
+  }
+}

@@ -1,0 +1,178 @@
+{
+  "dis": [],
+  "miss": [],
+  "redir": [
+    {
+      "id": "saint_simon",
+      "name": "圣西门",
+      "disc": "soc",
+      "cat": "thinker",
+      "wiki": "https://zh.wikipedia.org/wiki/%E5%9C%A3%E8%A5%BF%E9%97%A8",
+      "title": "圣西门",
+      "issue": "REDIRECT",
+      "resolved": "亨利·德·圣西门"
+    },
+    {
+      "id": "tocqueville",
+      "name": "托克维尔",
+      "disc": "soc",
+      "cat": "thinker",
+      "wiki": "https://zh.wikipedia.org/wiki/%E4%BA%9A%E5%8E%86%E5%85%8B%E8%A5%BF%C2%B7%E5%BE%B7%C2%B7%E6%89%98%E5%85%8B%E7%BB%B4%E5%B0%94",
+      "title": "亚历克西·德·托克维尔",
+      "issue": "REDIRECT",
+      "resolved": "亞歷克西·德·托克維爾"
+    },
+    {
+      "id": "digital",
+      "name": "数字社会学",
+      "disc": "soc",
+      "cat": "topic",
+      "wiki": "https://en.wikipedia.org/wiki/Digital_sociology",
+      "title": "Digital sociology",
+      "issue": "REDIRECT",
+      "resolved": "Sociology of the Internet"
+    },
+    {
+      "id": "econ_austrian",
+      "name": "奥地利学派",
+      "disc": "econ",
+      "cat": "theory",
+      "wiki": "https://en.wikipedia.org/wiki/Austrian_School",
+      "title": "Austrian School",
+      "issue": "REDIRECT",
+      "resolved": "Austrian school of economics"
+    },
+    {
+      "id": "econ_behavioral",
+      "name": "行为经济学",
+      "disc": "econ",
+      "cat": "theory",
+      "wiki": "https://en.wikipedia.org/wiki/Behavioural_economics",
+      "title": "Behavioural economics",
+      "issue": "REDIRECT",
+      "resolved": "Behavioral economics"
+    },
+    {
+      "id": "econ_free_rider",
+      "name": "搭便车",
+      "disc": "econ",
+      "cat": "concept",
+      "wiki": "https://en.wikipedia.org/wiki/Free_rider_problem",
+      "title": "Free rider problem",
+      "issue": "REDIRECT",
+      "resolved": "Free-rider problem"
+    },
+    {
+      "id": "econ_consumer_surplus",
+      "name": "消费者剩余",
+      "disc": "econ",
+      "cat": "concept",
+      "wiki": "https://en.wikipedia.org/wiki/Consumer_surplus",
+      "title": "Consumer surplus",
+      "issue": "REDIRECT",
+      "resolved": "Economic surplus"
+    },
+    {
+      "id": "econ_public_goods",
+      "name": "公共物品",
+      "disc": "econ",
+      "cat": "concept",
+      "wiki": "https://en.wikipedia.org/wiki/Public_good_(economics)",
+      "title": "Public good (economics)",
+      "issue": "REDIRECT",
+      "resolved": "Public good"
+    },
+    {
+      "id": "econ_inequality",
+      "name": "收入分配与不平等",
+      "disc": "econ",
+      "cat": "topic",
+      "wiki": "https://en.wikipedia.org/wiki/Income_inequality",
+      "title": "Income inequality",
+      "issue": "REDIRECT",
+      "resolved": "Income distribution"
+    },
+    {
+      "id": "econ_behavioral_finance",
+      "name": "行为金融学",
+      "disc": "econ",
+      "cat": "topic",
+      "wiki": "https://en.wikipedia.org/wiki/Behavioral_finance",
+      "title": "Behavioral finance",
+      "issue": "REDIRECT",
+      "resolved": "Behavioural finance"
+    },
+    {
+      "id": "econ_taxation",
+      "name": "税收学",
+      "disc": "econ",
+      "cat": "topic",
+      "wiki": "https://en.wikipedia.org/wiki/Taxation",
+      "title": "Taxation",
+      "issue": "REDIRECT",
+      "resolved": "Tax"
+    },
+    {
+      "id": "psy_functionalism",
+      "name": "功能主义",
+      "disc": "psy",
+      "cat": "theory",
+      "wiki": "https://en.wikipedia.org/wiki/Functionalism_(psychology)",
+      "title": "Functionalism (psychology)",
+      "issue": "REDIRECT",
+      "resolved": "Functional psychology"
+    },
+    {
+      "id": "psy_anchoring",
+      "name": "锚定效应",
+      "disc": "psy",
+      "cat": "concept",
+      "wiki": "https://en.wikipedia.org/wiki/Anchoring_(cognitive_bias)",
+      "title": "Anchoring (cognitive bias)",
+      "issue": "REDIRECT",
+      "resolved": "Anchoring effect"
+    },
+    {
+      "id": "psy_intrinsic",
+      "name": "内在动机",
+      "disc": "psy",
+      "cat": "concept",
+      "wiki": "https://en.wikipedia.org/wiki/Intrinsic_motivation",
+      "title": "Intrinsic motivation",
+      "issue": "REDIRECT",
+      "resolved": "Motivation"
+    },
+    {
+      "id": "psy_extrinsic",
+      "name": "外在动机",
+      "disc": "psy",
+      "cat": "concept",
+      "wiki": "https://en.wikipedia.org/wiki/Extrinsic_motivation",
+      "title": "Extrinsic motivation",
+      "issue": "REDIRECT",
+      "resolved": "Motivation"
+    },
+    {
+      "id": "psy_neuroscience",
+      "name": "生理心理学与神经科学",
+      "disc": "psy",
+      "cat": "topic",
+      "wiki": "https://en.wikipedia.org/wiki/Biological_psychology",
+      "title": "Biological psychology",
+      "issue": "REDIRECT",
+      "resolved": "Behavioral neuroscience"
+    },
+    {
+      "id": "psy_stress",
+      "name": "压力与应对",
+      "disc": "psy",
+      "cat": "topic",
+      "wiki": "https://en.wikipedia.org/wiki/Stress_(psychological)",
+      "title": "Stress (psychological)",
+      "issue": "REDIRECT",
+      "resolved": "Psychological stress"
+    }
+  ],
+  "noWiki": [],
+  "bad": []
+}

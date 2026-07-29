@@ -1,0 +1,15 @@
+{
+  "name": "社会人 — 高中生时事作文素材库",
+  "short_name": "社会人",
+  "description": "用社会科学视角解读每日时事热点，帮高中生积累有分析框架的作文/议论文素材。",
+  "lang": "zh-CN",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#F5F0E8",
+  "theme_color": "#C84B3A",
+  "icons": [
+    { "src": "favicon.svg", "sizes": "192x192 512x512", "type": "image/svg+xml", "purpose": "any" },
+    { "src": "favicon-maskable.svg", "sizes": "512x512", "type": "image/svg+xml", "purpose": "maskable" }
+  ]
+}

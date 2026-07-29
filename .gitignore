@@ -1,0 +1,16 @@
+# Netlify 本地状态目录（netlify-cli 生成）
+.netlify/
+
+# 敏感令牌：切勿提交！另一台设备请自行放置 .netlify_token 或用环境变量
+.netlify_token
+
+# 临时调试目录
+.check_tmp/
+
+# 备份文件（带 .bak- 时间戳的）
+*.bak-*
+
+# 系统/依赖
+.DS_Store
+Thumbs.db
+node_modules/

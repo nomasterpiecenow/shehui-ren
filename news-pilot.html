@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>社会热点 · 新格式对照样例</title>
+<style>
+  :root{
+    --bg:#f5f6f8; --card:#ffffff; --ink:#1d2129; --sub:#5a6472;
+    --line:#e6e8eb; --accent:#2f6fed; --warn:#b8860b; --soft:#f0f4ff;
+    --aha:#fff7e6; --aha-ink:#8a5a00; --tag:#eef2f7;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font-family:-apple-system,"PingFang SC","Microsoft YaHei",Segoe UI,Roboto,sans-serif;
+    line-height:1.75;-webkit-font-smoothing:antialiased;}
+  .wrap{max-width:760px;margin:0 auto;padding:32px 20px 80px;}
+  .page-title{font-size:14px;color:var(--sub);letter-spacing:.08em;margin-bottom:4px;}
+  .page-sub{font-size:13px;color:var(--sub);margin:0 0 28px;}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:16px;
+    padding:26px 28px;margin-bottom:26px;box-shadow:0 1px 3px rgba(20,30,50,.04);}
+  .kicker{font-size:12px;color:var(--accent);font-weight:600;letter-spacing:.05em;margin-bottom:8px;}
+  h2.title{font-size:21px;line-height:1.45;margin:0 0 14px;}
+  .gist{font-size:16px;font-weight:600;color:var(--ink);background:var(--soft);
+    border-left:4px solid var(--accent);border-radius:8px;padding:12px 16px;margin:0 0 22px;}
+  .section-h{font-size:13px;font-weight:700;color:var(--sub);letter-spacing:.06em;
+    margin:22px 0 12px;display:flex;align-items:center;gap:8px;}
+  .section-h::before{content:"";width:3px;height:14px;background:var(--accent);border-radius:2px;}
+  /* 脉络时间线 */
+  .thread{border-left:2px solid var(--line);margin-left:6px;padding-left:18px;}
+  .thread .step{position:relative;margin-bottom:14px;}
+  .thread .step::before{content:"";position:absolute;left:-25px;top:7px;width:9px;height:9px;
+    background:#fff;border:2px solid var(--accent);border-radius:50%;}
+  .thread .step .t{font-size:12px;color:var(--sub);font-weight:600;margin-bottom:2px;}
+  .thread .step .x{font-size:14.5px;color:var(--ink);}
+  /* 解读块 */
+  .interp{border:1px solid var(--line);border-radius:12px;padding:18px 20px;margin-bottom:16px;
+    background:#fcfcfd;}
+  .interp .q{font-size:16px;font-weight:700;color:var(--ink);margin:0 0 10px;
+    display:flex;gap:8px;align-items:baseline;}
+  .interp .q .qm{color:var(--accent);font-size:20px;line-height:1;}
+  .interp .naive{font-size:14px;color:var(--sub);margin:0 0 12px;
+    padding-left:12px;border-left:3px solid var(--warn);}
+  .interp .lens-body{font-size:15px;color:var(--ink);margin:0 0 12px;}
+  .interp .lens-body b{color:var(--accent);}
+  .interp .badge{display:inline-block;font-size:12px;color:var(--accent);
+    background:var(--tag);border:1px solid #d8e2f3;border-radius:999px;
+    padding:2px 10px;margin-bottom:12px;font-weight:600;}
+  .interp .aha{font-size:14.5px;font-weight:600;color:var(--aha-ink);background:var(--aha);
+    border-radius:8px;padding:10px 14px;}
+  .interp .aha::before{content:"💡 所以 ";font-weight:700;}
+  .foot{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:20px;
+    padding-top:16px;border-top:1px dashed var(--line);}
+  .foot .lab{font-size:12px;color:var(--sub);}
+  .chip{font-size:12px;background:var(--tag);border:1px solid var(--line);border-radius:999px;
+    padding:3px 11px;color:var(--ink);}
+  .src{font-size:12px;color:var(--sub);margin-left:auto;}
+  .note{font-size:12.5px;color:var(--sub);background:#fbfbfc;border:1px dashed var(--line);
+    border-radius:10px;padding:12px 16px;margin-top:30px;line-height:1.7;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="page-title">社会人 · 社会热点</div>
+  <p class="page-sub">新内容格式对照样例（手工重写 · 非线上数据）— 含 gist 立论 / thread 脉络 / 疑问驱动解读</p>
+  <div id="root"></div>
+  <div class="note">
+    <b>新格式相对旧版的三处变化：</b><br>
+    ① <b>gist</b>：开篇一句话立论，替代图片的"钩子"作用，让人愿意读下去；<br>
+    ② <b>thread（事件脉络）</b>：把背景-发展-结果串成时间线，即使新闻源很薄，用户也能拿到事件全貌（亦为后续"源升级"承载抓取出的关键事实）；<br>
+    ③ <b>解读块疑问驱动</b>：以读者本有的真问题开头 → 点破常识误判 → 用学术概念作"解答工具"（概念降为尾部小标签）→ 顿悟收尾。概念不再是压顶的大 title。<br>
+    <br>
+    <b>本轮范畴说明：</b>此为格式对照样例，未改动生产管线。你已确认"源升级 + 国际视野"纳入后续管线重构范围（要求 url 指向有正文的可读文章、抓取时存关键事实/脉络、放宽 S2 纳入有分析价值的国际事件）。
+  </div>
+</div>
+
+<script>
+var PILOT = [
+  {
+    kicker: '职场 · 社会学 / 心理学',
+    title: '"办公室三天没人说话"登热搜：职场"断亲"是高效协作还是情感冷漠',
+    gist: '办公室三天没人说话，不是大家突然更专业了，而是每个人都在用沉默，悄悄划清自己和组织之间的安全距离。',
+    thread: [
+      {t:'现象发酵', x:'某员工发帖"办公室连续三天无人交谈"，冲上热搜。'},
+      {t:'调研背书', x:'智联调研显示逾七成上班族曾被无意义闲聊折磨，"职场断亲"成为新现象。'},
+      {t:'舆论分化', x:'一方视作"低消耗的高效协作"，另一方担忧沉默背后的疏离与防备。'},
+      {t:'专家定调', x:'呼吁区分"高效沉默"与"被动防备式沉默"，在"不说话"与"破冰"间找舒适边界。'}
+    ],
+    interpretations: [
+      {q:'为什么办公室里大家突然都不说话了？',
+       naive:'很多人以为：不说话 = 更高效，是职场进化的结果。',
+       lens:'符号互动论',
+       body:'但<b>符号互动论</b>提醒我们：沉默从来不是"无"，而是一种被反复解读的信号。在职场里，你不开口，同事会把它读成"他在专注""他在疏远"或"他对我不满"——每个人都在用收敛表达，管理自己在组织中的形象与边界。',
+       aha:'"三天没人说话"不是大家更专业了，而是每个人都在用不说话，悄悄划清自己和组织之间的安全距离。'},
+      {q:'既然有人想聊，为什么整层楼还是一片死寂？',
+       naive:'常理认为：只要有一个人起头，气氛就会松动。',
+       lens:'社会影响',
+       body:'<b>社会影响</b>研究却指出，人的行为深受周围人牵引。一旦"不说话"成了屋里的默认规范，哪怕你内心想交流，也会因为怕打扰、怕显得突兀而克制——沉默会"传染"，从个人选择固化为群体氛围。',
+       aha:'破冰之所以难，不是没人想说，而是"谁先开口"本身成了一种要冒风险的行为。'},
+      {q:'这种安静，是公司的福还是员工的祸？',
+       naive:'老板可能乐见：安静 = 专注 = 产出。',
+       lens:'工作社会学',
+       body:'<b>工作社会学</b>把职场看作一套权力与协作的安排。当"不说话"被默认为合规，员工失去了通过日常闲聊建立信任、交换非正式信息的渠道——而这些闲聊，恰恰是缓冲压力、预警问题的安全阀。',
+       aha:'沉默省下的也许是噪音，丢掉的却可能是团队唯一的"软连接"。'}
+    ],
+    chips:['符号互动论','社会影响','工作社会学'],
+    src:'微博热搜'
+  },
+  {
+    kicker: '公共事件 · 社会学（特大）',
+    title: '南方多地强降雨、龙卷风与洪涝齐发：湖北强对流致11死，多流域启动防汛',
+    gist: '同一场雨，低洼老城和新建豪宅的受灾程度天差地别——极端天气照出的从来不是天灾，而是城市的不平等。',
+    thread: [
+      {t:'7月下旬', x:'副热带高压边缘强对流系统在南方多地引爆极端天气。'},
+      {t:'湖北', x:'出现龙卷风、强对流，已致 11 人死亡。'},
+      {t:'广西', x:'洪水致养蛇场蛇类逃逸，无人机吊运被困人员。'},
+      {t:'广东', x:'洪涝与"男子被卷至百米高空"等险情引发关注。'},
+      {t:'预警', x:'中央气象台五预警齐发，七大流域全力防汛。'},
+      {t:'响应', x:'三部门向广西调拨救灾物资，多地转移群众。'}
+    ],
+    interpretations: [
+      {q:'为什么一场雨，能把一个现代化城市短时间内打回原形？',
+       naive:'人们习惯把灾害归咎于"天太狠"。',
+       lens:'风险社会理论',
+       body:'<b>风险社会理论</b>（贝克）指出，现代风险不是外来的，而是工业化与城市化自身制造、又需被系统管理的。当极端天气在人口稠密的城市群叠加，灾害后果跨越阶层与地域、无人能独善其身——治理的重点，必须从"救灾"前移到"风险前置"。',
+       aha:'城市在暴雨里"失灵"，不是运气差，而是我们一直把系统性风险当成偶发意外在应付。'},
+      {q:'为什么新闻里总说"同舟共济"，可受灾最重的偏偏是最没准备的人？',
+       naive:'常理以为：天灾面前人人平等。',
+       lens:'环境社会学',
+       body:'<b>环境社会学</b>强调环境风险的不平等分配。排水管网、应急资源的投入高度不均，老旧城区与临时务工者往往最缺乏抵御灾害的资产与退路——气候正义因此成为城市防灾无法回避的议题。',
+       aha:'极端天气从不是"平等地"打击所有人，它精准地先找到社会里最脆弱的那批人。'}
+    ],
+    chips:['风险社会理论','环境社会学','城市社会学'],
+    src:'综合新闻'
+  },
+  {
+    kicker: '消费 · 经济学 / 社会学',
+    title: '"清醒反向省钱"刷屏：年轻人该省省该花花，拒绝消费主义绑架',
+    gist: '"该省省、该花花"不是抠门，是年轻人在不确定时代里，用可控的储蓄为自己攥住的一点确定性。',
+    thread: [
+      {t:'风潮兴起', x:'抖音/小红书/微博走红"反向省钱"，年轻人开始分级生活。'},
+      {t:'行为特征', x:'拼单、平替、薅补贴，但不省饮食、睡眠、体检与情绪。'},
+      {t:'舆论反馈', x:'网友晒账单："以前月月光，现在月月存"。'},
+      {t:'定性', x:'从"精致穷"到务实消费的认知升级，折射收入不稳定下储蓄意识觉醒。'}
+    ],
+    interpretations: [
+      {q:'为什么这届年轻人，一边拼命省钱、一边又舍得为睡眠和体检花钱？',
+       naive:'常被解读成：他们只是更会算账了。',
+       lens:'理性人',
+       body:'<b>理性人</b>假设个体基于成本收益做决策。当年轻人看清溢价品牌与营销套路的本质，便把消费从"身份表演"拉回"效用最大化"——但"效用"不只是省钱，更包括健康与情绪这些长期收益。于是在收入约束下，他们重新配置每一笔开支，而不是一刀切地抠。',
+       aha:'"反向省钱"的反常之处恰恰证明他们理性：省的是面子，花的是里子。'},
+      {q:'既然省钱是好事，为什么这股风潮里总透着一丝焦虑？',
+       naive:'常理认为：存下钱就该安心了。',
+       lens:'晚期现代性理论',
+       body:'<b>晚期现代性理论</b>指出，传统保障瓦解，个体直面不确定性。在就业与收入波动加剧的背景下，"分级生活"是年轻人用可控的储蓄对抗不可控风险的个体化策略——自由与焦虑，其实同源。',
+       aha:'月月存下的那笔钱，买的不是消费力，而是一点点"万一出事我还能扛"的心理安全垫。'}
+    ],
+    chips:['理性人','社会分层','晚期现代性理论'],
+    src:'今日头条'
+  }
+];
+
+function esc(s){return s;}
+
+var root = document.getElementById('root');
+PILOT.forEach(function(n){
+  var card = document.createElement('div');
+  card.className = 'card';
+
+  var k = '<div class="kicker">'+n.kicker+'</div>';
+  var h = '<h2 class="title">'+n.title+'</h2>';
+  var g = '<div class="gist">'+n.gist+'</div>';
+
+  var th = '<div class="section-h">事件脉络</div><div class="thread">';
+  n.thread.forEach(function(s){
+    th += '<div class="step"><div class="t">'+s.t+'</div><div class="x">'+s.x+'</div></div>';
+  });
+  th += '</div>';
+
+  var ih = '<div class="section-h">社科视角解读</div>';
+  var interps = '';
+  n.interpretations.forEach(function(p){
+    interps +=
+      '<div class="interp">'+
+        '<div class="q"><span class="qm">?</span><span>'+p.q+'</span></div>'+
+        '<div class="naive">常以为：'+p.naive+'</div>'+
+        '<div class="badge">用「'+p.lens+'」解读</div>'+
+        '<div class="lens-body">'+p.body+'</div>'+
+        '<div class="aha">'+p.aha+'</div>'+
+      '</div>';
+  });
+
+  var chips = n.chips.map(function(c){return '<span class="chip">'+c+'</span>';}).join('');
+  var foot = '<div class="foot"><span class="lab">关联知识点</span>'+chips+
+             '<span class="src">来源：'+n.src+'</span></div>';
+
+  card.innerHTML = k + h + g + th + ih + interps + foot;
+  root.appendChild(card);
+});
+</script>
+</body>
+</html>

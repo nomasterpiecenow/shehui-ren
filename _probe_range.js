@@ -1,0 +1,5 @@
+const fs=require('fs');const {JSDOM}=require('jsdom');
+let html=fs.readFileSync('sociology-map.html','utf8').replace(/<script src="news-data\.js"><\/script>/,'<script>var NEWS_DATA=[];<\/script>');
+const ctx=new Proxy({},{get(_t,p){if(p==='measureText')return()=>({width:10});if(p==='createLinearGradient'||p==='createRadialGradient')return()=>({addColorStop(){}});if(p==='canvas')return{width:1000,height:700};return()=>{};},set(){return true;}});
+const dom=new JSDOM(html,{runScripts:'dangerously',pretendToBeVisual:true,beforeParse(w){w.requestAnimationFrame=()=>0;w.cancelAnimationFrame=()=>{};w.HTMLCanvasElement.prototype.getContext=function(){return ctx;};Object.defineProperty(w.HTMLElement.prototype,'offsetWidth',{get(){return 1000;}});Object.defineProperty(w.HTMLElement.prototype,'offsetHeight',{get(){return 700;}});}});
+const w=dom.window;setTimeout(()=>{const ticks=[];for(let yr=w.eval('YEAR_MIN');yr<=w.eval('YEAR_MAX');yr+=50)ticks.push(yr);console.log('YEAR_MIN',w.eval('YEAR_MIN'),'YEAR_MAX',w.eval('YEAR_MAX'));console.log('刻度标签:',ticks.join(', '));},300);

@@ -1,0 +1,679 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>前沿研究层 · 真实渲染预览</title>
+<style>
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --bg: #F5F0E8;
+            --bg-card: #FEFCF8;
+            --text: #2D304B;
+            --text-light: #6B6F8A;
+            --text-muted: #9B97A8;
+            --red: #C84B3A;
+            --red-soft: rgba(200, 75, 58, 0.12);
+            --teal: #3A8C8C;
+            --teal-soft: rgba(58, 140, 140, 0.12);
+            --navy: #3D4F8F;
+            --navy-soft: rgba(61, 79, 143, 0.12);
+            --border: #E5DFD4;
+            --border-light: #EDE8DE;
+            --radius: 14px;
+            --radius-sm: 8px;
+            --shadow: 0 1px 3px rgba(45,48,75,0.04), 0 6px 24px rgba(45,48,75,0.06);
+            --shadow-lg: 0 4px 12px rgba(45,48,75,0.06), 0 20px 48px rgba(45,48,75,0.1);
+            --font-display: 'Fraunces', Georgia, serif;
+            --font-body: 'Inter', -apple-system, sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: var(--font-body);
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.72;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* ===== NAV ===== */
+        .nav {
+            position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+            height: 56px;
+            background: rgba(245, 240, 232, 0.82);
+            backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--border-light);
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 0 40px;
+            transition: box-shadow 0.3s;
+        }
+        .nav.scrolled { box-shadow: 0 1px 12px rgba(45,48,75,0.08); }
+        .nav-logo {
+            font-family: var(--font-display);
+            font-weight: 700; font-size: 17px;
+            color: var(--text);
+            display: flex; align-items: center; gap: 8px;
+            letter-spacing: -0.02em;
+        }
+        .nav-logo .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--red); }
+        .nav-links { display: flex; gap: 6px; }
+        .nav-links a {
+            font-size: 13px; font-weight: 500;
+            color: var(--text-light);
+            text-decoration: none;
+            padding: 6px 14px;
+            border-radius: 20px;
+            transition: all 0.25s;
+        }
+        .nav-links a:hover, .nav-links a.active {
+            color: var(--text);
+            background: rgba(45,48,75,0.06);
+        }
+        /* [Phase 0] .nav-progress styles removed (progress UI absent from DOM) */
+
+        /* [Phase 0] .hero styles removed (landing page not in product scope) */
+
+        /* ===== SECTION COMMON ===== */
+        .section {
+            padding: 100px 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .section-header {
+            text-align: center;
+            margin-bottom: 64px;
+        }
+        .section-num {
+            font-family: var(--font-mono);
+            font-size: 11px; font-weight: 500;
+            letter-spacing: 0.14em;
+            color: var(--teal);
+            margin-bottom: 12px;
+            display: block;
+        }
+        .section-title {
+            font-family: var(--font-display);
+            font-size: clamp(28px, 4vw, 42px);
+            font-weight: 400;
+            letter-spacing: -0.02em;
+            line-height: 1.15;
+        }
+        .section-subtitle {
+            margin-top: 16px;
+            font-size: 16px;
+            color: var(--text-light);
+            max-width: 520px;
+            margin-left: auto; margin-right: auto;
+        }
+
+        /* ===== THEORY MAP ===== */
+        .map-section { height: calc(100vh - 56px);
+            padding: 0;
+            max-width: 100%;
+        }
+        .map-section .section-header {
+            padding: 0 40px;
+            max-width: 1200px;
+            margin: 0 auto 40px;
+        }
+        .map-container {
+            position: relative;
+            width: 100%;
+            height: calc(100vh - 56px);
+            background: var(--bg-card);
+            border-top: 1px solid var(--border-light);
+            border-bottom: 1px solid var(--border-light);
+            overflow: hidden;
+        }
+        #theoryMap {
+            width: 100%; height: 100%;
+            cursor: grab;
+        }
+        #theoryMap:active { cursor: grabbing; }
+        .map-legend {
+            position: absolute; bottom: 24px; left: 24px;
+            display: flex; flex-wrap: wrap; gap: 8px;
+        }
+        .map-legend-btn {
+            font-family: var(--font-body);
+            font-size: 12px; font-weight: 500;
+            padding: 6px 14px;
+            border-radius: 20px;
+            border: 1px solid var(--border);
+            background: var(--bg-card);
+            color: var(--text-light);
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex; align-items: center; gap: 6px;
+        }
+        .map-legend-btn .ldot {
+            width: 7px; height: 7px; border-radius: 50%;
+        }
+        .map-legend-btn:hover, .map-legend-btn.active {
+            border-color: var(--text);
+            color: var(--text);
+        }
+        .map-legend-disc { top: 24px; bottom: auto; }
+        .map-legend-chk {
+            font-family: var(--font-body);
+            font-size: 12px; font-weight: 500;
+            padding: 6px 14px;
+            border-radius: 20px;
+            border: 1px solid var(--border);
+            background: var(--bg-card);
+            color: var(--text-light);
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex; align-items: center; gap: 6px;
+            user-select: none;
+        }
+        .map-legend-chk input { accent-color: var(--teal); margin: 0; cursor: pointer; }
+        .map-legend-chk:hover { border-color: var(--text); color: var(--text); }
+        .map-axis-toggle { font-size: 12px; }
+        .map-tooltip {
+            position: absolute;
+            pointer-events: none;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            padding: 12px 16px;
+            box-shadow: var(--shadow);
+            opacity: 0;
+            transition: opacity 0.2s;
+            max-width: 220px;
+            z-index: 10;
+        }
+        .map-tooltip.show { opacity: 1; }
+        .map-tooltip h4 {
+            font-family: var(--font-display);
+            font-size: 15px; font-weight: 600;
+            margin-bottom: 4px;
+        }
+        .map-tooltip p {
+            font-size: 12px; color: var(--text-light);
+            line-height: 1.5;
+        }
+
+        /* Theory detail panel */
+        .theory-panel {
+            position: absolute;
+            top: 0; right: 0;
+            width: 380px; height: 100%;
+            background: var(--bg-card);
+            border-left: 1px solid var(--border-light);
+            box-shadow: -8px 0 32px rgba(45,48,75,0.08);
+            transform: translateX(100%);
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            overflow-y: auto;
+            z-index: 20;
+            padding: 32px;
+        }
+        .theory-panel.open { transform: translateX(0); }
+        .theory-panel-close {
+            position: absolute; top: 16px; right: 16px;
+            width: 32px; height: 32px;
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            background: transparent;
+            cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 14px; color: var(--text-light);
+            transition: all 0.2s;
+        }
+        .theory-panel-close:hover {
+            background: var(--red-soft);
+            border-color: var(--red);
+            color: var(--red);
+        }
+        .tp-cat {
+            font-family: var(--font-mono);
+            font-size: 10px; font-weight: 500;
+            letter-spacing: 0.12em;
+            padding: 4px 10px;
+            border-radius: 12px;
+            display: inline-block;
+            margin-bottom: 12px;
+        }
+        .tp-title {
+            font-family: var(--font-display);
+            font-size: 26px; font-weight: 500;
+            letter-spacing: -0.02em;
+            line-height: 1.2;
+            margin-bottom: 8px;
+        }
+        .tp-en {
+            font-family: var(--font-mono);
+            font-size: 11px;
+            color: var(--text-muted);
+            opacity: 0.6;
+            margin-bottom: 20px;
+        }
+        .tp-desc {
+            font-size: 14px;
+            color: var(--text-light);
+            line-height: 1.7;
+            margin-bottom: 24px;
+        }
+        .tp-section-title {
+            font-size: 11px; font-weight: 600;
+            letter-spacing: 0.1em;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            margin-bottom: 12px;
+        }
+        .tp-thinkers {
+            display: flex; flex-wrap: wrap; gap: 6px;
+            margin-bottom: 24px;
+        }
+        .tp-thinker {
+            font-size: 12px; font-weight: 500;
+            padding: 4px 12px;
+            border-radius: 16px;
+            background: var(--navy-soft);
+            color: var(--navy);
+        }
+        .tp-concepts {
+            list-style: none;
+            margin-bottom: 24px;
+        }
+        .tp-concepts li {
+            font-size: 13px;
+            color: var(--text);
+            padding: 8px 0;
+            border-bottom: 1px solid var(--border-light);
+            display: flex; align-items: baseline; gap: 8px;
+        }
+        .tp-concepts li::before {
+            content: '';
+            width: 4px; height: 4px;
+            border-radius: 50%;
+            background: var(--teal);
+            flex-shrink: 0;
+            margin-top: 6px;
+        }
+        .tp-related {
+            display: flex; flex-wrap: wrap; gap: 6px;
+        }
+        .tp-related-btn {
+            font-family: var(--font-body);
+            font-size: 12px; font-weight: 500;
+            padding: 6px 12px;
+            border-radius: 16px;
+            border: 1px solid var(--border);
+            background: transparent;
+            color: var(--text-light);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .tp-related-btn:hover {
+            border-color: var(--red);
+            color: var(--red);
+            background: var(--red-soft);
+        }
+
+        /* 思想家头像 + 头部布局 */
+        .tp-head {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+        .tp-avatar-wrap {
+            position: relative;
+            width: 64px; height: 64px;
+            flex-shrink: 0;
+        }
+        .tp-avatar {
+            position: absolute; inset: 0;
+            width: 64px; height: 64px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--border-light);
+            background: var(--bg);
+        }
+        .tp-avatar-initial {
+            position: absolute; inset: 0;
+            display: flex; align-items: center; justify-content: center;
+            width: 64px; height: 64px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--navy), var(--red));
+            color: #fff;
+            font-family: var(--font-display);
+            font-size: 30px; font-weight: 500;
+            letter-spacing: -0.02em;
+            box-shadow: 0 4px 14px rgba(45,48,75,0.18);
+        }
+        .tp-head-text { min-width: 0; }
+        .tp-head-text .tp-cat { margin-bottom: 6px; }
+        .tp-head-text .tp-title { margin-bottom: 4px; }
+        .tp-head-text .tp-en { margin-bottom: 0; }
+        .tp-title-link {
+            color: inherit;
+            text-decoration: none;
+            border-bottom: 1px solid transparent;
+            transition: color .18s, border-color .18s;
+        }
+        .tp-title-link:hover { color: var(--navy); border-bottom-color: var(--navy); }
+        .tp-ext {
+            font-size: 0.6em;
+            margin-left: 5px;
+            opacity: 0.5;
+            vertical-align: super;
+        }
+        .tp-title-link:hover .tp-ext { opacity: 0.9; }
+
+        /* 思想家核心思想（展开讲解） */
+        .tp-ideas {
+            display: flex; flex-direction: column; gap: 14px;
+            margin-bottom: 24px;
+        }
+        .tp-idea {
+            padding: 14px 16px;
+            background: var(--bg);
+            border: 1px solid var(--border-light);
+            border-left: 3px solid var(--navy);
+            border-radius: var(--radius-sm);
+        }
+        .tp-idea-title {
+            font-family: var(--font-display);
+            font-size: 15px; font-weight: 600;
+            color: var(--navy);
+            margin-bottom: 6px;
+            letter-spacing: -0.01em;
+        }
+        .tp-idea-desc {
+            font-size: 13.5px;
+            color: var(--text-light);
+            line-height: 1.7;
+        }
+
+        /* [Phase 0] .path-timeline styles removed (learning-path page not in product scope) */
+
+        /* [Phase 0] .theories-grid/.theory-card styles removed (theory cards page not in scope) */
+
+        /* [Phase 0] .concepts-grid/.concept-card styles removed (concepts page not in scope) */
+
+        /* [Phase 0] .apps-grid/.app-card styles removed (applications page not in scope) */
+
+        /* [Phase 0] .footer styles removed (no footer in two-page product) */
+
+        /* ===== ANIMATIONS ===== */
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 1; }
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-6px); }
+        }
+
+        .fade-in {
+            opacity: 0;
+            transform: translateY(16px);
+            transition: all 0.6s ease;
+        }
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 768px) {
+            .nav { padding: 0 20px; }
+            .nav-links { display: none; }
+            .section { padding: 60px 24px; }
+            .map-container { height: 450px; }
+            .theory-panel { width: 100%; }
+            .map-section .section-header { padding: 0 24px; }
+            .topics-layout { flex-direction: column; gap: 20px; }
+            .date-sidebar { position: static; width: 100%; }
+            .date-group-list { display: flex; flex-wrap: wrap; gap: 6px; }
+            .date-btn-side { width: auto; }
+        }
+        /* [Phase 0] 480px breakpoint reserved for date-sidebar fine-tuning (Phase 3) */
+
+        /* Reduced motion */
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+    
+        /* Pages */
+
+        /* [Phase 2] topic-card / news-perspective base styles consolidated below (single source of truth) */
+
+        /* PAGE SWITCHING */
+        .page{display:none}.page.active{display:block}
+        #page-topics{min-height:100vh;background:var(--bg);padding-top:56px}
+        #page-topics .section{max-width:1200px}
+        #page-topics .topics-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:20px;margin-top:32px}
+        /* Topic cards - match theory card style */
+        #page-topics .topic-card{background:var(--bg-card);border:1px solid var(--border-light);border-radius:var(--radius);padding:24px;cursor:pointer;transition:all .3s;position:relative;overflow:hidden}
+        #page-topics .topic-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--red);transform:scaleX(0);transform-origin:left;transition:transform .4s}
+        #page-topics .topic-card:hover::before{transform:scaleX(1)}
+        #page-topics .topic-card:hover{box-shadow:var(--shadow-lg);border-color:var(--border);transform:translateY(-2px)}
+        .topic-card-header{padding:16px 20px 0;display:flex;align-items:flex-start;gap:12px;margin-bottom:14px}
+        .topic-rank{font-family:var(--font-display);font-size:22px;font-weight:700;color:var(--red);line-height:1;flex-shrink:0;min-width:28px}
+        .topic-rank.top3{color:var(--red)}
+        .topic-title{font-family:var(--font-display);font-size:16px;font-weight:600;line-height:1.4;flex:1;color:var(--text);letter-spacing:-0.01em}
+        .topic-meta{font-size:11px;color:var(--text-muted);margin-bottom:14px;display:flex;align-items:center;gap:8px}
+        .topic-meta .dot{width:3px;height:3px;border-radius:50%;background:var(--border)}
+        .topic-tags{display:flex;flex-wrap:wrap;gap:5px;margin-top:auto}
+        .topic-tag{font-size:10px;font-weight:500;padding:3px 9px;border-radius:10px;border:1px solid var(--border);background:var(--teal-soft);color:var(--teal);cursor:pointer;transition:all .2s}
+        .topic-tag:hover{border-color:var(--red);color:var(--red);background:var(--red-soft)}
+        
+        /* News detail panel styling */
+        .news-perspective{padding:14px 18px;background:var(--bg);border-radius:var(--radius-sm);margin-bottom:12px;border-left:3px solid var(--red)}
+        .news-perspective h6{font-size:13px;font-weight:600;margin-bottom:5px;color:var(--red);letter-spacing:-0.01em}
+        .news-perspective p{font-size:13px;color:var(--text-light);line-height:1.65;margin:0}
+
+
+        .detail-panel{position:fixed;right:-440px;top:56px;width:440px;height:calc(100vh - 56px);background:var(--bg-card);border-left:1px solid var(--border-light);box-shadow:-8px 0 32px rgba(45,48,75,.1);transition:right .4s cubic-bezier(.16,1,.3,1);overflow-y:auto;z-index:50}
+        .detail-panel.open{right:0}
+
+        /* Detail panel internal styles */
+        .dp-header{position:sticky;top:0;background:var(--bg-card);padding:24px 28px 16px;border-bottom:1px solid var(--border-light);z-index:10}
+        .dp-close{position:absolute;top:16px;right:16px;width:32px;height:32px;border:1px solid var(--border);border-radius:50%;background:transparent;cursor:pointer;font-size:14px;color:var(--text-light);transition:all .2s;display:flex;align-items:center;justify-content:center}
+        .dp-close:hover{background:var(--red-soft);border-color:var(--red);color:var(--red)}
+        .dp-cat{font-family:var(--font-mono);font-size:10px;font-weight:500;padding:4px 10px;border-radius:12px;display:inline-block;margin-bottom:10px}
+        .dp-title{font-family:var(--font-display);font-size:24px;font-weight:600;line-height:1.3;margin-bottom:6px;color:var(--text)}
+        .dp-en{font-family:var(--font-mono);font-size:12px;color:var(--text-muted)}
+        .dp-title-link{text-decoration:none;color:var(--text);transition:color .15s}
+        .dp-title-link:hover{color:var(--red);text-decoration:underline;text-underline-offset:3px}
+        .dp-ext{font-size:13px;color:var(--text-muted);font-weight:400;margin-left:4px}
+        .dp-title-link:hover .dp-ext{color:var(--red)}
+        .dp-body{padding:20px 28px 40px}
+        .dp-section{margin-bottom:28px}
+        .dp-section-title{font-size:11px;font-weight:600;letter-spacing:.1em;color:var(--text-muted);text-transform:uppercase;margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid var(--border-light)}
+        .dp-text{font-size:14px;color:var(--text);line-height:1.8}
+        .dp-text p{margin-bottom:12px}
+        .dp-related{display:flex;flex-wrap:wrap;gap:6px}
+        .dp-related-btn{font-size:12px;font-weight:500;padding:6px 14px;border-radius:16px;border:1px solid var(--border);background:transparent;color:var(--text-light);cursor:pointer;transition:all .2s}
+        .dp-related-btn:hover{border-color:var(--red);color:var(--red);background:var(--red-soft)}
+        .dp-count{font-size:11px;font-weight:500;color:var(--text-muted);background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:1px 8px;margin-left:8px}
+        .dp-related-group{margin-bottom:14px}
+        .dp-related-group:last-of-type{margin-bottom:8px}
+        .dp-related-glabel{display:inline-block;font-size:11px;font-weight:600;letter-spacing:.04em;margin-bottom:6px}
+        .dp-subgraph-btn{margin-top:6px;width:100%;font-family:var(--font-body);font-size:13px;font-weight:600;padding:11px;border-radius:var(--radius-sm);border:1px solid var(--navy);background:var(--navy);color:#fff;cursor:pointer;transition:all .2s}
+        .dp-subgraph-btn:hover{background:#2E3D6E}
+        .topic-tag-more{font-weight:600;color:var(--text-muted)}
+
+        /* [v1.16] 新新闻结构样式：gist / 事件脉络 / 疑问驱动解读 */
+        .dp-kicker{font-family:var(--font-mono);font-size:11px;font-weight:500;color:var(--red);margin-bottom:8px;letter-spacing:.02em}
+        .dp-gist{font-size:15px;font-weight:600;line-height:1.7;color:var(--text);background:var(--red-soft);border-left:4px solid var(--red);border-radius:8px;padding:12px 16px;margin:0 0 24px}
+        .dp-thread{border-left:2px solid var(--border-light);margin-left:4px;padding-left:18px}
+        .dp-thread-step{position:relative;margin-bottom:14px}
+        .dp-thread-step::before{content:"";position:absolute;left:-25px;top:7px;width:9px;height:9px;background:var(--bg-card);border:2px solid var(--red);border-radius:50%}
+        .dp-thread-t{font-size:12px;font-weight:600;color:var(--red);margin-bottom:2px}
+        .dp-thread-x{font-size:14px;color:var(--text);line-height:1.65}
+        .dp-interp{border:1px solid var(--border-light);border-radius:12px;padding:16px 18px;margin-bottom:16px;background:var(--bg)}
+        .dp-interp-q{font-size:15.5px;font-weight:700;color:var(--text);margin:0 0 10px;display:flex;gap:8px;align-items:baseline;line-height:1.5}
+        .dp-qm{color:var(--red);font-size:20px;line-height:1;font-weight:700}
+        .dp-interp-naive{font-size:13px;color:var(--text-light);margin:0 0 12px;padding-left:12px;border-left:3px solid #c9923a}
+        .dp-interp-badge{display:inline-block;font-size:12px;color:var(--red);background:var(--red-soft);border:1px solid var(--red-soft);border-radius:999px;padding:3px 12px;margin-bottom:10px;font-weight:600}
+        .dp-interp-body{font-size:14.5px;color:var(--text);line-height:1.75;margin:0 0 12px}
+        .dp-interp-body b{color:var(--red)}
+        .dp-interp-aha{font-size:14px;font-weight:600;color:#8a5a00;background:#fff7e6;border-radius:8px;padding:10px 14px}
+        .dp-interp-aha::before{content:"💡 所以 ";font-weight:700}
+        .topic-gist{font-size:12.5px;color:var(--text-light);line-height:1.6;margin:6px 0 2px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+
+        /* [Phase 3 / A10] Date navigation → left vertical sidebar, grouped by month, collapsible */
+        .topics-layout { display: flex; gap: 32px; align-items: flex-start; }
+        .topics-main { flex: 1; min-width: 0; }
+        .date-sidebar {
+            position: sticky; top: 80px;
+            width: 210px; flex-shrink: 0;
+            align-self: flex-start;
+        }
+        .date-sidebar-title {
+            font-family: var(--font-display);
+            font-size: 15px; font-weight: 600;
+            color: var(--text);
+            margin-bottom: 14px; padding-left: 4px;
+        }
+        .date-group {
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-sm);
+            background: var(--bg-card);
+            margin-bottom: 8px;
+            overflow: hidden;
+        }
+        .date-group-header {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 10px 14px;
+            cursor: pointer; user-select: none;
+            font-size: 13px; font-weight: 600; color: var(--text);
+        }
+        .date-group-header .chev {
+            font-size: 11px; color: var(--text-muted);
+            transition: transform 0.2s;
+        }
+        .date-group.collapsed .chev { transform: rotate(-90deg); }
+        .date-group-list { display: flex; flex-direction: column; padding: 0 8px 8px; }
+        .date-group.collapsed .date-group-list { display: none; }
+        .date-btn-side {
+            display: block; width: 100%; text-align: left;
+            font-family: var(--font-mono); font-size: 12px; font-weight: 500;
+            padding: 7px 12px; border: none; background: transparent;
+            color: var(--text-light); cursor: pointer;
+            border-radius: 10px; transition: all 0.2s;
+        }
+        .date-btn-side:hover { background: var(--bg); color: var(--text); }
+        .date-btn-side.active { background: var(--red); color: #fff; }
+
+        #page-map{height:100vh;overflow:hidden;padding-top:56px}
+        #page-map .map-section{height:calc(100vh - 56px);padding:0}
+        #page-map .map-container{height:calc(100vh - 56px)}
+
+        /* ===== ENRICHED PANEL SECTIONS ===== */
+        .tp-works { list-style:none; margin:0 0 24px; display:flex; flex-direction:column; gap:6px; }
+        .tp-works li { font-size:13px; color:var(--text); padding:8px 12px 8px 30px; background:var(--bg); border:1px solid var(--border-light); border-radius:var(--radius-sm); position:relative; }
+        .tp-works li::before { content:'📖'; position:absolute; left:10px; top:8px; font-size:12px; }
+        .tp-chips { display:flex; flex-wrap:wrap; gap:6px; margin-bottom:24px; }
+        .tp-chip { font-size:12px; font-weight:500; padding:4px 12px; border-radius:16px; background:var(--navy-soft); color:var(--navy); }
+        .tp-chip-btn { font-family:var(--font-body); font-size:12px; font-weight:500; padding:5px 12px; border-radius:16px; border:1px solid var(--border); background:transparent; color:var(--text-light); cursor:pointer; transition:all .2s; }
+        .tp-chip-btn:hover { border-color:var(--red); color:var(--red); background:var(--red-soft); }
+        .tp-highlight { background:var(--red-soft); border-left:3px solid var(--red); padding:12px 14px; border-radius:var(--radius-sm); }
+        .tp-example { background:var(--teal-soft); border-left:3px solid var(--teal); padding:12px 14px; border-radius:var(--radius-sm); }
+        .tp-expand-btn {
+            margin-top: 28px;
+            width: 100%;
+            font-family: var(--font-body);
+            font-size: 14px; font-weight: 600;
+            padding: 14px;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--navy);
+            background: var(--navy);
+            color: #fff;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 4px 14px rgba(45,48,75,0.18);
+        }
+        .tp-expand-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 22px rgba(45,48,75,0.28);
+            background: #2d304b;
+        }
+
+        /* ===== RELATED-THEORY MODAL ===== */
+        .theory-modal { position:fixed; inset:0; z-index:200; display:none; }
+        .theory-modal.open { display:block; }
+        .theory-modal .tm-backdrop { position:absolute; inset:0; background:rgba(45,48,75,0.45); backdrop-filter:blur(4px); -webkit-backdrop-filter:blur(4px); animation:tmFade .25s ease; }
+        .theory-modal .tm-window { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:min(920px,92vw); height:min(640px,86vh); background:var(--bg-card); border-radius:var(--radius); box-shadow:var(--shadow-lg); display:flex; flex-direction:column; overflow:hidden; animation:tmPop .3s cubic-bezier(0.16,1,0.3,1); }
+        .theory-modal .tm-header { display:flex; align-items:center; justify-content:space-between; padding:18px 24px; border-bottom:1px solid var(--border-light); }
+        .theory-modal .tm-title { font-family:var(--font-display); font-size:18px; font-weight:500; }
+        .theory-modal .tm-close { width:32px; height:32px; border:1px solid var(--border); border-radius:50%; background:transparent; cursor:pointer; font-size:14px; color:var(--text-light); transition:all .2s; }
+        .theory-modal .tm-close:hover { background:var(--red-soft); border-color:var(--red); color:var(--red); }
+        .theory-modal .tm-body { flex:1; display:flex; min-height:0; }
+        .theory-modal .tm-graph-wrap { flex:1.2; min-width:0; position:relative; background:var(--bg); border-right:1px solid var(--border-light); }
+        .theory-modal .tm-graph-wrap canvas { width:100%; height:100%; display:block; cursor:pointer; }
+        .theory-modal .tm-hint { position:absolute; bottom:12px; left:50%; transform:translateX(-50%); font-size:11px; color:var(--text-muted); background:rgba(254,252,248,0.82); padding:4px 10px; border-radius:12px; pointer-events:none; white-space:nowrap; }
+        .theory-modal .tm-detail { flex:1; min-width:0; overflow-y:auto; padding:32px; line-height:1.72; }
+        .theory-modal .tm-detail-empty { color:var(--text-muted); font-size:14px; line-height:1.7; text-align:center; margin-top:48px; }
+        @keyframes tmFade { from{opacity:0} to{opacity:1} }
+        @keyframes tmPop { from{opacity:0; transform:translate(-50%,-46%) scale(.96)} to{opacity:1; transform:translate(-50%,-50%) scale(1)} }
+        @media (max-width:720px){ .theory-modal .tm-body{ flex-direction:column } .theory-modal .tm-graph-wrap{ flex:none; height:46% } }
+</style>
+<style>
+  body{margin:0;padding:32px;background:var(--bg,#f6f7f9);font-family:-apple-system,'PingFang SC','Microsoft YaHei',sans-serif}
+  .pv-h{font-size:13px;color:var(--text-light,#888);letter-spacing:.08em;margin:0 0 10px;font-weight:600;text-transform:uppercase}
+  .pv-wrap{max-width:760px;margin:0 auto 48px;background:var(--bg-card,#fff);border:1px solid var(--border-light,#eee);border-radius:var(--radius,14px);overflow:hidden}
+  .pv-note{max-width:760px;margin:0 auto 12px;font-size:13px;color:var(--text-light,#888);line-height:1.7}
+</style>
+</head>
+<body>
+  <p class="pv-note">下方为 <b>「办公室三天没人说话」</b> 新闻详情面板（调用 <code>showNewsDetail(3)</code> 的真实渲染结果，最新日期）。注意「社科视角解读」的对应 interpretation 内已<strong>内嵌前沿研究</strong>（不再是独立区块），含「溯源 → work」按钮与该上游节点的一句知识解读；其上方为 v1.16 的 gist 立论块与事件脉络时间线。</p>
+  <div class="pv-wrap"><div class="dp-gist">办公室三天没人说话，不是大家突然更专业了，而是每个人都在用沉默，悄悄划清自己和组织之间的安全距离。</div><div class="dp-section"><div class="dp-section-title">🧵 事件脉络</div><div class="dp-thread"><div class="dp-thread-step"><div class="dp-thread-t">现象发酵</div><div class="dp-thread-x">某员工发帖“办公室连续三天无人交谈”，冲上热搜。</div></div><div class="dp-thread-step"><div class="dp-thread-t">调研背书</div><div class="dp-thread-x">智联调研显示逾七成上班族曾被无意义闲聊折磨，“职场断亲”成为新现象。</div></div><div class="dp-thread-step"><div class="dp-thread-t">舆论分化</div><div class="dp-thread-x">一方视作“低消耗的高效协作”，另一方担忧沉默背后的疏离与防备。</div></div><div class="dp-thread-step"><div class="dp-thread-t">专家定调</div><div class="dp-thread-x">呼吁区分“高效沉默”与“被动防备式沉默”，在“不说话”与“破冰”间找舒适边界。</div></div></div></div><div class="dp-section"><div class="dp-section-title">🔍 社科视角解读</div>
+            <p style="font-size:12px;color:var(--text-light);margin-bottom:16px;font-style:italic">以下用你真正会问的问题，拆解这条新闻背后的社会逻辑：</p><div class="dp-interp">
+                    <div class="dp-interp-q"><span class="dp-qm">?</span><span>为什么办公室里大家突然都不说话了？</span></div>
+                    <div class="dp-interp-naive">常以为：很多人以为：不说话 = 更高效，是职场进化的结果。</div>
+                    <div class="dp-interp-badge">用「符号互动论」解读</div>
+                    <div class="dp-interp-body"><b>符号互动论</b>提醒我们：沉默从来不是“无”，而是一种被反复解读的信号。在职场里，你不开口，同事会把它读成“他在专注”“他在疏远”或“他对我不满”——每个人都在用收敛表达，管理自己在组织中的形象与边界。</div>
+                    <div class="dp-interp-aha">“三天没人说话”不是大家更专业了，而是每个人都在用不说话，悄悄划清自己和组织之间的安全距离。</div>
+                    <div class="news-research" style="margin-top:12px;padding:12px 14px;background:var(--bg);border-radius:var(--radius-sm);border-left:3px solid var(--teal)">
+            <div style="font-size:11px;font-weight:600;color:var(--teal);margin-bottom:6px">📄 前沿研究（直接相关）</div>
+            <a href="https://doi.org/10.1007/s10869-021-09788-7" target="_blank" rel="noopener noreferrer" style="font-size:13px;font-weight:600;color:var(--text);text-decoration:none">When Is Silence Golden? A Meta-analysis on Antecedents and Outcomes of Employee Silence <span style="font-size:11px">↗</span></a>
+            <div style="font-size:12px;color:var(--text-light);margin:4px 0 6px">2022 · Journal of Business and Psychology · Hao L., Zhu H., He Y., et al.</div>
+            <p style="margin:0 0 8px;font-size:12px;line-height:1.6;color:var(--text)">对 168 项独立研究、逾 6 万名员工的元分析发现，员工沉默与心理安全感缺失、领导风格、组织公平等结构性因素高度相关——新闻里“办公室不说话”很可能不是个体性格，而是组织环境的产物。</p>
+            <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center">
+                <button class="dp-related-btn" style="border-color:var(--teal)55" onclick="focusNode('work')" title="溯源：该研究所关联的上游知识节点">溯源 → 工作社会学</button>
+                
+            </div>
+        </div>
+                </div><div class="dp-interp">
+                    <div class="dp-interp-q"><span class="dp-qm">?</span><span>既然有人想聊，为什么整层楼还是一片死寂？</span></div>
+                    <div class="dp-interp-naive">常以为：常理认为：只要有一个人起头，气氛就会松动。</div>
+                    <div class="dp-interp-badge">用「社会影响」解读</div>
+                    <div class="dp-interp-body"><b>社会影响</b>研究却指出，人的行为深受周围人牵引。一旦“不说话”成了屋里的默认规范，哪怕你内心想交流，也会因为怕打扰、怕显得突兀而克制——沉默会“传染”，从个人选择固化为群体氛围。</div>
+                    <div class="dp-interp-aha">破冰之所以难，不是没人想说，而是“谁先开口”本身成了一种要冒风险的行为。</div>
+                    
+                </div><div class="dp-interp">
+                    <div class="dp-interp-q"><span class="dp-qm">?</span><span>这种安静，是公司的福还是员工的祸？</span></div>
+                    <div class="dp-interp-naive">常以为：老板可能乐见：安静 = 专注 = 产出。</div>
+                    <div class="dp-interp-badge">用「工作社会学」解读</div>
+                    <div class="dp-interp-body"><b>工作社会学</b>把职场看作一套权力与协作的安排。当“不说话”被默认为合规，员工失去了通过日常闲聊建立信任、交换非正式信息的渠道——而这些闲聊，恰恰是缓冲压力、预警问题的安全阀。</div>
+                    <div class="dp-interp-aha">沉默省下的也许是噪音，丢掉的却可能是团队唯一的“软连接”。</div>
+                    
+                </div></div><div class="dp-section"><div class="dp-section-title">关联知识 <span class="dp-count">3 个关联点</span></div><div class="dp-related-group"><span class="dp-related-glabel" style="color:#5B6FB5">社会学</span><div class="dp-related"><button class="dp-related-btn" style="border-color:#5B6FB555" onclick="focusNode('symbolic')" title="在知识图谱中聚焦该节点">符号互动论</button><button class="dp-related-btn" style="border-color:#5B6FB555" onclick="focusNode('work')" title="在知识图谱中聚焦该节点">工作社会学</button></div></div><div class="dp-related-group"><span class="dp-related-glabel" style="color:#2FA37C">心理学</span><div class="dp-related"><button class="dp-related-btn" style="border-color:#2FA37C55" onclick="focusNode('psy_social_influence')" title="在知识图谱中聚焦该节点">社会影响</button></div></div><button class="dp-subgraph-btn" onclick="openRelatedModal(3)">⛶ 在知识图谱中查看关联网络</button></div></div>
+
+  <p class="pv-note">下方为点击「溯源 → work」后跳转到的 <b>work（工作社会学）</b> 节点卡片尾部——<b>🔬 前沿研究</b> 反向聚合了上面那条研究（新闻↔知识双向可达）。</p>
+  <div class="pv-wrap"><div class="tp-cat" style="background:rgba(139,126,200,0.12);color:#8B7EC8">研究领域</div><div class="tp-title"><a class="tp-title-link" href="https://zh.wikipedia.org/wiki/%E5%B7%A5%E6%A5%AD%E7%A4%BE%E6%9C%83%E5%AD%B8" target="_blank" rel="noopener">工作社会学<span class="tp-ext">↗</span></a></div><div class="tp-en">Sociology of Work</div><div class="tp-section-title">领域概览</div><div class="tp-desc">工作社会学研究工作的社会意义。工作不仅是谋生手段，也是身份认同的来源。从工业社会到后工业社会，工作形式发生根本变化——从稳定雇佣到灵活就业，从集体劳动到个体化工作。"工作伦理"本身是社会建构的产物。</div><div class="tp-section-title">关联理论</div><div class="tp-chips"><button class="tp-chip-btn" onclick="focusNode('rationalization_theory')">理性化理论</button><button class="tp-chip-btn" onclick="focusNode('conflict')">冲突理论</button><button class="tp-chip-btn" onclick="focusNode('late_modern')">晚期现代性理论</button></div><div class="tp-section-title">🔬 前沿研究</div><div class="tp-research"><div class="tp-research-item" style="margin-bottom:10px">
+                    <a href="https://doi.org/10.1007/s10869-021-09788-7" target="_blank" rel="noopener noreferrer" style="font-size:13px;font-weight:600;color:var(--text);text-decoration:none">When Is Silence Golden? A Meta-analysis on Antecedents and Outcomes of Employee Silence <span style="font-size:11px">↗</span></a>
+                    <div style="font-size:11px;color:var(--text-light)">2022 · Journal of Business and Psychology</div>
+                </div></div><div class="tp-section-title">关联节点</div><div class="tp-related"><button class="tp-related-btn" onclick="focusNode('rationalization_theory')">理性化理论</button><button class="tp-related-btn" onclick="focusNode('conflict')">冲突理论</button><button class="tp-related-btn" onclick="focusNode('late_modern')">晚期现代性理论</button></div></div>
+</body>
+</html>
