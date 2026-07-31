@@ -1,5 +1,34 @@
 # 自动化执行记录 — 社会人 新闻全自动更新
 
+## 2026-07-31 (morning, ~08:56)
+- 批次日期: 2026-07-31（morning 槽，近24h）；候选池约 50 条（微博/百度/头条/知乎/抖音 5 指数 + 央媒/部委编辑源；多源 WebSearch 并行检索）
+- 入库: 15 条（1 特大 + 14 非特大），日期键插入 NEWS_DATA 首位；删除最旧 2026-07-24，日期数保持 7（07-31~07-25）
+- 特大(1): #1 重庆彭水山体崩塌（7/30通报51遇难10失联，陆上搜寻完毕），跨微博热搜+央广+央视+环球+百度 ≥4 平台；risk_society/social_capital 双强链
+- 本批条目: 彭水崩塌(risk_society/social_capital,major,research)、河南三支一扶(institutionalism/education)、医保套现(econ_moral_hazard/deviance,research)、北京外卖算法新规(work/econ_labor,research)、养老补贴(econ_welfare/social_capital,research)、美股AI芯片(econ_supply_demand/technology,research)、职业伤害保障全国推开(econ_labor/work,research)、开放安全AI联盟(rationalization_theory/technology)、暑期档65亿(media/attention_economy,research)、多地高温红色预警(health/risk_society,research)、崇太长江隧道(science/econ_growth)、网文蓝皮书(media/psy_emotion)、重点群体就业(econ_human_capital/work)、产教评技能生态链(cultural_capital/institutionalism)、青年下乡(stratification/psy_stress)
+- 学科覆盖: soc 14 / econ 13 / psy 5，三科全覆盖；15 条全 strong，每条 2–3 链接
+- S9 前沿研究: 8 条（#1 Akbar&Aldrich 2018 Disasters 巴基斯坦洪灾社会资本 fromNode=social_capital；#3 Qin等2022 Front Public Health 医保道德风险实证 fromNode=econ_moral_hazard；#4 Liu等2025 iScience 算法管理推高骑手冒险 fromNode=work；#5 Zeng等2024 Arch Geront Geriatr 失能老人长期照护 fromNode=econ_welfare；#6 Tan&Mathews 2010 TFSC 半导体周期 fromNode=econ_supply_demand；#7 梁栋2026 山大学报 新职伤制度 fromNode=econ_labor；#9 杨继军2022 世界经济 电影拉动文旅 fromNode=media；#10 Healy等2026 Lancet Planet Health 高温老人死亡率 fromNode=health），均嵌 interpretation.research，url 真实(DOI/PubMed/期刊)，fromNode∈311节点集
+- 节点id: 全部∈311节点集逐一程序化比对（urbanization/consumption/aging 实测 MISSING 已规避；rationalization_theory 与 rationalization_concept 拆分正确）
+- 校验: 临时副本注入 navigator/matchMedia/localStorage/sessionStorage/location 桩后 `node news-validate.js` → **FAIL=0 WARN=0**（7日期各15条，311节点）；前置另跑条数/url/id/非中文字符扫描全过（拉丁词仅作者名与 AI/GDP/SK 专有名词）
+- S5 去重: 重庆GDP再易位(07-30)、熊本地震(07-30)均近7天已覆盖 → 排除；彭水07-29已报，本次取"51遇难10失联通报"新进展角度合规续发
+- S0 剔除/未纳入: 政治局会议主体(仅民生侧面入#13)、伊朗打击美军基地/高市支持率(国际政治)、柯洁/宋祖儿(娱乐体育弱关联)、卫星发射/江苏高温(名额满合并)
+- 同步: news-data.js + news-review-log.json 已 cp 至 D:/Users/wtianyi/ctrip-claw/
+- 部署: deploy-netlify.js 退出码 0，Production https://shehui-ren.com（deploy id 6a6bf59b8e4b3b0a234248e9）
+- 红线: 未改 sociology-map.html/deploy 脚本/.netlify_token；临时脚本(_validate_tmp_0731/_node_map_run) 跑完已删
+
+## 2026-07-30 (morning, ~08:56)
+- 批次日期: 2026-07-30（morning 槽，近24h）；候选池约 46 条（微博/百度/头条/知乎/抖音 5 指数 + 央媒/部委编辑源；腾讯热榜抓取失败但 ≥4 指数已满足；百度经 tophub 拦截后改抓 top.baidu.com 成功）
+- 入库: 15 条（1 特大 + 14 非特大），日期键插入 NEWS_DATA 首位；删除最旧 2026-07-23，日期数保持 7（07-30~07-24）
+- 特大(1): #1 日本熊本接连强震（14死/余震近200次/半导体停产），跨微博+百度+头条+知乎 4 指数
+- 本批条目: 熊本强震(risk_society/globalization/econ_supply_demand,major,research)、乐事毛粉(econ_adverse_selection/deviance/econ_moral_hazard)、宁波无人岛(econ_public_goods/law/digital)、老人羊奶会销(emotional_labor/econ_behavioral/socialization)、美团盗刷(econ_moral_hazard/technology/psy_loss_aversion)、修手机私密照(panopticon/goffman/digital,research)、王的猜想洛阳纸贵(capital_forms/media/education)、勐腊老师打学生(psy_obedience/psy_milgram/education)、智驾小蓝灯禁用(technology/rationalization_concept/law)、最高法脱产学历批复(econ_human_capital/institutionalism/work)、GDP十强重庆反超广州(econ_gdp/urban/stratification)、美联储按兵不动三反对票(econ_monetary_policy/econ_inflation/globalization)、6月彩票新高(econ_behavioral/econ_public_finance/durkheim)、打赏650万驳回(media/family/psy_conformity,research)、内存涨300%(econ_supply_demand/technology/globalization)
+- 学科覆盖: soc 14 / econ 10 / psy 5，三科全覆盖；15 条全 strong
+- S9 前沿研究: 3 条（#1 Ding/Lam/Cheng/Zhou 2021 IJPE 熊本地震跨国供应链传染 fromNode=globalization，作者经 sciencedirect 原文页 WebFetch 核实；#6 Ceci/Stegman/Khan 2023 IEEE S&P "No Privacy in the Electronics Repair Industry" arxiv 2211.05824 fromNode=panopticon；#14 Liu 等 2025 J. Retailing & Consumer Services 准社会关系与打赏 fromNode=media）
+- 节点id: 全部∈311节点集，label 与节点名逐条程序化比对（本轮自检脚本新增 lens/label==节点名 断言）；capital_forms/digital/urban/reflexivity 实测在集合内（reminder 的 stale 列表以实时提取为准）
+- 校验: 自写校验（字段/url/theory/lensId/label/research.fromNode/外文字符扫描）全过 + 临时副本注入全套桩后 `node news-validate.js` → **FAIL=0 WARN=0**（7日期各15条）
+- S5 去重: 王虹获奖 07-24 首报，本批《王的猜想》取"报纸加印洛阳纸贵"新进展角度合规；世界杯仅取彩票数据新角度
+- 同步: news-data.js + news-review-log.json 已 cp 至 D:/Users/wtianyi/ctrip-claw/
+- 部署: deploy-netlify.js 退出码 0，Production https://shehui-ren.com（deploy id 6a6aa9c4771a6e95403f59b3）
+- 红线: 未改 sociology-map.html/deploy 脚本/.netlify_token；临时脚本(_tmp_trim/_tmp_verify/_tmp_validate) 跑完已删
+
 ## 2026-07-29 (morning, ~08:56)
 - 批次日期: 2026-07-29（morning 槽，近24h）；候选池约 48 条（微博/百度/知乎/抖音/头条/腾讯 + 央媒/部委编辑源）
 - 入库: 15 条（0 特大），日期键插入 NEWS_DATA 首位；删除最旧 2026-07-22，日期数保持 7（07-29~07-23）

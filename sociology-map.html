@@ -2922,7 +2922,7 @@ function resizeCanvas() {
     ctx.setTransform(window.devicePixelRatio, 0, 0, window.devicePixelRatio, 0, 0);
 }
 
-const COLORS = { thinker:'#3D4F8F', theory:'#C84B3A', concept:'#3A8C8C', topic:'#8B7EC8' };
+const COLORS = { thinker:'#4a4f5e', theory:'#5e4a4a', concept:'#4a5a5a', topic:'#544e5e' };  // v1.27: 低饱和度深灰（Obsidian 式，保留冷暖倾向）
 const RADII  = { thinker:18, theory:15, concept:12, topic:11 };
 // 动态节点尺寸：根据当前可见节点数自适应缩放，节点越多半径越小，避免"糊成一坨"
 const NODE_SCALE_REF = 55;    // 可见节点数≈该值时缩放=1（舒适密度）
@@ -3324,24 +3324,18 @@ function drawEdge(e, highlight) {
         grad.addColorStop(0, from.color);
         grad.addColorStop(1, to.color);
         ctx.strokeStyle = grad;
-        ctx.globalAlpha = 0.85;
-        ctx.lineWidth = 1.2;
+        ctx.globalAlpha = 0.55;
+        ctx.lineWidth = 0.7;
         ctx.setLineDash([]);
         ctx.stroke();
         ctx.globalAlpha = 1;
     } else {
-        // 关联强度 s 真正生效：强关联更粗更亮，弱关联更细更淡，形成视觉层次
+        // Obsidian 式边：统一中性灰、极低 alpha、细线——边是"隐形骨架"而非视觉主体
         const s = e.s || 0.6;
-        const cross = from.disc !== to.disc;
-        const baseA = cross ? 0.16 : 0.10;
-        const a = Math.max(0.06, Math.min(0.72, baseA + s * (cross ? 0.42 : 0.32)));
-        const aHex = ('0' + Math.round(a * 255).toString(16)).slice(-2);
-        const dc = DISC_COLORS[from.disc], tc = DISC_COLORS[to.disc];
-        const grad = ctx.createLinearGradient(from.baseX, from.baseY, to.baseX, to.baseY);
-        grad.addColorStop(0, dc + aHex);
-        grad.addColorStop(1, tc + aHex);
-        ctx.strokeStyle = grad;
-        ctx.lineWidth = (cross ? 0.6 : 0.5) + s * 0.5;
+        const baseA = 0.03;
+        const a = Math.max(0.02, Math.min(0.13, baseA + s * 0.10));
+        ctx.strokeStyle = 'rgba(180, 180, 190, ' + a.toFixed(2) + ')';
+        ctx.lineWidth = 0.3 + s * 0.25;
         ctx.stroke();
     }
 }
@@ -3388,7 +3382,7 @@ function drawNode(n) {
         ctx.fill();
     }
 
-    // label (with soft halo for readability)
+    // label (Obsidian 式：小字体、低字重、极轻 shadow)
     // Obsidian 式标签策略（移动/桌面统一）：draw() 每帧统计视口内可见节点数，
     //   - 可见节点少（≤ LABEL_THRESHOLD）→ labelAll=true，通盘显示名称（局部探索时清晰可读）；
     //   - 可见节点多（缩放全图）→ labelAll=false，全部隐名（只剩极小色点，保持简洁）。
@@ -3397,21 +3391,21 @@ function drawNode(n) {
     if (showLabel) {
         ctx.textAlign = 'center';
         ctx.textBaseline = 'top';
-        const labelY = ny + r + 5;
-        ctx.shadowColor = 'rgba(254,252,248,0.9)';
-        ctx.shadowBlur = 4;
+        const labelY = ny + r + 6;
+        ctx.shadowColor = 'rgba(254,252,248,0.7)';
+        ctx.shadowBlur = 1.5;
         if (n.cat === 'thinker' || n.cat === 'theory') {
-            ctx.font = `600 ${n.cat === 'thinker' ? 13 : 12}px Inter, sans-serif`;
-            ctx.fillStyle = `rgba(45, 48, 75, ${isDimmed ? 0.15 : 0.88})`;
+            ctx.font = `500 ${n.cat === 'thinker' ? 11 : 10}px Inter, sans-serif`;
+            ctx.fillStyle = `rgba(50, 52, 68, ${isDimmed ? 0.12 : 0.78})`;
             ctx.fillText(n.label, nx, labelY);
             if (n.sublabel && (isHovered || isSelected || n.cat === 'theory')) {
-                ctx.font = '400 10px JetBrains Mono, monospace';
-                ctx.fillStyle = `rgba(107, 111, 138, ${isDimmed ? 0.1 : 0.6})`;
-                ctx.fillText(n.sublabel, nx, labelY + 16);
+                ctx.font = '400 9px JetBrains Mono, monospace';
+                ctx.fillStyle = `rgba(107, 111, 138, ${isDimmed ? 0.08 : 0.50})`;
+                ctx.fillText(n.sublabel, nx, labelY + 14);
             }
         } else {
-            ctx.font = '500 10px Inter, sans-serif';
-            ctx.fillStyle = `rgba(45, 48, 75, ${isDimmed ? 0.12 : 0.66})`;
+            ctx.font = '400 9px Inter, sans-serif';
+            ctx.fillStyle = `rgba(50, 52, 68, ${isDimmed ? 0.10 : 0.60})`;
             ctx.fillText(n.label, nx, labelY);
         }
         ctx.shadowBlur = 0;
@@ -3448,16 +3442,7 @@ function draw() {
         ctx.restore();
     }
 
-    // Background dot grid
-    ctx.fillStyle = 'rgba(45, 48, 75, 0.04)';
-    const gridSize = 24;
-    for (let x = gridSize; x < W; x += gridSize) {
-        for (let y = gridSize; y < H; y += gridSize) {
-            ctx.beginPath();
-            ctx.arc(x, y, 0.8, 0, Math.PI * 2);
-            ctx.fill();
-        }
-    }
+    // Background: pure white (Obsidian style, no dot grid)
 
     // Draw edges
     const highlightSet = new Set();

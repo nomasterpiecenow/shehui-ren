@@ -1,319 +1,42 @@
 {
   "meta": {
-    "batchDate": "2026-07-29",
-    "slot": "morning (~08:56)",
-    "window": "near 24h (2026-07-28 ~ 2026-07-29)",
-    "candidatePoolSize": 48,
-    "sources": [
-      "微博热搜",
-      "百度热搜",
-      "知乎热榜",
-      "抖音热搜",
-      "今日头条",
-      "腾讯新闻",
-      "新华社",
-      "央视新闻",
-      "澎湃新闻",
-      "人民日报",
-      "经济日报",
-      "经济参考报",
-      "央广网",
-      "中国青年报",
-      "健康报",
-      "廉政瞭望",
-      "四川日报",
-      "齐鲁晚报",
-      "新京报",
-      "南方都市报",
-      "大皖新闻",
-      "财新网",
-      "国家电影专资办",
-      "国家税务总局",
-      "最高人民检察院",
-      "浙江大学医学院附属精神卫生中心",
-      "微博数据中心",
-      "新浪",
-      "网易"
-    ],
-    "majorCount": 0,
-    "disciplines": [
-      "soc",
-      "econ",
-      "psy"
-    ],
-    "researchCount": 2,
-    "validateResult": "PASS (FAIL=0, WARN=0)",
-    "dateKeysAfterPrune": 7,
-    "oldestPruned": "2026-07-22"
+    "date": "2026-07-31",
+    "slot": "morning",
+    "generatedAt": "2026-07-31T08:56:00+08:00",
+    "count": 15,
+    "majorCount": 1,
+    "disciplinesCovered": ["soc", "psy", "econ"],
+    "researchCount": 8,
+    "validation": "PASS"
   },
   "chosen": [
-    {
-      "id": 1,
-      "title": "重庆彭水山体崩塌深度搜寻：累计新确认30名遇难者，C、D区进入最后攻坚",
-      "source": "央视新闻 / 新华社 / 澎湃新闻",
-      "major": false,
-      "disciplines": [
-        "soc"
-      ],
-      "strength": "strong",
-      "theories": [
-        "risk_society",
-        "beck",
-        "durkheim"
-      ],
-      "research": false
-    },
-    {
-      "id": 2,
-      "title": "青海海南州兴海县接连发生5.7级、5.8级地震，多方力量连夜排查安置",
-      "source": "新华社 / 央视新闻",
-      "major": false,
-      "disciplines": [
-        "soc"
-      ],
-      "strength": "medium",
-      "theories": [
-        "social_capital",
-        "institutionalism"
-      ],
-      "research": false
-    },
-    {
-      "id": 3,
-      "title": "\"两高\"修改内幕交易司法解释：透露\"初步意向\"即入敏感期，7月27日起施行",
-      "source": "最高人民检察院 / 央视新闻",
-      "major": false,
-      "disciplines": [
-        "econ",
-        "soc"
-      ],
-      "strength": "medium",
-      "theories": [
-        "econ_akerlof",
-        "law"
-      ],
-      "research": false
-    },
-    {
-      "id": 4,
-      "title": "央行罕见预告：7月29日起连续三天每日开展6000亿元隔夜逆回购",
-      "source": "经济参考报 / 中国经济网",
-      "major": false,
-      "disciplines": [
-        "econ"
-      ],
-      "strength": "medium",
-      "theories": [
-        "econ_keynes",
-        "econ_macro"
-      ],
-      "research": false
-    },
-    {
-      "id": 5,
-      "title": "个税汇算落幕：超1.2亿人申请退税近1500亿元，\"多退少补\"渐成全民习惯",
-      "source": "国家税务总局 / 新华社",
-      "major": false,
-      "disciplines": [
-        "econ"
-      ],
-      "strength": "medium",
-      "theories": [
-        "econ_welfare",
-        "econ_macro"
-      ],
-      "research": false
-    },
-    {
-      "id": 6,
-      "title": "森马回应\"荷兰弟\"同款159元短裤卖爆：明星效应下的平价单品抢购潮",
-      "source": "齐鲁晚报 / 腾讯新闻",
-      "major": false,
-      "disciplines": [
-        "econ",
-        "psy"
-      ],
-      "strength": "medium",
-      "theories": [
-        "econ_signaling",
-        "psy_conformity",
-        "econ_veblen"
-      ],
-      "research": false
-    },
-    {
-      "id": 7,
-      "title": "多元避暑游点燃暑期市场：避暑旅居连住订单激增，外国游客扎堆来华\"找清凉\"",
-      "source": "经济日报 / 腾讯新闻",
-      "major": false,
-      "disciplines": [
-        "soc",
-        "econ"
-      ],
-      "strength": "medium",
-      "theories": [
-        "late_modern",
-        "giddens"
-      ],
-      "research": false
-    },
-    {
-      "id": 8,
-      "title": "出游人次创新高，朋友圈却\"静音\"了：年轻人为什么旅行不再发九宫格",
-      "source": "新浪旅游 / 微博热议",
-      "major": false,
-      "disciplines": [
-        "soc",
-        "psy"
-      ],
-      "strength": "strong",
-      "theories": [
-        "goffman",
-        "self_presentation"
-      ],
-      "research": true
-    },
-    {
-      "id": 9,
-      "title": "暑期档单周票房首破15亿：《功夫女足》领跑，豆瓣6.6分与猫眼9.4分的平行世界",
-      "source": "财新网 / 国家电影专资办",
-      "major": false,
-      "disciplines": [
-        "econ",
-        "soc"
-      ],
-      "strength": "medium",
-      "theories": [
-        "habitus",
-        "econ_behavioral",
-        "econ_industrial_org"
-      ],
-      "research": false
-    },
-    {
-      "id": 10,
-      "title": "虞书欣工作室严正声明：AI短剧盗脸克隆声音全网取证，将追责到底",
-      "source": "中国青年报 / 南方都市报",
-      "major": false,
-      "disciplines": [
-        "soc"
-      ],
-      "strength": "strong",
-      "theories": [
-        "technology",
-        "law"
-      ],
-      "research": false
-    },
-    {
-      "id": 11,
-      "title": "57岁处级干部每天11点准时\"消失\"，全科室沉默：官媒聚焦\"逍遥干部\"治理",
-      "source": "廉政瞭望 / 四川日报 / 新京报",
-      "major": false,
-      "disciplines": [
-        "soc"
-      ],
-      "strength": "medium",
-      "theories": [
-        "weber",
-        "merton",
-        "work"
-      ],
-      "research": false
-    },
-    {
-      "id": 12,
-      "title": "暑期\"手机拉锯战\"：医生提醒沉迷是心理缺口的代偿，别只怪孩子贪玩",
-      "source": "健康报 / 浙江大学医学院附属精神卫生中心",
-      "major": false,
-      "disciplines": [
-        "psy",
-        "soc"
-      ],
-      "strength": "strong",
-      "theories": [
-        "psy_emotion",
-        "family",
-        "psy_stress"
-      ],
-      "research": true
-    },
-    {
-      "id": 13,
-      "title": "世界杯微博观赛报告：热搜3415个、讨论2.9亿次，\"云看球\"成新一代体育仪式",
-      "source": "央广网 / 微博数据中心",
-      "major": false,
-      "disciplines": [
-        "soc"
-      ],
-      "strength": "medium",
-      "theories": [
-        "media",
-        "durkheim"
-      ],
-      "research": false
-    },
-    {
-      "id": 14,
-      "title": "林依晨早年无滤镜旅拍突然翻红：\"活人感\"为什么成了顶级审美标签",
-      "source": "新浪娱乐 / 微博热议",
-      "major": false,
-      "disciplines": [
-        "psy",
-        "soc"
-      ],
-      "strength": "medium",
-      "theories": [
-        "simmel",
-        "mead",
-        "attention_economy"
-      ],
-      "research": false
-    },
-    {
-      "id": 15,
-      "title": "苏有朋大同南站喊话\"如萍\"引全网怀旧：一句台词如何盘活一座城的文旅",
-      "source": "大皖新闻 / 腾讯新闻",
-      "major": false,
-      "disciplines": [
-        "econ",
-        "soc"
-      ],
-      "strength": "medium",
-      "theories": [
-        "econ_behavioral",
-        "attention_economy"
-      ],
-      "research": false
-    }
+    { "id": 1, "title": "重庆彭水山体崩塌已确认51人遇难、10人失联，陆上搜寻完毕转入灾后重建", "major": true, "platforms": ["微博热搜", "央广网", "央视新闻", "环球网", "百度热搜"], "disciplines": ["soc"], "strongest": "risk_society", "why": "7/30通报51遇难10失联，跨微博+央媒+百度等≥4平台判为特大；risk_society/social_capital双强链，含Aldrich灾害社会资本研究" },
+    { "id": 2, "title": "河南多地重发“三支一扶”名单人数变少，80分考生“集体消失”引招考公平追问", "major": false, "platforms": [], "disciplines": ["soc"], "strongest": "institutionalism", "why": "中国新闻周刊+腾讯多源；institutionalism(新制度主义)/education双链，考试公平与制度公信" },
+    { "id": 3, "title": "医保套现黑色产业链调查：刷个人账户760元买一粒片仔癀，中介只给220元", "major": false, "platforms": [], "disciplines": ["econ", "soc"], "strongest": "econ_moral_hazard", "why": "新京报暗访；econ_moral_hazard(道德风险)/deviance双链，含医保骗保道德风险实证研究" },
+    { "id": 4, "title": "北京快递外卖非机动车新规8月1日施行：平台算法不得“超速配送”", "major": false, "platforms": [], "disciplines": ["soc", "econ"], "strongest": "work", "why": "人民日报/央视；work(工作社会学)/econ_labor双链，含算法管理推高骑手冒险行为研究" },
+    { "id": 5, "title": "养老服务消费补贴惠及约200万失能老人，核销65亿元带动近300亿消费", "major": false, "platforms": [], "disciplines": ["econ", "soc"], "strongest": "econ_welfare", "why": "新华社/中国新闻网；econ_welfare(福利经济学)/social_capital双链，含失能老人长期照护因果评估" },
+    { "id": 6, "title": "美股AI芯片股史诗级反攻：美光涨18%、SK海力士涨17%，微软财报点燃存储需求", "major": false, "platforms": [], "disciplines": ["econ", "soc"], "strongest": "econ_supply_demand", "why": "证券时报/腾讯；econ_supply_demand(供给与需求)/technology双链，含半导体周期研究" },
+    { "id": 7, "title": "新就业形态职业伤害保障试点全国推开，累计参保已达2990万人", "major": false, "platforms": [], "disciplines": ["econ", "soc"], "strongest": "econ_labor", "why": "央视网/新华社；econ_labor(劳动力市场)/work双链，含新职伤制度专题论文" },
+    { "id": 8, "title": "英伟达、微软、IBM等数十家科技巨头成立“开放安全AI联盟”，闭源阵营缺席", "major": false, "platforms": [], "disciplines": ["soc"], "strongest": "rationalization_theory", "why": "央视新闻/北京日报；rationalization_theory(理性化理论)/technology双链，AI治理开源闭源路线之争" },
+    { "id": 9, "title": "2026暑期档票房破65亿，《八仙！》9亿领跑，“电影+文旅”串起消费长链", "major": false, "platforms": [], "disciplines": ["soc", "econ"], "strongest": "media", "why": "央视网/腾讯；media(媒介社会学)/attention_economy双链，含电影拉动文旅计量研究" },
+    { "id": 10, "title": "多地高温健康风险拉响红色预警：江浙沪冲破40℃，老人与弱者承受最重代价", "major": false, "platforms": [], "disciplines": ["soc"], "strongest": "health", "why": "中国天气网/央视；health(健康社会学)/risk_society双链，含高温老年人死亡率队列研究" },
+    { "id": 11, "title": "世界最大直径高铁盾构机“领航号”穿越长江，崇太长江隧道水域段贯通", "major": false, "platforms": [], "disciplines": ["soc", "econ"], "strongest": "science", "why": "央视网/腾讯；science(科学社会学)/econ_growth双链，超级工程与国家科技建制" },
+    { "id": 12, "title": "《2025中国网络文学蓝皮书》发布：作品超3300万部、读者破5亿", "major": false, "platforms": [], "disciplines": ["soc", "psy"], "strongest": "media", "why": "中国作协/腾讯；media(媒介社会学)/psy_emotion双链，数字阅读与情绪慰藉" },
+    { "id": 13, "title": "政治局会议定调：加大重点群体就业支持，强化新就业形态人员权益保障", "major": false, "platforms": [], "disciplines": ["econ", "soc"], "strongest": "econ_human_capital", "why": "人民日报/腾讯；econ_human_capital(人力资本)/work双链，稳就业与技能提升" },
+    { "id": 14, "title": "“产教评技能生态链”发力：企业出标准、学校出学生、政府出政策破解结构性就业矛盾", "major": false, "platforms": [], "disciplines": ["soc", "econ"], "strongest": "cultural_capital", "why": "人民日报/人民网；cultural_capital(文化资本)/institutionalism双链，技能认证与制度接口" },
+    { "id": 15, "title": "“青年下乡”话题升温：基层与西部，正在成为年轻人对抗不确定的新选项", "major": false, "platforms": [], "disciplines": ["soc", "psy"], "strongest": "stratification", "why": "腾讯/湘江评论；stratification(社会分层)/psy_stress双链，流动通道与确定性需求" }
   ],
   "rejected": [
-    {
-      "title": "台风\"红霞\"后续报道",
-      "reason": "S5 特大续发已连续覆盖 07-24/26/27 三批达上限，本批不再续发"
-    },
-    {
-      "title": "微博/抖音/小红书 个人吐槽与随手拍热帖（多起）",
-      "reason": "S0：UGC 个人帖原则上排除，缺编辑信源，不采"
-    },
-    {
-      "title": "涉国际政治与地缘冲突的社媒热传",
-      "reason": "S0 政治敏感边界，不采"
-    },
-    {
-      "title": "明星婚恋/塌房类娱乐八卦",
-      "reason": "S3/S1：无明确社会学学科切入点，weak-only 排除"
-    },
-    {
-      "title": "网传无第二信源的灾情与案件",
-      "reason": "S0/S6：仅社媒传言，主源无法核对，整体排除"
-    },
-    {
-      "title": "近7天已入库事件的重复二次报道",
-      "reason": "S5 去重：仅取新角度/新进展，避免同事件重复"
-    }
-  ],
-  "s0Notes": "候选池约 48 条；剔除政治敏感类（国际地缘/官员案件）若干、纯社媒无第二信源传言与 UGC 个人帖、无学科价值的娱乐八卦，其余进入 S2-S6 流程。本批新闻 url 均取央视/新华社/最高检/税务总局/经济日报/财新等一级或权威编辑源，已用 WebSearch 核对直链。",
-  "majorNotes": "跨平台统计：本窗口内无单一事件同时登上 ≥4 个热榜平台，majorCount=0。彭水崩塌、青海地震、两高司法解释等均属重要但单事件未达特大线（且彭水灾情已在 07-17 首报、近期为深度搜寻进展，未跨 ≥4 平台共振）。",
-  "researchNotes": "S9：挂载 2 条达标研究——#8 朋友圈静音→Xu Jing 等(2023) TMSP 模型, Journal of Hospitality and Tourism Management, sciencedirect 直链, fromNode=self_presentation；#12 手机沉迷→Xiao Y 等(2025) JAMA 青少年成瘾性屏幕使用轨迹与自杀风险研究, pubmed 直链 PMID 40531519, fromNode=psy_emotion。中英文各检索一次，其余候选未找到强相关高质量研究，不强行挂载。"
+    { "title": "中共中央政治局会议定调下半年经济工作（含“人工智能+”行动）", "reason": "S0 合规：政治会议主体内容，仅以“就业支持”民生侧面作入选#13，主体不纳入解读" },
+    { "title": "伊朗伊斯兰革命卫队打击约旦美军基地/美伊冲突", "reason": "S0 合规：国际政治军事敏感" },
+    { "title": "日本首相高市早苗支持率跌至就任以来最低", "reason": "S0 合规：外国政局，且为熊本地震关联外溢，不纳入" },
+    { "title": "柯洁逆转夺冠/赵心童6:0横扫罗伯逊（体育）", "reason": "弱关联：无稳定学科价值，未纳入" },
+    { "title": "宋祖儿天津偶遇买面包（娱乐八卦）", "reason": "弱关联/娱乐：无学科价值" },
+    { "title": "中国GDP十强城市再易位（重庆反超广州）", "reason": "重复：07-30已入库同主题，S5跨日期去重" },
+    { "title": "日本熊本强震（死亡升至34人）", "reason": "重复：07-30已入库，特大续发已达S5连续≤3天上限，取新进展角度亦不重复" },
+    { "title": "中欧贸易投资磋商机制首次会议", "reason": "弱关联：外交经贸程序性新闻，学科角度弱" },
+    { "title": "我国成功发射通信技术试验卫星二十七号A/B星", "reason": "候选未纳入：强可用但15条名额已满，取崇太隧道(#11)作科技工程代表" },
+    { "title": "江苏/江浙沪高温橙色预警与健康风险红色预警", "reason": "候选未纳入：与#10高温健康主题合并呈现，避免同一事件多表述" },
+    { "title": "全国青少年科技创新大赛/网络文学蓝皮书", "reason": "候选未纳入：网络文学(#12)已承载文化与注意力议题，名额已满" }
+  ]
 }
