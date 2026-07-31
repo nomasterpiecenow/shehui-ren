@@ -3391,21 +3391,21 @@ function drawNode(n) {
     if (showLabel) {
         ctx.textAlign = 'center';
         ctx.textBaseline = 'top';
-        const labelY = ny + r + 6;
-        ctx.shadowColor = 'rgba(254,252,248,0.7)';
-        ctx.shadowBlur = 1.5;
+        const labelY = ny + r + 3;
+        ctx.shadowColor = 'rgba(254,252,248,0.5)';
+        ctx.shadowBlur = 1;
         if (n.cat === 'thinker' || n.cat === 'theory') {
-            ctx.font = `500 ${n.cat === 'thinker' ? 11 : 10}px Inter, sans-serif`;
-            ctx.fillStyle = `rgba(50, 52, 68, ${isDimmed ? 0.12 : 0.78})`;
+            ctx.font = `500 ${n.cat === 'thinker' ? 8 : 7}px Inter, sans-serif`;
+            ctx.fillStyle = `rgba(50, 52, 68, ${isDimmed ? 0.10 : 0.70})`;
             ctx.fillText(n.label, nx, labelY);
             if (n.sublabel && (isHovered || isSelected || n.cat === 'theory')) {
-                ctx.font = '400 9px JetBrains Mono, monospace';
-                ctx.fillStyle = `rgba(107, 111, 138, ${isDimmed ? 0.08 : 0.50})`;
-                ctx.fillText(n.sublabel, nx, labelY + 14);
+                ctx.font = '400 6px JetBrains Mono, monospace';
+                ctx.fillStyle = `rgba(107, 111, 138, ${isDimmed ? 0.06 : 0.40})`;
+                ctx.fillText(n.sublabel, nx, labelY + 10);
             }
         } else {
-            ctx.font = '400 9px Inter, sans-serif';
-            ctx.fillStyle = `rgba(50, 52, 68, ${isDimmed ? 0.10 : 0.60})`;
+            ctx.font = '400 6px Inter, sans-serif';
+            ctx.fillStyle = `rgba(50, 52, 68, ${isDimmed ? 0.08 : 0.50})`;
             ctx.fillText(n.label, nx, labelY);
         }
         ctx.shadowBlur = 0;
