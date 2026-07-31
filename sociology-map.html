@@ -874,8 +874,8 @@
     <div class="map-container">
         <canvas id="theoryMap"></canvas>
         <div class="map-legend map-legend-cat">
-            <label class="map-legend-chk"><input type="checkbox" data-cat="thinker" checked><span class="ldot" style="background:var(--navy)"></span>思想家</label>
-            <label class="map-legend-chk"><input type="checkbox" data-cat="theory" checked><span class="ldot" style="background:var(--red)"></span>理论流派</label>
+            <label class="map-legend-chk"><input type="checkbox" data-cat="thinker"><span class="ldot" style="background:var(--navy)"></span>思想家</label>
+            <label class="map-legend-chk"><input type="checkbox" data-cat="theory"><span class="ldot" style="background:var(--red)"></span>理论流派</label>
             <label class="map-legend-chk"><input type="checkbox" data-cat="concept" checked><span class="ldot" style="background:var(--teal)"></span>核心概念</label>
             <label class="map-legend-chk"><input type="checkbox" data-cat="topic"><span class="ldot" style="background:#8B7EC8"></span>研究领域</label>
         </div>
@@ -2897,9 +2897,8 @@ let hoveredNode = null;
 let selectedNode = null;
 let mouseX = 0, mouseY = 0;
 let animFrame;
-let activeCategories = new Set(['thinker', 'theory', 'concept']);   // 默认显示结构骨干（思想家/理论/概念），研究领域默认隐藏，用户可勾选揭示
+let activeCategories = new Set(['concept']);   // 默认仅显示核心概念，思想家/理论流派/研究领域由用户勾选揭示
 let activeDiscipline = 'all';
-let time = 0;
 let timeAxisOn = false;                          // 时间轴排布：可选开关（默认关）
 let view = { scale: 1, ox: 0, oy: 0 };          // pan/zoom：逻辑坐标→屏幕的平移与缩放
 let graphInitialized = false;
@@ -3330,12 +3329,12 @@ function drawEdge(e, highlight) {
         ctx.stroke();
         ctx.globalAlpha = 1;
     } else {
-        // Obsidian 式边：统一中性灰、极低 alpha、细线——边是"隐形骨架"而非视觉主体
+        // Obsidian 式边：统一中性灰、低 alpha、细线——边是"隐形骨架"而非视觉主体（v1.29 适度加深）
         const s = e.s || 0.6;
-        const baseA = 0.03;
-        const a = Math.max(0.02, Math.min(0.13, baseA + s * 0.10));
-        ctx.strokeStyle = 'rgba(180, 180, 190, ' + a.toFixed(2) + ')';
-        ctx.lineWidth = 0.3 + s * 0.25;
+        const baseA = 0.05;
+        const a = Math.max(0.04, Math.min(0.20, baseA + s * 0.15));
+        ctx.strokeStyle = 'rgba(160, 162, 175, ' + a.toFixed(2) + ')';
+        ctx.lineWidth = 0.4 + s * 0.3;
         ctx.stroke();
     }
 }
@@ -3359,9 +3358,8 @@ function drawNode(n) {
 
     const sr = Math.max(2.2, Math.min(effR(n) * view.scale, 5));  // 屏幕像素半径，Obsidian 式极小点（缩放不膨胀）
     const r = sr / view.scale;                                     // 转回世界坐标供 ctx 绘制
-    const floatY = Math.sin(time * 0.012 + n.baseX * 0.01) * 3;
     const nx = n.baseX;
-    const ny = n.baseY + floatY;
+    const ny = n.baseY;
 
     // body（Obsidian 式纯填充圆，无外环无光晕）
     const g = ctx.createRadialGradient(nx - r*0.3, ny - r*0.3, r*0.2, nx, ny, r);
@@ -3507,7 +3505,6 @@ function draw() {
         // 渲染异常自愈：单帧出错不应让整图永久空白，记录后继续下一帧
         if (window.console) console.error('[graph] draw recovered from render error:', err);
     }
-    time++;
     if (location.search.indexOf('debug=1') >= 0) {
         window.__dbg = { labelAll, visCount: lastVisCount, scale: view.scale, focusSetSize: focusSet.size, fitCount: lastFitCount, fitSubset: lastFitSubset, isMobile, W, H };
     }
@@ -3522,10 +3519,9 @@ function hitTest(mx, my) {
     for (let i = nodes.length - 1; i >= 0; i--) {
         const n = nodes[i];
         if (!isNodeVisible(n)) continue;
-        // 与 drawNode 完全一致：节点绘制于 baseX/baseY，并叠加同公式的浮动位移
-        const floatY = Math.sin(time * 0.012 + n.baseX * 0.01) * 3;
+        // 与 drawNode 完全一致：节点绘制于 baseX/baseY（已取消浮动位移，静止）
         const dx = lx - n.baseX;
-        const dy = ly - (n.baseY + floatY);
+        const dy = ly - n.baseY;
         if (dx * dx + dy * dy <= (effR(n) + (isMobile ? 14 : 8)) * (effR(n) + (isMobile ? 14 : 8))) return n;
     }
     return null;
@@ -4742,9 +4738,9 @@ function switchPage(pageId) {
                 draw();
                 if (!mobileFitted) {
                     mobileFitted = true;
-                    // 首进：揭示结构骨干（思想家/理论/概念），使进入即具备可读性；研究领域默认仍隐藏避免过密
-                    activeCategories = new Set(['thinker', 'theory', 'concept']);
-                    document.querySelectorAll('.map-legend-cat input[type="checkbox"]').forEach(cb => { cb.checked = (cb.dataset.cat !== 'topic'); });
+                    // 首进：仅揭示核心概念，使进入即聚焦概念网；思想家/理论流派/研究领域默认隐藏避免过密
+                    activeCategories = new Set(['concept']);
+                    document.querySelectorAll('.map-legend-cat input[type="checkbox"]').forEach(cb => { cb.checked = (cb.dataset.cat === 'concept'); });
                     updateNodeScale();
                     // 首进：移动端定倍率居中到枢纽邻域（局部进入、其余簇屏外）；桌面仍铺满全图。先 fit 一次防初屏空白，稳定后再 fit 更准。
                     const doFit = () => { isMobile ? focusEntryView(3.2) : fitToView(50, null); draw(); };
