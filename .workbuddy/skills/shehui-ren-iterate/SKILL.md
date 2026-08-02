@@ -41,6 +41,8 @@ cd /Users/wangtianyi/shehui-ren && node sync.js
 
 功能版本号与缓存版本号是两套：v1.29 ↔ 缓存 v11（不对应，各自递增）。
 
+> **`feature-manifest.html` 也是改造沟通主文件**（用户 2026-08-03 明确）：每次网站有内容更新，先把改动整理进此文件；后续改造讨论、需求反馈、改动记录**优先通过此文件交流**，而非只在聊天里口述。底部「更新日志」表每次改动在表头追加一行（日期/版本/改动内容/涉及模块）。
+
 ## 2. 代码结构要点（sociology-map.html，~350KB）
 
 - 节点 311 个，schema 16 字段 `{id,name,en,cat,era,disc,sublabel,color,r,x,y,vx,vy,baseX,baseY,year,data}`
