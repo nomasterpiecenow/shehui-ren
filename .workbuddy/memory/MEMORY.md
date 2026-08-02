@@ -4,6 +4,9 @@
 用户在**公司 Win + 家里 Mac 两台机器**交替改动。**每次执行任务前**必须先跑：
 `cd /Users/wangtianyi/shehui-ren && node sync.js`
 确认已连 Gitee（origin = https://gitee.com/no-works-yet/shehui-ren.git）且不落后远程，然后再动手。
+
+**为什么必须 pull 最新（用户 2026-08-03 强调）**：新闻数据经常是**在另一台机器上 push 到 Git** 的（例如 28–31 号新闻就是 Windows 那台推上 Gitee 的）。如果这台 Mac 不先拉最新就动手，两边就会分叉、事后冲突。sync.js 在「工作区干净且落后」时会自动 `git pull --rebase` 把最新代码 down 下来；若本地也有改动则只给 `stash → pull --rebase → stash pop` 顺序、绝不自动动，避免搅乱半截改动。
+
 收尾必须 `git commit && git push`，否则另一台机器丢改动。
 详细工作流见项目技能 `.workbuddy/skills/shehui-ren-iterate/SKILL.md`。
 
