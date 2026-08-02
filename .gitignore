@@ -4,6 +4,9 @@
 # 敏感令牌：切勿提交！另一台设备请自行放置 .netlify_token 或用环境变量
 .netlify_token
 
+# Gitee 推送令牌：切勿提交！另一台设备放自己的 .gitee_token
+.gitee_token
+
 # 临时调试目录
 .check_tmp/
 
