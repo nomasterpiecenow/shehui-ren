@@ -1,42 +1,213 @@
 {
   "meta": {
-    "date": "2026-07-31",
+    "date": "2026-08-01",
     "slot": "morning",
-    "generatedAt": "2026-07-31T08:56:00+08:00",
+    "generatedAt": "2026-08-01T08:56:00+08:00",
     "count": 15,
     "majorCount": 1,
-    "disciplinesCovered": ["soc", "psy", "econ"],
-    "researchCount": 8,
+    "disciplinesCovered": [
+      "soc",
+      "econ",
+      "psy"
+    ],
+    "researchCount": 2,
     "validation": "PASS"
   },
   "chosen": [
-    { "id": 1, "title": "重庆彭水山体崩塌已确认51人遇难、10人失联，陆上搜寻完毕转入灾后重建", "major": true, "platforms": ["微博热搜", "央广网", "央视新闻", "环球网", "百度热搜"], "disciplines": ["soc"], "strongest": "risk_society", "why": "7/30通报51遇难10失联，跨微博+央媒+百度等≥4平台判为特大；risk_society/social_capital双强链，含Aldrich灾害社会资本研究" },
-    { "id": 2, "title": "河南多地重发“三支一扶”名单人数变少，80分考生“集体消失”引招考公平追问", "major": false, "platforms": [], "disciplines": ["soc"], "strongest": "institutionalism", "why": "中国新闻周刊+腾讯多源；institutionalism(新制度主义)/education双链，考试公平与制度公信" },
-    { "id": 3, "title": "医保套现黑色产业链调查：刷个人账户760元买一粒片仔癀，中介只给220元", "major": false, "platforms": [], "disciplines": ["econ", "soc"], "strongest": "econ_moral_hazard", "why": "新京报暗访；econ_moral_hazard(道德风险)/deviance双链，含医保骗保道德风险实证研究" },
-    { "id": 4, "title": "北京快递外卖非机动车新规8月1日施行：平台算法不得“超速配送”", "major": false, "platforms": [], "disciplines": ["soc", "econ"], "strongest": "work", "why": "人民日报/央视；work(工作社会学)/econ_labor双链，含算法管理推高骑手冒险行为研究" },
-    { "id": 5, "title": "养老服务消费补贴惠及约200万失能老人，核销65亿元带动近300亿消费", "major": false, "platforms": [], "disciplines": ["econ", "soc"], "strongest": "econ_welfare", "why": "新华社/中国新闻网；econ_welfare(福利经济学)/social_capital双链，含失能老人长期照护因果评估" },
-    { "id": 6, "title": "美股AI芯片股史诗级反攻：美光涨18%、SK海力士涨17%，微软财报点燃存储需求", "major": false, "platforms": [], "disciplines": ["econ", "soc"], "strongest": "econ_supply_demand", "why": "证券时报/腾讯；econ_supply_demand(供给与需求)/technology双链，含半导体周期研究" },
-    { "id": 7, "title": "新就业形态职业伤害保障试点全国推开，累计参保已达2990万人", "major": false, "platforms": [], "disciplines": ["econ", "soc"], "strongest": "econ_labor", "why": "央视网/新华社；econ_labor(劳动力市场)/work双链，含新职伤制度专题论文" },
-    { "id": 8, "title": "英伟达、微软、IBM等数十家科技巨头成立“开放安全AI联盟”，闭源阵营缺席", "major": false, "platforms": [], "disciplines": ["soc"], "strongest": "rationalization_theory", "why": "央视新闻/北京日报；rationalization_theory(理性化理论)/technology双链，AI治理开源闭源路线之争" },
-    { "id": 9, "title": "2026暑期档票房破65亿，《八仙！》9亿领跑，“电影+文旅”串起消费长链", "major": false, "platforms": [], "disciplines": ["soc", "econ"], "strongest": "media", "why": "央视网/腾讯；media(媒介社会学)/attention_economy双链，含电影拉动文旅计量研究" },
-    { "id": 10, "title": "多地高温健康风险拉响红色预警：江浙沪冲破40℃，老人与弱者承受最重代价", "major": false, "platforms": [], "disciplines": ["soc"], "strongest": "health", "why": "中国天气网/央视；health(健康社会学)/risk_society双链，含高温老年人死亡率队列研究" },
-    { "id": 11, "title": "世界最大直径高铁盾构机“领航号”穿越长江，崇太长江隧道水域段贯通", "major": false, "platforms": [], "disciplines": ["soc", "econ"], "strongest": "science", "why": "央视网/腾讯；science(科学社会学)/econ_growth双链，超级工程与国家科技建制" },
-    { "id": 12, "title": "《2025中国网络文学蓝皮书》发布：作品超3300万部、读者破5亿", "major": false, "platforms": [], "disciplines": ["soc", "psy"], "strongest": "media", "why": "中国作协/腾讯；media(媒介社会学)/psy_emotion双链，数字阅读与情绪慰藉" },
-    { "id": 13, "title": "政治局会议定调：加大重点群体就业支持，强化新就业形态人员权益保障", "major": false, "platforms": [], "disciplines": ["econ", "soc"], "strongest": "econ_human_capital", "why": "人民日报/腾讯；econ_human_capital(人力资本)/work双链，稳就业与技能提升" },
-    { "id": 14, "title": "“产教评技能生态链”发力：企业出标准、学校出学生、政府出政策破解结构性就业矛盾", "major": false, "platforms": [], "disciplines": ["soc", "econ"], "strongest": "cultural_capital", "why": "人民日报/人民网；cultural_capital(文化资本)/institutionalism双链，技能认证与制度接口" },
-    { "id": 15, "title": "“青年下乡”话题升温：基层与西部，正在成为年轻人对抗不确定的新选项", "major": false, "platforms": [], "disciplines": ["soc", "psy"], "strongest": "stratification", "why": "腾讯/湘江评论；stratification(社会分层)/psy_stress双链，流动通道与确定性需求" }
+    {
+      "id": 1,
+      "title": "今年第13号超强台风“白海豚”已达17级，8月5日前对我国海区无影响",
+      "major": true,
+      "platforms": [
+        "微博热搜",
+        "百度热搜",
+        "知乎热榜",
+        "今日头条",
+        "抖音热榜"
+      ],
+      "disciplines": [
+        "soc"
+      ],
+      "strongest": "risk_society",
+      "why": "今年第13号超强台风17级(60m/s)，跨5平台判为特大；risk_society/social_capital双链，远海风暴的社会预警与社区韧性"
+    },
+    {
+      "id": 2,
+      "title": "连云港一小区住宅起火，避险母女坠楼一死一伤，消防回应救援条件",
+      "major": false,
+      "platforms": [],
+      "disciplines": [
+        "soc"
+      ],
+      "strongest": "risk_society",
+      "why": "央广网/现代快报/中国新闻周刊多源；risk_society(风险社会理论)/urban(城市社会学)双链，高层住宅安全盲区与互助"
+    },
+    {
+      "id": 3,
+      "title": "第十二批国家集采开标：新增65种药品，327家企业521产品拟中选",
+      "major": false,
+      "platforms": [],
+      "disciplines": [
+        "econ",
+        "soc"
+      ],
+      "strongest": "econ_welfare",
+      "why": "央广网/新华社/国家医保局；econ_welfare(福利经济学)/econ_moral_hazard双链，含Wang 2026集采不平等溢出研究"
+    },
+    {
+      "id": 4,
+      "title": "马尔康红旗大桥垮塌调查报告公布：7人被立案侦查，28名公职人员被问责",
+      "major": false,
+      "platforms": [],
+      "disciplines": [
+        "soc"
+      ],
+      "strongest": "law",
+      "why": "央视网/中国网/廉洁四川；law(法律社会学)/institutionalism(新制度主义)双链，工程全链条责任"
+    },
+    {
+      "id": 5,
+      "title": "《住房公积金管理条例》迎重大修订：提取扩至装修物业费，覆盖灵活就业者",
+      "major": false,
+      "platforms": [],
+      "disciplines": [
+        "econ",
+        "soc"
+      ],
+      "strongest": "econ_welfare",
+      "why": "腾讯/新华社；econ_welfare(福利经济学)/social_capital双链，覆盖灵活就业与存量提质"
+    },
+    {
+      "id": 6,
+      "title": "聊城东阿破获劣质烟丝案：原料混鸡鸭粪便，3.66吨烟丝流向全国",
+      "major": false,
+      "platforms": [],
+      "disciplines": [
+        "soc",
+        "econ"
+      ],
+      "strongest": "deviance",
+      "why": "齐鲁网/中华网/大河报；deviance(越轨)/econ_moral_hazard双链，劣质烟丝黑链坑老"
+    },
+    {
+      "id": 7,
+      "title": "上海三甲ICU医生购境外未上市原料药救母，同情用药制度缺口引讨论",
+      "major": false,
+      "platforms": [],
+      "disciplines": [
+        "soc"
+      ],
+      "strongest": "health",
+      "why": "中华网/中国新闻网/央视网；health(健康社会学)/law双链，同情用药制度缺口"
+    },
+    {
+      "id": 8,
+      "title": "12306回应高铁提前发车：G107次北京站实际提前5分钟，属正常调度",
+      "major": false,
+      "platforms": [],
+      "disciplines": [
+        "soc"
+      ],
+      "strongest": "rationalization_theory",
+      "why": "腾讯/扬子晚报/新浪；rationalization_theory(理性化理论)/technology双链，系统效率与个体确定性"
+    },
+    {
+      "id": 9,
+      "title": "“十五五”算力网建设将新增直接投资4万亿元，全国产10万卡超集群投用",
+      "major": false,
+      "platforms": [],
+      "disciplines": [
+        "econ",
+        "soc"
+      ],
+      "strongest": "econ_growth",
+      "why": "腾讯(玉渊谭天)/财联社/证券时报；econ_growth(经济增长)/technology双链，算力基建投资"
+    },
+    {
+      "id": 10,
+      "title": "全国首部省级中小学体育锻炼法规8月1日施行：义务教育每天一节体育课",
+      "major": false,
+      "platforms": [],
+      "disciplines": [
+        "soc"
+      ],
+      "strongest": "education",
+      "why": "湖南省教育厅/湖南省政府/中国教育报；education(教育社会学)/health双链，全国首部省级体育法规"
+    },
+    {
+      "id": 11,
+      "title": "三大运营商8月1日起停第三方互联网渠道办卡，低价大流量卡退场",
+      "major": false,
+      "platforms": [],
+      "disciplines": [
+        "econ",
+        "soc"
+      ],
+      "strongest": "econ_monopoly",
+      "why": "腾讯/新华社/央视；econ_monopoly(垄断)/technology双链，渠道收紧与资费博弈"
+    },
+    {
+      "id": 12,
+      "title": "中青报调查：82.2%受访大学生暑期打工或有计划，积累经验超赚钱居首",
+      "major": false,
+      "platforms": [],
+      "disciplines": [
+        "soc",
+        "psy"
+      ],
+      "strongest": "work",
+      "why": "中青报/中青网；work(工作社会学)/psy_self_efficacy双链，含Gbadamosi 2019兼职自我效能研究"
+    },
+    {
+      "id": 13,
+      "title": "《医药代表管理办法》8月1日施行：医药代表不得承担销售任务、禁利益输送",
+      "major": false,
+      "platforms": [],
+      "disciplines": [
+        "econ",
+        "soc"
+      ],
+      "strongest": "econ_moral_hazard",
+      "why": "新疆司法厅/新浪(界面)/国家药监局；econ_moral_hazard(道德风险)/law双链，带金销售法治化"
+    },
+    {
+      "id": 14,
+      "title": "微博话题“我甚至不知道人体还能那样动”刷屏，极限动作视频引真实性争议",
+      "major": false,
+      "platforms": [
+        "微博热搜"
+      ],
+      "disciplines": [
+        "soc",
+        "psy"
+      ],
+      "strongest": "media",
+      "why": "新浪健康/新浪娱乐/微博热搜；media(媒介社会学)/psy_emotion双链，视觉奇观与注意力"
+    },
+    {
+      "id": 15,
+      "title": "贵州洛北河漂流“伴漂服务”擦边引争议，运营公司被责令停业整顿",
+      "major": false,
+      "platforms": [],
+      "disciplines": [
+        "soc"
+      ],
+      "strongest": "media",
+      "why": "央广网/中青网/光明网；media(媒介社会学)/attention_economy双链，文旅擦边与情绪价值营销"
+    }
   ],
   "rejected": [
-    { "title": "中共中央政治局会议定调下半年经济工作（含“人工智能+”行动）", "reason": "S0 合规：政治会议主体内容，仅以“就业支持”民生侧面作入选#13，主体不纳入解读" },
-    { "title": "伊朗伊斯兰革命卫队打击约旦美军基地/美伊冲突", "reason": "S0 合规：国际政治军事敏感" },
-    { "title": "日本首相高市早苗支持率跌至就任以来最低", "reason": "S0 合规：外国政局，且为熊本地震关联外溢，不纳入" },
-    { "title": "柯洁逆转夺冠/赵心童6:0横扫罗伯逊（体育）", "reason": "弱关联：无稳定学科价值，未纳入" },
-    { "title": "宋祖儿天津偶遇买面包（娱乐八卦）", "reason": "弱关联/娱乐：无学科价值" },
-    { "title": "中国GDP十强城市再易位（重庆反超广州）", "reason": "重复：07-30已入库同主题，S5跨日期去重" },
-    { "title": "日本熊本强震（死亡升至34人）", "reason": "重复：07-30已入库，特大续发已达S5连续≤3天上限，取新进展角度亦不重复" },
-    { "title": "中欧贸易投资磋商机制首次会议", "reason": "弱关联：外交经贸程序性新闻，学科角度弱" },
-    { "title": "我国成功发射通信技术试验卫星二十七号A/B星", "reason": "候选未纳入：强可用但15条名额已满，取崇太隧道(#11)作科技工程代表" },
-    { "title": "江苏/江浙沪高温橙色预警与健康风险红色预警", "reason": "候选未纳入：与#10高温健康主题合并呈现，避免同一事件多表述" },
-    { "title": "全国青少年科技创新大赛/网络文学蓝皮书", "reason": "候选未纳入：网络文学(#12)已承载文化与注意力议题，名额已满" }
+    {
+      "title": "河南备孕补贴辟谣（许昌卫健证伪禹州/长葛可领备孕补贴）",
+      "reason": "S0 合规：纯辟谣弱新闻，无稳定学科解读角度，未纳入"
+    },
+    {
+      "title": "2026届1270万应届毕业生就业（教育部例行数据）",
+      "reason": "弱关联：例行数据、无当日新事件，且与#12暑期工角度重合，未纳入"
+    },
+    {
+      "title": "8月1日多部新规集中施行（生态环境法典/个人贷款明示成本等）",
+      "reason": "弱关联：多部法规同日施行但无单一社会冲突事件，15条名额已满，未纳入"
+    }
   ]
 }

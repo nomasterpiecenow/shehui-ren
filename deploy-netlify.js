@@ -9,6 +9,9 @@
 //     1) netlify deploy（草稿，--json 取 deploy_id）
 //     2) POST /sites/{siteId}/deploys/{deployId}/restore  → 把该草稿发布为生产版本
 //   restore 走的是「回滚/发布已有部署」通道，不受 new-deploy 拦截，实测可正常上线。
+//
+// 2026-08-02 起：部署成功后自动把本批新闻同步到 Gitee（读取仓库根 .gitee_token），
+// 让另一台设备 `git pull` 即获最新新闻，根治每日 Gitee 滞后。
 const { spawnSync } = require('child_process');
 const fs = require('fs');
 const path = require('path');
@@ -17,6 +20,39 @@ const https = require('https');
 const ROOT = __dirname;            // 本仓库根（即 sociology-map 目录）
 const SITE_DIR = ROOT;             // 发布目录 = 仓库自身
 const SITE_ID = '1c681e5b-9d1b-4a63-bf84-6a79e4a62cd2';
+
+// ---------- Gitee 自动同步配置 ----------
+const GITEE_REPO = 'no-works-yet/shehui-ren';
+const GITEE_REMOTE_CLEAN = 'https://gitee.com/' + GITEE_REPO + '.git';
+
+function syncGitee() {
+  let giteeToken;
+  try { giteeToken = fs.readFileSync(path.join(ROOT, '.gitee_token'), 'utf8').trim(); }
+  catch (e) {
+    console.warn('[gitee] 未找到 .gitee_token，跳过 Gitee 同步（另一台设备 git pull 暂拿不到本批新闻）');
+    return;
+  }
+  const dateStr = new Date().toISOString().slice(0, 10);
+  const withToken = 'https://no-works-yet:' + giteeToken + '@gitee.com/' + GITEE_REPO + '.git';
+  const run = (args) => spawnSync('git', args, { cwd: ROOT, stdio: 'inherit', windowsHide: true });
+  console.log('[gitee] 同步本批新闻到 Gitee ...');
+  if (run(['remote', 'set-url', 'origin', withToken]).status !== 0) {
+    console.warn('[gitee] 设置远程失败，跳过');
+    return;
+  }
+  run(['add', 'news-data.js', 'news-review-log.json']);
+  if (run(['commit', '-m', 'news: auto-sync ' + dateStr]).status !== 0) {
+    console.warn('[gitee] 无新闻变更或未提交，跳过 push');
+    run(['remote', 'set-url', 'origin', GITEE_REMOTE_CLEAN]);
+    return;
+  }
+  if (run(['push', 'origin', 'master']).status !== 0) {
+    console.warn('[gitee] push 失败（令牌可能失效），请手动补推');
+  } else {
+    console.log('[gitee] 同步成功，另一台设备 git pull 即最新');
+  }
+  run(['remote', 'set-url', 'origin', GITEE_REMOTE_CLEAN]);
+}
 
 // 令牌优先级：环境变量 NETLIFY_AUTH_TOKEN > 仓库根 .netlify_token 文件
 let token = process.env.NETLIFY_AUTH_TOKEN;
@@ -93,6 +129,7 @@ const prod = spawnSync(
 
 if (!prod.error && prod.status === 0) {
   console.log('[deploy] 生产部署成功');
+  syncGitee();
   process.exit(0);
 }
 
@@ -134,6 +171,7 @@ const req = https.request({
       let state = '';
       try { state = JSON.parse(body).state; } catch (e) { /* ignore */ }
       console.log('[deploy] 发布成功 state=' + state + ' → https://shehui-ren.com');
+      syncGitee();
       process.exit(0);
     }
     console.error('[deploy] 发布失败 HTTP ' + res.statusCode + ':', body.slice(0, 400));
