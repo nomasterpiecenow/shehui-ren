@@ -1,5 +1,22 @@
 # 项目长期记忆 — sociology-map（社会人 新闻站）
 
+## ⚠️ 开工前必做（用户明确要求，2026-08-02）
+用户在**公司 Win + 家里 Mac 两台机器**交替改动。**每次执行任务前**必须先跑：
+`cd /Users/wangtianyi/shehui-ren && node sync.js`
+确认已连 Gitee（origin = https://gitee.com/no-works-yet/shehui-ren.git）且不落后远程，然后再动手。
+收尾必须 `git commit && git push`，否则另一台机器丢改动。
+详细工作流见项目技能 `.workbuddy/skills/shehui-ren-iterate/SKILL.md`。
+
+## 代码结构要点（2026-08-02 核实）
+- 版本三处必须同步：`sw.js` 的 `CACHE='shehui-ren-vN'`、`feature-manifest.html` 顶部徽章 + 底部更新日志表、README 的当前版本行。改 HTML/CSS 必 bump 缓存。
+- 连线**不是**单一 EDGES 数组，分三张表：`EXTRA_CONCEPT_LINKS`(~1017) / `CONCEPT_LINKS`(~1028) / `THINKER_LINKS`(~1089)，运行时在 `edges=[]`(~2895/2976) 组装。写校验脚本别只找 EDGES。
+- `rationalization` 重名 bug **已修复**（拆为 `rationalization_theory` / `rationalization_concept`），311 节点当前无重复 id。
+
+## 部署环境（2026-08-02）
+- `deploy-netlify.js` 已跨平台化：自动探测 `~/.workbuddy/binaries/node/versions/*/bin/node` 与 workspace 下 netlify-cli，WB_NODE/WB_NETLIFY 可覆盖。
+- Mac 端首次使用需两步：① `cd ~/.workbuddy/binaries/node/workspace && ~/.workbuddy/binaries/node/versions/22.22.2/bin/npm install netlify-cli`；② 仓库根放 `.netlify_token` 或设 `NETLIFY_AUTH_TOKEN`。
+- 干跑验证技巧：`NETLIFY_AUTH_TOKEN=dummy node deploy-netlify.js`，在 cli 缺失时安全退出，不会触发真实部署。
+
 ## news-validate.js 运行须知（重要，2026-07-28 更新）
 - 直接用 `node news-validate.js` 会报 `navigator is not defined`；只补 navigator 后又报 `window.matchMedia is not a function`（HTML 内联脚本已新增 matchMedia 调用）。
 - 解决：用临时副本，在 `sandbox.globalThis = sandbox;` 之后注入全套桩再运行、跑完删除（不要改项目原文件）：

@@ -29,17 +29,60 @@ if (!token) {
   process.exit(2);
 }
 
-// node 与 netlify-cli 路径：优先环境变量，否则回退本机（Windows）常见位置
-// Mac 用户请 export WB_NODE / WB_NETLIFY 指向本机的 managed node 与 netlify-cli
-const NODE = process.env.WB_NODE
-  || 'D:/Users/wtianyi/.workbuddy/binaries/node/versions/22.22.2/node.exe';
-const NETLIFY_BIN = process.env.WB_NETLIFY
-  || 'D:/Users/wtianyi/.workbuddy/binaries/node/workspace/node_modules/netlify-cli/bin/run.js';
+// node 与 netlify-cli 路径：优先环境变量 WB_NODE / WB_NETLIFY，
+// 否则按当前系统自动探测 WorkBuddy managed node 工作区（Mac/Linux 与 Windows 布局不同）。
+const IS_WIN = process.platform === 'win32';
+const WB_HOME = process.env.WORKBUDDY_HOME
+  || path.join(process.env.HOME || process.env.USERPROFILE || '', '.workbuddy');
+
+function detectNode() {
+  // 1) 本进程自身就是一个可用 node，最稳妥
+  const versionsDir = path.join(WB_HOME, 'binaries', 'node', 'versions');
+  try {
+    const vs = fs.readdirSync(versionsDir)
+      .filter((v) => /^\d+\./.test(v))
+      // 版本号倒序，取最新
+      .sort((a, b) => b.localeCompare(a, undefined, { numeric: true }));
+    for (const v of vs) {
+      const p = IS_WIN
+        ? path.join(versionsDir, v, 'node.exe')
+        : path.join(versionsDir, v, 'bin', 'node');
+      if (fs.existsSync(p)) return p;
+    }
+  } catch (e) { /* 目录不存在，继续回退 */ }
+  // 2) 回退：Windows 老路径 / 其它系统用当前解释器
+  if (IS_WIN && fs.existsSync('D:/Users/wtianyi/.workbuddy/binaries/node/versions/22.22.2/node.exe')) {
+    return 'D:/Users/wtianyi/.workbuddy/binaries/node/versions/22.22.2/node.exe';
+  }
+  return process.execPath;
+}
+
+function detectNetlify() {
+  const candidates = [
+    path.join(WB_HOME, 'binaries', 'node', 'workspace', 'node_modules', 'netlify-cli', 'bin', 'run.js'),
+    path.join(ROOT, 'node_modules', 'netlify-cli', 'bin', 'run.js'),
+    'D:/Users/wtianyi/.workbuddy/binaries/node/workspace/node_modules/netlify-cli/bin/run.js',
+  ];
+  for (const c of candidates) { if (fs.existsSync(c)) return c; }
+  return null;
+}
+
+const NODE = process.env.WB_NODE || detectNode();
+const NETLIFY_BIN = process.env.WB_NETLIFY || detectNetlify();
+
+if (!NETLIFY_BIN) {
+  console.error('[deploy] NO_NETLIFY_CLI: 未找到 netlify-cli。请先安装：');
+  console.error('  cd "' + path.join(WB_HOME, 'binaries', 'node', 'workspace') + '" && npm install netlify-cli');
+  console.error('或用环境变量 WB_NETLIFY 指定 netlify-cli 的 bin/run.js 路径。');
+  process.exit(2);
+}
 
 const CLI_ENV = Object.assign({}, process.env, { NETLIFY_AUTH_TOKEN: token });
 
 console.log('[deploy] 发布到 Netlify:', SITE_ID);
 console.log('[deploy] 目录:', SITE_DIR);
+console.log('[deploy] node:', NODE);
+console.log('[deploy] netlify-cli:', NETLIFY_BIN);
 
 // ---------- 主路径：直接生产部署 ----------
 const prod = spawnSync(
