@@ -17,3 +17,15 @@
 .DS_Store
 Thumbs.db
 node_modules/
+
+# 发布到公开站点时排除的内部/开发文件（Netlify 部署参考 .gitignore 过滤）
+# 说明：密钥文件（.netlify_token/.gitee_token）以点开头，Netlify 默认即忽略；
+# 以下为非点号开头的开发脚本/数据，需显式排除，避免随站点公开。
+_*.js
+sync.js
+sync.bat
+sync.command
+deploy-netlify.js
+pending-news.json
+news-review-log.json
+_node_map*.json
