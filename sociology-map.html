@@ -880,6 +880,10 @@
             <label class="map-legend-chk"><input type="checkbox" data-cat="topic"><span class="ldot" style="background:#8B7EC8"></span>研究领域</label>
         </div>
         <div class="map-legend map-legend-disc">
+            <button class="map-legend-btn active" data-disc="all"><span class="ldot" style="background:var(--text)"></span>全部学科</button>
+            <button class="map-legend-btn" data-disc="soc"><span class="ldot" style="background:#5B6FB5"></span>社会学</button>
+            <button class="map-legend-btn" data-disc="econ"><span class="ldot" style="background:#D4A017"></span>经济学</button>
+            <button class="map-legend-btn" data-disc="psy"><span class="ldot" style="background:#2FA37C"></span>心理学</button>
             <button class="map-legend-btn map-axis-toggle" id="axisToggle">时间轴：关</button>
         </div>
         <div class="map-tooltip" id="mapTooltip">
@@ -3514,21 +3518,6 @@ function draw() {
 
     ctx.restore();                                    // 恢复世界变换
 
-    // 学科环色图例（屏幕空间，固定右上角，不随 pan/zoom 缩放）
-    ctx.save();
-    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    const lx0 = W - 132, ly0 = 56;
-    ctx.font = '500 12px Inter, sans-serif';
-    ctx.textAlign = 'left'; ctx.textBaseline = 'middle';
-    Object.keys(DISC_META).forEach((d, i) => {
-        const yy = ly0 + i * 20;
-        ctx.beginPath(); ctx.arc(lx0 + 6, yy, 6, 0, Math.PI * 2);
-        ctx.strokeStyle = DISC_COLORS[d]; ctx.lineWidth = 4; ctx.stroke();
-        ctx.fillStyle = 'rgba(45,48,75,0.78)';
-        ctx.fillText(DISC_META[d].label, lx0 + 20, yy);
-    });
-    ctx.restore();
-
     } catch (err) {
         // 渲染异常自愈：单帧出错不应让整图永久空白，记录后继续下一帧
         if (window.console) console.error('[graph] draw recovered from render error:', err);
@@ -3708,6 +3697,19 @@ document.querySelectorAll('.map-legend-cat input[type="checkbox"]').forEach(cb =
         const cat = cb.dataset.cat;
         if (cb.checked) activeCategories.add(cat);
         else activeCategories.delete(cat);
+        updateNodeScale();
+        draw();
+    });
+});
+
+// Legend — 学科单选筛选（保留可选筛选能力，仅去掉页面级分带）
+// 注意：时间轴按钮(axisToggle)也带 map-legend-btn 类且位于此容器内，必须排除，
+// 否则点它会被当成学科按钮二次触发，把 activeDiscipline 设成 undefined 导致全节点不可见、整页空白。
+document.querySelectorAll('.map-legend-disc .map-legend-btn:not(.map-axis-toggle)').forEach(btn => {
+    btn.addEventListener('click', () => {
+        document.querySelectorAll('.map-legend-disc .map-legend-btn:not(.map-axis-toggle)').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        activeDiscipline = btn.dataset.disc;
         updateNodeScale();
         draw();
     });

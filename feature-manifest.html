@@ -683,7 +683,7 @@
     <section id="overview">
         <h1>社会人 <em>功能模块说明</em></h1>
         <p class="subtitle">帮助初学者理解社会科学理论的可视化网站 · 本文档是功能契约，所有改动需同步更新</p>
-        <span class="version-badge">v1.32 · 2026-08-03</span>
+        <span class="version-badge">v1.33 · 2026-08-03</span>
 
         <h3>产品定位</h3>
         <p><strong>用社会科学看社会</strong> —— 将高大上的理论落地到社会生活的实践中。网站包含两个页面：</p>
@@ -1493,7 +1493,8 @@
         <table class="module-table" id="clTable">
             <thead><tr><th>日期</th><th>版本</th><th>改动内容</th><th>涉及模块</th></tr></thead>
             <tbody>
-                <tr><td>2026-08-03</td><td>v1.32</td><td><strong>[去掉学科图例并发布上线] 用户确认学科圆点已能区分三科，右上角「全部学科/社会学/经济学/心理学」图例按钮不再需要，予以移除：</strong>① HTML 中删除 <code>.map-legend-disc</code> 内四个学科按钮，仅保留「时间轴：关」开关（<code>axisToggle</code>）。② 删除对应学科单选筛选的 JS 事件监听（该代码已无按钮可绑定）。③ 经预览验收后，<code>deploy-netlify.js</code> 生产路径正式上线；service worker 缓存 <code>shehui-ren-v13</code>→<code>shehui-ren-v14</code>，确保手机 PWA 丢弃旧版。说明：v1.30/v1.31 均为预览状态，v1.32 为首次将学科圆点样式发布到正式站。</td><td>A5, A6</td></tr>
+                <tr><td>2026-08-03</td><td>v1.33</td><td><strong>[修正 v1.32 误删 + 真正移除画布图例] 接用户反馈"没删图例、反而删了学科筛选"：</strong>① 删除画布上用代码绘制的「学科环色图例」（原 <code>draw()</code> 末尾屏幕空间绘制块，右上角色环+社会学/经济学/心理学文字）——这才是被圆点取代、应删的"图例"。② <strong>恢复学科筛选</strong>：HTML 重新加回 <code>.map-legend-disc</code> 内四个按钮（全部学科/社会学/经济学/心理学，含 <code>data-disc</code>），并恢复对应 JS 点击监听（设 <code>activeDiscipline</code> + <code>updateNodeScale()</code> + <code>draw()</code>），排除 <code>axisToggle</code> 复用类导致的二次触发。③ service worker 缓存 <code>shehui-ren-v14</code>→<code>shehui-ren-v15</code>。说明：v1.32 实际误删的是学科筛选按钮、画布图例未动；本版纠正。发布前走预览验收。</td><td>A5, A6</td></tr>
+                <tr><td>2026-08-03</td><td>v1.32</td><td><strong>[误删学科筛选按钮 · 已被 v1.33 纠正] 原意"右上角图例不再需要"：</strong>本版误将 HTML <code>.map-legend-disc</code> 内的学科筛选按钮（全部学科/社会学/经济学/心理学）连同点击监听一并删除，仅保留「时间轴：关」；但画布上的「学科环色图例」并未移除。学科圆点样式随本版发布上线（缓存 <code>shehui-ren-v13</code>→<code>shehui-ren-v14</code>）。筛选功能在 v1.33 已恢复。</td><td>A5, A6</td></tr>
                 <tr><td>2026-08-03</td><td>v1.31</td><td><strong>[学科标记：文字前缀 → 学科圆点] 接用户反馈"前面一个颜色圆点、圆点里有一个文字更美观"：</strong>① 弃用 <code>discPrefixedLabel</code> 纯文字前缀，新增 <code>drawDiscDot(ctx,cx,cy,disc,r,alpha)</code> 辅助函数——画带学科色的实心圆 + 圆内白色学字（社/经/心），dimmed 态降透明度。② <code>drawNode</code> 标签改为「圆点 + 节点名」左对齐整体居中（dotR=3.6，节点名用原灰）；思想家/理论副标签对齐到名起始处。③ 悬浮提示 <code>ttTitle</code> 改用内联 <code>span</code> 圆点徽标（背景=学科色、白字），与局部网络小图 <code>tmCtx</code>（dotR=5）同步带圆点，三处表现一致。④ service worker 缓存 <code>shehui-ren-v12</code>→<code>shehui-ren-v13</code> 强制手机端丢弃旧缓存。校验：node --check 通过、三处渲染点均调用 drawDiscDot、无回归。</td><td>A5, A6</td></tr>
                 <tr><td>2026-08-03</td><td>v1.30</td><td><strong>[知识图谱节点学科前缀] 回应"每个节点前用一个词区分学科"：</strong>① 新增 <code>DISC_SHORT = { soc:'社', econ:'经', psy:'心' }</code>，给每个节点显示名前置学科单字（v1.31 起改为学科圆点）。② <code>drawNode</code> 标签渲染复合绘制，悬停/选中/局部视图可见时生效。③ 悬浮提示与局部网络小图同步带标记。④ 缓存 <code>shehui-ren-v11</code>→<code>shehui-ren-v12</code>。说明：此前 v1.11/v1.25 仅用外环颜色+图例区分学科，文本前缀当时未落地；本次补齐（后精炼为圆点）。</td><td>A5, A6</td></tr>
                 <tr><td>2026-07-31</td><td>v1.29</td><td><strong>[知识图谱三项体验优化] 回应"进入页面默认只勾核心概念 / 静止时节点抖动 / 边太浅"：</strong>① <strong>默认只勾选核心概念</strong>——HTML 思想家/理论流派 checkbox 去掉 checked（核心概念保留）；JS `activeCategories` 初始 `new Set(['thinker','theory','concept'])`→`new Set(['concept'])`；首进逻辑（约行4746）强制仅勾 concept、其余隐藏，避免进页面过密。② <strong>取消节点静态抖动</strong>——删除 drawNode/hitTest 中 `floatY = sin(time*0.012+baseX*0.01)*3` 正弦浮动位移（叠加在已冻结的仿真坐标上造成永久上下抖动），节点绘制于 baseX/baseY 完全静止；同步删除 `let time` 声明与 `time++`（仅服务于该效果），命中判定与绘制保持一致。③ <strong>链接颜色加深一点点</strong>——drawEdge 普通态 baseA 0.03→0.05、alpha clamp 0.02~0.13→0.04~0.20、s 系数 0.10→0.15、lineWidth 0.3+s*0.25→0.4+s*0.3，灰值 rgba(180,180,190)→(160,162,175) 略深；高亮态不变。service worker 缓存 shehui-ren-v10→shehui-ren-v11。</td><td>A5</td></tr>
