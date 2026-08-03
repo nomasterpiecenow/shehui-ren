@@ -3,8 +3,8 @@
 单文件 HTML + Canvas 力导向知识图谱，三学科（社会学 / 经济学 / 心理学）
 + 每日新闻页。正式站 https://shehui-ren.com （Netlify 托管）。
 
-当前版本 **v1.29**（视觉深度对齐 Obsidian Graph View + 手机端可读性优化）。
-对应 service worker 缓存版本 `shehui-ren-v11`。
+当前版本 **v1.36**（素材卡片一键导出（免费功能）· 学科圆点 · 移动端适配）。
+对应 service worker 缓存版本 `shehui-ren-v19`。
 
 图谱规模：**311 节点 / 3 组连线表**（`CONCEPT_LINKS` / `THINKER_LINKS` / `EXTRA_CONCEPT_LINKS`）。
 节点分四类 `cat ∈ {thinker, theory, concept, topic}`，三学科 `disc ∈ {soc, econ, psy}`。
@@ -124,6 +124,8 @@ Netlify 免费额度耗尽时，生产部署（`deploy --prod`）会返回 **403
 
 | 版本 | 日期 | 要点 |
 |------|------|------|
+| v1.36 | 2026-08-03 | 新增「素材卡片一键导出」（news-export.html，近7天全量105条，浏览器原生打印 A4/PDF，免费） |
+| v1.30–v1.35 | 2026-08-03 | 知识图谱节点学科圆点、移动端学科筛选/时间轴/间距适配（详见 feature-manifest.html） |
 | v1.29 | 2026-07-31 | 默认只勾核心概念 / 取消节点静态抖动 / 链接颜色加深 |
 | v1.28 | 2026-07-31 | 标签字号再次大幅缩小（thinker 11→8px 等） |
 | v1.27 | 2026-07-31 | 深度对齐 Obsidian：边改中性灰低 alpha、节点降饱和、删背景点阵 |
