@@ -1,0 +1,28 @@
+# 发布到 Netlify 时排除：本仓库根即发布目录，必须把内部/密钥文件挡在公开站点之外
+# （netlify deploy 默认不会上传 .gitignore 里的，但 .netlifyignore 才是权威，二者都留）
+
+# 密钥（绝不进公开站点）
+.netlify_token
+.gitee_token
+
+# 项目内部笔记 / 技能 / 记忆
+.workbuddy/
+
+# 调试 / 开发脚本（_ 开头的临时脚本 + 同步/部署脚本）
+_*.js
+sync.js
+sync.bat
+sync.command
+deploy-netlify.js
+
+# 内部数据 / 审核日志（非站点运行所需）
+pending-news.json
+news-review-log.json
+_node_map*.json
+
+# 本地依赖（若有）
+node_modules/
+
+# 本机/系统杂项
+.DS_Store
+*.command

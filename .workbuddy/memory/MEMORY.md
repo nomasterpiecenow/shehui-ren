@@ -10,6 +10,13 @@
 收尾必须 `git commit && git push`，否则另一台机器丢改动。
 详细工作流见项目技能 `.workbuddy/skills/shehui-ren-iterate/SKILL.md`。
 
+## 🚦 发布流程：预览优先（用户 2026-08-03 准则）
+- **任何改动先出预览链接、用户验收通过后再正式发布**。`deploy-netlify.js` 已支持：
+  - `node deploy-netlify.js --staging` → 只发**草稿**（生成独立 `https://xxxx.netlify.app` 预览 URL，**不发布到 shehui-ren.com 生产域**），把链接发用户验收；
+  - 用户确认后 `node deploy-netlify.js`（不带 `--staging`）→ 正式上线生产。
+- 预览 URL 在手机/电脑均可打开验收；改完需再 `--staging` 一次生成新预览（旧草稿失效）。
+- 配套安全：仓库根已加 `.netlifyignore`，排除 `.netlify_token`/`.gitee_token`/`.workbuddy/`/`_*.js`/`sync.*`/`deploy-netlify.js` 等，避免内部/密钥文件随发布公开。部署时仍建议把 `.netlify_token` 临时移出、改走环境变量 `NETLIFY_AUTH_TOKEN`。
+
 ## 📄 feature-manifest.html — 改造沟通主文件（用户 2026-08-03 同步）
 - 这是「社会人」项目的**核心沟通 / 功能契约文档**（标题：功能模块说明文档）。每次网站有新内容更新，都先把内容整理进此文件；**后续改造讨论、需求反馈、改动记录优先通过此文件交流**（而非只在聊天里说）。
 - 文件结构：顶部版本徽章（`vX.Y · YYYY-MM-DD`）+ 中段各功能模块技术说明 + 底部「更新日志」表（日期 / 版本 / 改动内容 / 涉及模块）。

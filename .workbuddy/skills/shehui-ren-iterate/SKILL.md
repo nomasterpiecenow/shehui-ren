@@ -60,9 +60,20 @@ cd /Users/wangtianyi/shehui-ren && node sync.js
 
 ## 3. 部署
 
+**发布前必须先出预览、用户验收通过后再上线**（用户 2026-08-03 明确要求，作为长期准则）。
+
+1) 出预览（**不影响线上** shehui-ren.com，生成独立草稿 URL，不发布到生产域）：
 ```bash
-node deploy-netlify.js
+node deploy-netlify.js --staging
 ```
+   终端打印 `预览地址（发给用户验收）: https://xxxx.netlify.app`。把该链接发用户，
+   用户在手机/电脑验收；如需调整，改完再 `--staging` 一次生成新预览（旧草稿 URL 失效）。
+
+2) 用户确认无误后，正式发布到生产域：
+```bash
+node deploy-netlify.js        # 不带 --staging → 生产部署
+```
+   不带 `--staging` 时走生产部署；Netlify 额度耗尽自动草稿+restore 兜底上线。
 
 - 脚本按 `process.platform` 自动探测 node 与 netlify-cli，一般无需配置；
   特殊路径用 `WB_NODE` / `WB_NETLIFY` 覆盖。
@@ -72,6 +83,8 @@ node deploy-netlify.js
   `POST /api/v1/sites/{siteId}/deploys/{deployId}/restore` 发布为生产。restore 走回滚通道不被拦。
 - Site ID：`1c681e5b-9d1b-4a63-bf84-6a79e4a62cd2`
 - 干跑验证路径探测（不会真部署）：`NETLIFY_AUTH_TOKEN=dummy node deploy-netlify.js`
+- **安全：`.netlifyignore` 已排除 `.netlify_token`/`.gitee_token`/`.workbuddy/`/`_*.js`/`sync.*`/`deploy-netlify.js` 等**，
+  即便令牌文件在目录内也不会随发布上传；仍建议部署时把 `.netlify_token` 临时移出、改走环境变量 `NETLIFY_AUTH_TOKEN`。
 - 首次在新机器上：`cd ~/.workbuddy/binaries/node/workspace && npm install netlify-cli`
 
 ## 4. 新闻数据契约
