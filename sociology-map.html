@@ -880,10 +880,6 @@
             <label class="map-legend-chk"><input type="checkbox" data-cat="topic"><span class="ldot" style="background:#8B7EC8"></span>研究领域</label>
         </div>
         <div class="map-legend map-legend-disc">
-            <button class="map-legend-btn active" data-disc="all"><span class="ldot" style="background:var(--text)"></span>全部学科</button>
-            <button class="map-legend-btn" data-disc="soc"><span class="ldot" style="background:#5B6FB5"></span>社会学</button>
-            <button class="map-legend-btn" data-disc="econ"><span class="ldot" style="background:#D4A017"></span>经济学</button>
-            <button class="map-legend-btn" data-disc="psy"><span class="ldot" style="background:#2FA37C"></span>心理学</button>
             <button class="map-legend-btn map-axis-toggle" id="axisToggle">时间轴：关</button>
         </div>
         <div class="map-tooltip" id="mapTooltip">
@@ -2947,6 +2943,23 @@ const ERA_META = [
 ];
 // ── 学科维度（社会科学三巨头）──
 const DISC_COLORS = { soc:'#5B6FB5', econ:'#D4A017', psy:'#2FA37C' };
+const DISC_SHORT  = { soc:'社', econ:'经', psy:'心' };   // 节点标签前的学科单字标记
+// 在 (cx,cy) 画「学科圆点」：实心圆(学科色) + 圆内学字(白)；disc 缺省则不画
+function drawDiscDot(ctx, cx, cy, disc, r, alpha) {
+    if (!disc) return;
+    ctx.save();
+    if (alpha != null) ctx.globalAlpha = alpha;
+    ctx.beginPath();
+    ctx.arc(cx, cy, r, 0, Math.PI * 2);
+    ctx.fillStyle = DISC_COLORS[disc];
+    ctx.fill();
+    ctx.fillStyle = '#fff';
+    ctx.font = `700 ${Math.round(r * 1.4)}px Inter, sans-serif`;
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(DISC_SHORT[disc], cx, cy + 0.4);
+    ctx.restore();
+}
 const DISC_META = {
     soc:  { label:'社会学', color:DISC_COLORS.soc },
     econ: { label:'经济学', color:DISC_COLORS.econ },
@@ -3392,19 +3405,34 @@ function drawNode(n) {
         const labelY = ny + r + 3;
         ctx.shadowColor = 'rgba(254,252,248,0.5)';
         ctx.shadowBlur = 1;
-        if (n.cat === 'thinker' || n.cat === 'theory') {
-            ctx.font = `500 ${n.cat === 'thinker' ? 8 : 7}px Inter, sans-serif`;
-            ctx.fillStyle = `rgba(50, 52, 68, ${isDimmed ? 0.10 : 0.70})`;
-            ctx.fillText(n.label, nx, labelY);
-            if (n.sublabel && (isHovered || isSelected || n.cat === 'theory')) {
-                ctx.font = '400 6px JetBrains Mono, monospace';
-                ctx.fillStyle = `rgba(107, 111, 138, ${isDimmed ? 0.06 : 0.40})`;
-                ctx.fillText(n.sublabel, nx, labelY + 10);
-            }
-        } else {
-            ctx.font = '400 6px Inter, sans-serif';
-            ctx.fillStyle = `rgba(50, 52, 68, ${isDimmed ? 0.08 : 0.50})`;
-            ctx.fillText(n.label, nx, labelY);
+
+        // 学科圆点（实心圆+圆内学字）+ 节点名；整体居中于节点下方
+        const disc = n.disc && DISC_SHORT[n.disc] ? n.disc : null;
+        const nameFont = (n.cat === 'thinker') ? '500 8px Inter, sans-serif'
+                       : (n.cat === 'theory') ? '500 7px Inter, sans-serif'
+                       : '400 6px Inter, sans-serif';
+        const nameColor = (n.cat === 'thinker' || n.cat === 'theory')
+            ? `rgba(50, 52, 68, ${isDimmed ? 0.10 : 0.70})`
+            : `rgba(50, 52, 68, ${isDimmed ? 0.08 : 0.50})`;
+
+        ctx.font = nameFont;
+        const nameW = ctx.measureText(n.label).width;
+        const dotR = disc ? 3.6 : 0;
+        const gap  = disc ? 2 : 0;
+        const blockW = nameW + dotR * 2 + gap;
+        const sx = nx - blockW / 2;                       // 块左缘
+        if (disc) {
+            const cy = labelY + (n.cat === 'thinker' ? 4.0 : n.cat === 'theory' ? 3.5 : 3.0);
+            drawDiscDot(ctx, sx + dotR, cy, disc, dotR, isDimmed ? 0.15 : 1);
+        }
+        ctx.fillStyle = nameColor;
+        ctx.textAlign = 'left';
+        ctx.fillText(n.label, sx + dotR * 2 + gap, labelY);
+
+        if (n.sublabel && (isHovered || isSelected || n.cat === 'theory')) {
+            ctx.font = '400 6px JetBrains Mono, monospace';
+            ctx.fillStyle = `rgba(107, 111, 138, ${isDimmed ? 0.06 : 0.40})`;
+            ctx.fillText(n.sublabel, sx + dotR * 2 + gap, labelY + 10);
         }
         ctx.shadowBlur = 0;
     }
@@ -3557,7 +3585,11 @@ canvas.addEventListener('mousemove', (e) => {
     // Tooltip
     const tooltip = document.getElementById('mapTooltip');
     if (hit && !selectedNode) {
-        document.getElementById('ttTitle').textContent = hit.label + (hit.sublabel ? ` (${hit.sublabel})` : '');
+        const _d = hit.disc ? DISC_SHORT[hit.disc] : '';
+        const _c = hit.disc ? DISC_COLORS[hit.disc] : '#888';
+        const _dot = _d ? `<span style="display:inline-block;width:14px;height:14px;line-height:14px;border-radius:50%;background:${_c};color:#fff;font-size:9px;font-weight:700;text-align:center;margin-right:6px;vertical-align:middle;">${_d}</span>` : '';
+        const _sub = hit.sublabel ? ` <span style="color:#9aa2b1;font-weight:400;font-size:11px;">(${hit.sublabel})</span>` : '';
+        document.getElementById('ttTitle').innerHTML = _dot + hit.label + _sub;
         const d = hit.data;
         document.getElementById('ttDesc').textContent = d ? d.desc.substring(0, 80) + '…' : '';
         tooltip.style.left = (mouseX + 16) + 'px';
@@ -3669,19 +3701,6 @@ if (location.search.indexOf('debug=1') >= 0) {
         fitToView: (p) => fitToView(p)
     };
 }
-
-// Legend — 学科单选筛选（保留可选筛选能力，仅去掉页面级分带）
-// 注意：时间轴按钮(axisToggle)也带 map-legend-btn 类且位于此容器内，必须排除，
-// 否则点它会被当成学科按钮二次触发，把 activeDiscipline 设成 undefined 导致全节点不可见、整页空白。
-document.querySelectorAll('.map-legend-disc .map-legend-btn:not(.map-axis-toggle)').forEach(btn => {
-    btn.addEventListener('click', () => {
-        document.querySelectorAll('.map-legend-disc .map-legend-btn:not(.map-axis-toggle)').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        activeDiscipline = btn.dataset.disc;
-        updateNodeScale();
-        draw();
-    });
-});
 
 // Legend — 类别多选复选框（默认仅核心概念，勾选后揭示其它类型）
 document.querySelectorAll('.map-legend-cat input[type="checkbox"]').forEach(cb => {
@@ -4609,9 +4628,21 @@ function drawModal() {
         if (n.cat === 'thinker') { tmCtx.beginPath(); tmCtx.arc(x, y, n.r*0.42, 0, Math.PI*2); tmCtx.fillStyle = 'rgba(255,255,255,0.85)'; tmCtx.fill(); }
         tmCtx.textAlign = 'center'; tmCtx.textBaseline = 'top';
         tmCtx.shadowColor = 'rgba(254,252,248,0.9)'; tmCtx.shadowBlur = 4;
-        tmCtx.font = `600 ${n.cat==='thinker'?13:12}px Inter, sans-serif`;
+        const tmFont = `600 ${n.cat==='thinker'?13:12}px Inter, sans-serif`;
+        tmCtx.font = tmFont;
+        const tmName = n.label;
+        const tmDisc = n.disc ? DISC_SHORT[n.disc] : '';
+        const tmW = tmCtx.measureText(tmName).width;
+        const tmR = tmDisc ? 5 : 0;
+        const tmGap = tmDisc ? 3 : 0;
+        const tmBlk = tmW + tmR * 2 + tmGap;
+        const tmX = x - tmBlk / 2;
+        const tmBase = y + n.r + 5;
+        if (tmDisc) drawDiscDot(tmCtx, tmX + tmR, tmBase + (n.cat==='thinker'?6:5.5), tmDisc, tmR);
+        tmCtx.font = tmFont;
         tmCtx.fillStyle = 'rgba(45,48,75,0.9)';
-        tmCtx.fillText(n.label, x, y + n.r + 5);
+        tmCtx.textAlign = 'left';
+        tmCtx.fillText(tmName, tmX + tmR * 2 + tmGap, tmBase);
         tmCtx.shadowBlur = 0;
     });
     tmRAF = requestAnimationFrame(drawModal);

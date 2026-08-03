@@ -115,6 +115,36 @@ if (!NETLIFY_BIN) {
 
 const CLI_ENV = Object.assign({}, process.env, { NETLIFY_AUTH_TOKEN: token });
 
+// ---------- 预览模式（--staging）：只发草稿，不转正，等用户验收 ----------
+// 用途：功能/大改先发预览，把预览地址发给用户，用户说"发布"后再用不带 --staging 的命令上线。
+// 每日新闻自动化不传 --staging，走下方生产路径自动上线。
+const STAGING = process.argv.slice(2).includes('--staging');
+if (STAGING) {
+  const draft = spawnSync(
+    NODE,
+    [NETLIFY_BIN, 'deploy', '--dir=' + SITE_DIR, '--site=' + SITE_ID, '--json'],
+    { env: CLI_ENV, encoding: 'utf8', windowsHide: true }
+  );
+  if (draft.error || draft.status !== 0) {
+    console.error('[deploy] 预览部署失败:', (draft.stderr || draft.error || '').toString().slice(0, 800));
+    process.exit(1);
+  }
+  let previewUrl = '';
+  try {
+    const j = JSON.parse((draft.stdout || '').match(/\{[\s\S]*\}/)[0]);
+    previewUrl = j.deploy_url || j.url || '';
+  } catch (e) { /* ignore */ }
+  if (!previewUrl) {
+    const m = (draft.stdout || '').match(/(https?:\/\/\S+\.netlify\.app)/);
+    if (m) previewUrl = m[1];
+  }
+  console.log('[deploy] 预览已生成 ✅');
+  console.log('[deploy] 预览地址（发给用户验收）: ' + previewUrl);
+  syncGitee();
+  console.log('[deploy] 代码已同步 Gitee。用户验收通过后运行: node deploy-netlify.js （不带 --staging）即可上线。');
+  process.exit(0);
+}
+
 console.log('[deploy] 发布到 Netlify:', SITE_ID);
 console.log('[deploy] 目录:', SITE_DIR);
 console.log('[deploy] node:', NODE);
