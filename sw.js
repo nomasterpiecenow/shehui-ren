@@ -1,4 +1,4 @@
-const CACHE = 'shehui-ren-v15';
+const CACHE = 'shehui-ren-v18';
 const SHELL = [
   './',
   'sociology-map.html',

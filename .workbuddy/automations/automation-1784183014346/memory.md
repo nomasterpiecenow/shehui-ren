@@ -1,5 +1,32 @@
 # 自动化执行记录 — 社会人 新闻全自动更新
 
+## 2026-08-03 (morning, ~10:43)
+- 批次日期: 2026-08-03（morning 槽，取近24h）；候选池约 50+ 条（微博/百度/知乎/抖音/头条/腾讯 6 指数 + 央媒/部委编辑源；多源 WebSearch 并行检索 + 重抓主源核对 title/gist 关键事实一致性）
+- 入库: 15 条（7 特大 + 8 非特大），日期键插入 NEWS_DATA 首位；删除最旧 2026-07-27，日期数保持 7（08-03~07-28）
+- 特大(7, 均≥4平台经程序核对): #1 最高检公安部低龄未成年人核准追诉(law/institutionalism,5平台,research)、#2 小米手机涨价(econ_supply_demand/technology,5平台)、#3 微信地震预警新功能(technology/risk_society,4平台)、#4 央视水光针医美乱象(health/deviance,4平台)、#5 国家防总京冀黔防汛四级响应(risk_society/social_capital,5平台,research)、#6 河南三支一扶作弊通报(institutionalism/education,4平台)、#7 瑞幸奶油枪喂食(emotional_labor/media,4平台)
+- 非特大(8): 中国烹协废大师称号(institutionalism/cultural_capital)、地方养老基金1420.71亿(econ_welfare/stratification)、个贷新规8/1施行(econ_behavioral/law)、包钢爆炸10死84伤62人追责(work/law)、暑期档票房破72亿(media/attention_economy)、Tau人形机器人家政30美元/时(technology/alienation)、淘宝AI图两只半手臂(psy_cognitive_bias/media)、央行适度宽松货币政策(econ_monetary_policy/econ_macro)
+- 学科覆盖: soc 15 / econ 12 / psy 4，三科全覆盖；节点 id 全部∈311节点集（law/institutionalism/risk_society/social_capital/health/deviance/technology/econ_supply_demand/work/emotional_labor/media/cultural_capital/econ_welfare/stratification/econ_behavioral/econ_monetary_policy/econ_macro/education/alienation/attention_economy/psy_cognitive_bias 等逐一核对存在）
+- S9 前沿研究: 2 条（#1 低龄未成年人 → 检察日报理论版《低龄未成年人严重暴力犯罪的刑事责任认定与司法平衡》(2025) fromNode=law；#5 防汛 → Budría et al. IZA DP No.17907 "Resilience in the Wake of Disaster: The Role of Social Capital in Mitigating Long-Term Well-Being Losses" (2026 forthcoming American Behavioral Scientist) fromNode=social_capital），均嵌 interpretation.research，url 真实(12309.gov.cn / iza.org)、fromNode∈311节点集
+- 质检: 全量非中文字符扫描 08-03 块，69 处拉丁串均为合法专有名词/技术词(AI/DRAM/NAND/HBM/TrendForce/Counterpoint/REDMI/Tau Robotics)与英文论文题名(IZA)，无偶然外文混入(如 первый/precisely)
+- 校验: 临时副本注入 navigator/matchMedia/localStorage/sessionStorage/location 桩后 `node news-validate.js` → **FAIL=0 WARN=0**（7日期各15条，311节点）；S2 平台阈值核对 7 条 major 均≥4平台
+- S0 剔除/未纳入: 理想i8碰撞测试争议(2025旧闻)、微博热搜归档页2023内容(非真实当日热榜)、国际政治(特朗普/伊朗/莫斯科爆炸，敏感或弱关联)、娱乐八卦、纯UGC个人帖
+- 同步: news-data.js + news-review-log.json 已 cp 至 D:/Users/wtianyi/ctrip-claw/
+- 部署: deploy-netlify.js 首报生产 Forbidden，自动「草稿部署+发布」兜底成功，Production https://shehui-ren.com（deploy id 6a7004b4e9396d8bf65ca692，退出码 0）；并同步 Gitee(commit "news: auto-sync 2026-08-03" push master)
+- 红线: 未改 sociology-map.html/deploy-netlify.js/.netlify_token；临时脚本(_ins/_mk_log/_validate/_scan/_chk_major) 跑完已删
+
+## 2026-08-01 (morning, ~08:56)
+- 批次日期: 2026-08-01（morning 槽，近24h）；候选池约 50 条（微博/百度/知乎/头条/抖音 5 指数 + 央媒/部委编辑源；多源 WebSearch 并行检索 + 重抓主源核对 title/gist 关键事实一致性）
+- 入库: 15 条（1 特大 + 14 非特大），日期键插入 NEWS_DATA 首位；删除最旧 2026-07-25，日期数保持 7（08-01~07-26）
+- 特大(1): #1 台风"白海豚"逼近华东、多地停课停运（≥4 平台），risk_society/social_capital 双强链
+- 本批条目: 台风白海豚(risk_society/social_capital,major)、连云港母女坠楼(risk_society/urban)、第十二批集采(econ_welfare/econ_moral_hazard,research)、马尔康红旗大桥(law/institutionalism)、公积金条例修订(econ_welfare/social_capital)、聊城鸡鸭粪便烟丝(deviance/econ_moral_hazard)、医生买原料药救母(health/law)、12306提前发车(rationalization_theory/technology)、4万亿算力网(econ_growth/technology)、湖南体育锻炼规定(education/health)、三大运营商停第三方办卡(econ_monopoly/technology)、大学生暑期工(work/psy_self_efficacy,research)、医药代表管理办法(econ_moral_hazard/law)、微博人体极限视频(media/psy_emotion)、贵州漂流伴漂服务(media/attention_economy)
+- 学科覆盖: soc 14 / econ 13 / psy 5，三科全覆盖；节点 id 全部∈311节点集、label 与节点名一致
+- S9 前沿研究: 2 条（#3 集采 → Wang T. (2026) Social Science & Medicine 398:119195 fromNode=econ_welfare；#12 暑期工 → Gbadamosi G. et al. (2019) HESWBL 9(3):468-484 fromNode=psy_self_efficacy），均嵌 interpretation.research，url 真实(DOI/期刊)、fromNode∈311节点集
+- 质量质检: 全量非中文字符扫描发现条目#12正文嵌英文 `multitask` → 已改为「在快餐店里同时顶好几样活」；其余 ASCII 命中均为 JSON 键名/专名(NVL/ALK/ICU/Bandura/Gbadamosi)/学术引用，合法
+- 校验: 临时副本注入 navigator/matchMedia/localStorage/sessionStorage/location 桩后 `node news-validate.js` → **FAIL=0 WARN=0**（7日期各15条，311节点）
+- 同步: news-data.js + news-review-log.json 已 cp 至 D:/Users/wtianyi/ctrip-claw/（已 Grep 复核 7 日期键一致）
+- 部署: deploy-netlify.js 首报生产 Forbidden，自动「草稿部署+发布」兜底成功，Production https://shehui-ren.com（deploy id 6a6d4bb55584ba0af3af7851，退出码 0）
+- 红线: 未改 sociology-map.html/deploy-netlify.js/.netlify_token；临时脚本(_validate_run_0801 等) 跑完已删
+
 ## 2026-07-31 (morning, ~08:56)
 - 批次日期: 2026-07-31（morning 槽，近24h）；候选池约 50 条（微博/百度/头条/知乎/抖音 5 指数 + 央媒/部委编辑源；多源 WebSearch 并行检索）
 - 入库: 15 条（1 特大 + 14 非特大），日期键插入 NEWS_DATA 首位；删除最旧 2026-07-24，日期数保持 7（07-31~07-25）

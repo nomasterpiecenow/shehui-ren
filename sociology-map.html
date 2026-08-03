@@ -266,9 +266,10 @@
             }
             .map-legend::-webkit-scrollbar { display: none; }
             .map-legend-chk, .map-legend-btn { flex: 0 0 auto; white-space: nowrap; }
-            .map-legend-disc { top: 64px; left: 12px; bottom: auto; }   /* 落在导航栏(56px)下方，不再压住导航 */
+            .map-legend-disc { top: 14px; left: 12px; bottom: auto; }   /* top 相对 .map-container(已在导航栏底56px处)，故距导航栏底14px，与底部 bottom:14px 对称 */
             .map-legend-cat  { bottom: 14px; left: 12px; max-width: calc(100% - 96px); }  /* 底部横滚，右侧留出重置按钮空间 */
             .map-fit-btn { right: 12px; bottom: 60px; }                 /* 抬到底部筛选栏上方，互不重叠 */
+            .map-axis-toggle { display: none; }                         /* 手机端隐藏时间轴开关（显示不兼容），电脑端保留 */
         }
         .map-tooltip {
             position: absolute;

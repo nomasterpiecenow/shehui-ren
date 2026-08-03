@@ -683,7 +683,7 @@
     <section id="overview">
         <h1>社会人 <em>功能模块说明</em></h1>
         <p class="subtitle">帮助初学者理解社会科学理论的可视化网站 · 本文档是功能契约，所有改动需同步更新</p>
-        <span class="version-badge">v1.33 · 2026-08-03</span>
+        <span class="version-badge">v1.35 · 2026-08-03</span>
 
         <h3>产品定位</h3>
         <p><strong>用社会科学看社会</strong> —— 将高大上的理论落地到社会生活的实践中。网站包含两个页面：</p>
@@ -1493,6 +1493,8 @@
         <table class="module-table" id="clTable">
             <thead><tr><th>日期</th><th>版本</th><th>改动内容</th><th>涉及模块</th></tr></thead>
             <tbody>
+                <tr><td>2026-08-03</td><td>v1.35</td><td><strong>[移动端学科筛选顶部间距对齐 · 修正 top 基准] 接用户截图反馈"头部学科筛选离顶部太远"：</strong>手机端 <code>.map-legend-disc</code> 的 <code>top</code> 改为 <code>14px</code>。<strong>关键认知（已踩坑）：</strong><code>.map-legend</code> 是 <code>position:absolute</code>，其定位容器 <code>.map-container</code> 已在导航栏正下方 56px 处（<code>#page-map{padding-top:56px}</code>），故 <code>top</code> 是<strong>相对容器、即相对导航栏底部</strong>；而底部 <code>.map-legend-cat</code> 用 <code>bottom:14px</code> 是<strong>相对同一容器底=屏幕底</strong>。初版误设 <code>top:70px</code>（相对容器=距导航栏底70px，叠在56上=距屏顶126px），与底部14px严重不对称，经用户手机验收指出后改为 <code>top:14px</code>（距导航栏底14px，与底部<strong>视觉对称</strong>）。电脑端 <code>top:24px</code> 不变。service worker 缓存 <code>shehui-ren-v16</code>→<code>shehui-ren-v18</code>。发布前走预览验收。</td><td>A6, 移动端</td></tr>
+                <tr><td>2026-08-03</td><td>v1.34</td><td><strong>[手机端隐藏时间轴开关] 接用户反馈"时间轴开关在手机上显示不兼容、不好看"：</strong>① 在 <code>@media (max-width: 768px)</code> 移动端适配块内新增 <code>.map-axis-toggle { display: none; }</code>，仅手机端隐藏「时间轴：关」按钮，电脑端（&gt;768px）保留可用。② 时间轴逻辑本身不变（<code>timeAxisOn</code> 默认 false、桌面仍可切换）。③ service worker 缓存 <code>shehui-ren-v15</code>→<code>shehui-ren-v16</code> 强制手机端丢弃旧缓存。说明：此前用户记忆中曾提过"手机版删除时间轴开关"，经检索本地记忆与云端历史均无此明确记录，本次按用户当前指令执行"手机端隐藏"。发布前走预览验收。</td><td>A5, A6</td></tr>
                 <tr><td>2026-08-03</td><td>v1.33</td><td><strong>[修正 v1.32 误删 + 真正移除画布图例] 接用户反馈"没删图例、反而删了学科筛选"：</strong>① 删除画布上用代码绘制的「学科环色图例」（原 <code>draw()</code> 末尾屏幕空间绘制块，右上角色环+社会学/经济学/心理学文字）——这才是被圆点取代、应删的"图例"。② <strong>恢复学科筛选</strong>：HTML 重新加回 <code>.map-legend-disc</code> 内四个按钮（全部学科/社会学/经济学/心理学，含 <code>data-disc</code>），并恢复对应 JS 点击监听（设 <code>activeDiscipline</code> + <code>updateNodeScale()</code> + <code>draw()</code>），排除 <code>axisToggle</code> 复用类导致的二次触发。③ service worker 缓存 <code>shehui-ren-v14</code>→<code>shehui-ren-v15</code>。说明：v1.32 实际误删的是学科筛选按钮、画布图例未动；本版纠正。发布前走预览验收。</td><td>A5, A6</td></tr>
                 <tr><td>2026-08-03</td><td>v1.32</td><td><strong>[误删学科筛选按钮 · 已被 v1.33 纠正] 原意"右上角图例不再需要"：</strong>本版误将 HTML <code>.map-legend-disc</code> 内的学科筛选按钮（全部学科/社会学/经济学/心理学）连同点击监听一并删除，仅保留「时间轴：关」；但画布上的「学科环色图例」并未移除。学科圆点样式随本版发布上线（缓存 <code>shehui-ren-v13</code>→<code>shehui-ren-v14</code>）。筛选功能在 v1.33 已恢复。</td><td>A5, A6</td></tr>
                 <tr><td>2026-08-03</td><td>v1.31</td><td><strong>[学科标记：文字前缀 → 学科圆点] 接用户反馈"前面一个颜色圆点、圆点里有一个文字更美观"：</strong>① 弃用 <code>discPrefixedLabel</code> 纯文字前缀，新增 <code>drawDiscDot(ctx,cx,cy,disc,r,alpha)</code> 辅助函数——画带学科色的实心圆 + 圆内白色学字（社/经/心），dimmed 态降透明度。② <code>drawNode</code> 标签改为「圆点 + 节点名」左对齐整体居中（dotR=3.6，节点名用原灰）；思想家/理论副标签对齐到名起始处。③ 悬浮提示 <code>ttTitle</code> 改用内联 <code>span</code> 圆点徽标（背景=学科色、白字），与局部网络小图 <code>tmCtx</code>（dotR=5）同步带圆点，三处表现一致。④ service worker 缓存 <code>shehui-ren-v12</code>→<code>shehui-ren-v13</code> 强制手机端丢弃旧缓存。校验：node --check 通过、三处渲染点均调用 drawDiscDot、无回归。</td><td>A5, A6</td></tr>
