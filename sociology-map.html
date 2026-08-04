@@ -604,7 +604,25 @@
         .topic-tags{display:flex;flex-wrap:wrap;gap:5px;margin-top:auto}
         .topic-tag{font-size:10px;font-weight:500;padding:3px 9px;border-radius:10px;border:1px solid var(--border);background:var(--teal-soft);color:var(--teal);cursor:pointer;transition:all .2s}
         .topic-tag:hover{border-color:var(--red);color:var(--red);background:var(--red-soft)}
-        
+
+        /* 速用/完整 模式开关（v1.37） */
+        .mode-switch{display:flex;gap:4px;margin:18px auto 4px;padding:4px;background:var(--bg-card);border:1px solid var(--border-light);border-radius:999px;width:fit-content;justify-content:center}
+        .mode-btn{font-family:var(--font-body);font-size:13px;font-weight:600;color:var(--text-muted);background:transparent;border:none;padding:8px 18px;border-radius:999px;cursor:pointer;transition:all .2s}
+        .mode-btn.active{background:var(--red);color:#fff;box-shadow:0 2px 8px rgba(214,90,48,.25)}
+        /* 详情面板内单篇模式开关（不联动外部大开关） */
+        .dp-title-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+        .dp-title-row .dp-title{flex:1;min-width:0}
+        .dp-mode-switch{display:inline-flex;gap:3px;padding:3px;background:var(--bg);border:1px solid var(--border-light);border-radius:999px;flex-shrink:0}
+        .dp-mode-btn{font-family:var(--font-body);font-size:11px;font-weight:600;color:var(--text-muted);background:transparent;border:none;padding:5px 12px;border-radius:999px;cursor:pointer;transition:all .2s;white-space:nowrap}
+        .dp-mode-btn.active{background:var(--red);color:#fff}
+        /* 详情头部元信息行：模式开关 + 分类小title + 分类标 同一行 */
+        .dp-meta-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:2px 0 14px}
+        .dp-meta-row .dp-kicker{margin-bottom:0}
+        .dp-meta-row .dp-cat{margin-bottom:0}
+        .dp-quick{margin:8px 0 16px;padding:18px 20px;background:var(--red-soft);border:1px solid var(--red);border-radius:var(--radius)}
+        .dp-quick-label{font-size:12px;font-weight:700;color:var(--red);margin-bottom:10px;letter-spacing:.02em}
+        .dp-quick-text{font-size:15px;line-height:1.8;color:var(--text);font-family:var(--font-display)}
+
         /* News detail panel styling */
         .news-perspective{padding:14px 18px;background:var(--bg);border-radius:var(--radius-sm);margin-bottom:12px;border-left:3px solid var(--red)}
         .news-perspective h6{font-size:13px;font-weight:600;margin-bottom:5px;color:var(--red);letter-spacing:-0.01em}
@@ -785,6 +803,10 @@
 
             /* 新闻网格单栏，避免 minmax(340px) 在窄屏错列/溢出 */
             #page-topics .topics-grid { grid-template-columns: 1fr; }
+            .topics-topbar{display:flex;align-items:stretch;gap:12px;justify-content:space-between;margin:14px 0 4px}
+            .topics-topbar .date-trigger{flex:1;width:auto;margin:0;min-width:0;white-space:nowrap}
+            .topics-topbar .mode-switch{margin:0;flex-shrink:0}
+            .mode-btn{flex:0 1 auto;text-align:center;padding:12px 14px}
 
             /* 页面主区：A11 新闻列表占满，A10 收起为抽屉 */
             .topics-layout { flex-direction: column; gap: 16px; }
@@ -792,12 +814,12 @@
 
             /* A10 日期侧栏 → 左侧滑入抽屉（移出正常流，消除多余滚动） */
             .date-trigger {
-                display: flex; align-items: center; justify-content: space-between;
+                display: flex; align-items: center; justify-content: flex-start; gap: 4px;
                 width: 100%; box-sizing: border-box;
-                margin: 2px 0 14px; padding: 12px 16px;
+                margin: 2px 0 14px; padding: 10px 16px;
                 background: var(--bg-card); border: 1px solid var(--border-light);
-                border-radius: var(--radius-sm); color: var(--text);
-                font-family: var(--font-body); font-size: 14px; font-weight: 600;
+                border-radius: 999px; color: var(--text);
+                font-family: var(--font-body); font-size: 13px; font-weight: 600;
                 cursor: pointer;
             }
             #page-topics { min-height: auto; }
@@ -843,7 +865,7 @@
         <a href="#" class="tab-link active" data-page="page-topics">社会热点</a>
         <a href="#" class="tab-link" data-page="page-map">知识图谱</a>
         <a href="#" class="nav-guide" onclick="openGuide();return false;">怎么用</a>
-        <a href="news-export.html" class="nav-guide">🖨 导出素材</a>
+        <a href="news-export.html" class="nav-guide" target="_blank" rel="noopener noreferrer">导出素材</a>
     </div>
     </nav>
 
@@ -936,7 +958,13 @@
         <h2 class="section-title">用社科视角，把热点变成你的作文素材</h2>
         <p class="section-subtitle">每日一条时事热点 · 社科硬核解读，直接能用的议论文素材</p>
     </div>
-    <button class="date-trigger" id="dateTrigger" type="button">📅 选择日期 ▾</button>
+    <div class="topics-topbar">
+      <button class="date-trigger" id="dateTrigger" type="button">日期 ▾</button>
+      <div class="mode-switch" id="modeSwitch" role="group" aria-label="阅读模式">
+        <button class="mode-btn" data-mode="quick" type="button" onclick="setNewsMode('quick')">速用 · 作文语段</button>
+        <button class="mode-btn" data-mode="full" type="button" onclick="setNewsMode('full')">完整 · 全解读</button>
+      </div>
+    </div>
     <div class="topics-grid" id="topicsGrid"></div>
   </div>
 </section>
@@ -4795,7 +4823,7 @@ function switchPage(pageId) {
 // ── [Mobile] 日期抽屉控制（A10 移动端）──
 function updateDateTrigger(date) {
     const t = document.getElementById('dateTrigger');
-    if (t && date) t.textContent = '📅 选择日期：' + date + ' ▾';
+    if (t && date) t.textContent = date + ' ▾';
 }
 function setupDateDrawer() {
     const sb = document.getElementById('dateSidebar');
@@ -4824,7 +4852,32 @@ document.querySelectorAll('.tab-link').forEach(link => {
 });
 
 // ── News rendering ── [Phase 3 / A10] date nav rebuilt as month-grouped collapsible sidebar
+// ===== 速用/完整 阅读模式（v1.37）=====
+let newsMode = localStorage.getItem('shehui_news_mode') || 'quick';
+let detailMode = null; // 'quick'|'full'|null；null 表示跟随 newsMode
+function setNewsMode(mode) {
+    newsMode = mode;
+    try { localStorage.setItem('shehui_news_mode', mode); } catch (e) {}
+    // 只同步页面顶部大开关
+    const outer = document.getElementById('modeSwitch');
+    if (outer) outer.querySelectorAll('.mode-btn').forEach(b => b.classList.toggle('active', b.dataset.mode === mode));
+    // 重新渲染列表（速用模式卡片显示 essayQuote）
+    const active = document.querySelector('.date-btn-side.active');
+    if (active) renderNewsForDate(active.dataset.date);
+    // 注意：不联动当前已打开的详情面板；关闭后再开才会按新默认值呈现
+}
+function setDetailMode(mode) {
+    detailMode = mode;
+    // 只同步详情面板内小开关
+    const inner = document.getElementById('detailModeSwitch');
+    if (inner) inner.querySelectorAll('.dp-mode-btn').forEach(b => b.classList.toggle('active', b.dataset.mode === mode));
+    // 重新渲染当前详情面板（保留当前单篇模式，不跟随外部大开关）
+    if (currentNewsItem) showNewsDetail(currentNewsItem.id, false);
+}
+
 function renderNews() {
+    const outer = document.getElementById('modeSwitch');
+    if (outer) outer.querySelectorAll('.mode-btn').forEach(b => b.classList.toggle('active', b.dataset.mode === newsMode));
     const groupsEl = document.getElementById('dateNavGroups');
     if (groupsEl) {
         const dates = Object.keys(NEWS_DATA).sort((a, b) => b.localeCompare(a)); // newest first
@@ -4879,6 +4932,7 @@ function renderNewsForDate(date) {
         grid.innerHTML = '<div style="text-align:center;padding:40px;color:var(--text-muted)">该日期暂无新闻</div>';
         return;
     }
+    const quick = newsMode === 'quick';
     grid.innerHTML = items.map((item, i) => {
         const rank = i + 1;
         const MAXTAGS = 6;
@@ -4887,24 +4941,29 @@ function renderNewsForDate(date) {
         const tagsHtml = shown.map(t =>
             `<button class="topic-tag" onclick="event.stopPropagation();focusNode('${t.id}')" title="在知识图谱中聚焦：${t.label}">${t.label}</button>`
         ).join('') + (extra > 0 ? `<button class="topic-tag topic-tag-more" onclick="event.stopPropagation();showNewsDetail(${item.id})">+${extra}</button>` : '');
+        const leadLine = (quick && item.essayQuote) ? item.essayQuote : item.gist;
         return `
         <div class="topic-card fade-in visible" onclick="showNewsDetail(${item.id})">
             <div class="topic-card-header">
                 <span class="topic-rank ${rank<=3?'top3':''}">${String(rank).padStart(2,'0')}</span>
                 <div class="topic-title">${item.title}</div>
             </div>
-            ${item.gist ? `<div class="topic-gist">${item.gist}</div>` : ''}
+            ${leadLine ? `<div class="topic-gist">${leadLine}</div>` : ''}
             <div class="topic-meta"><span>${item.source}</span><span class="dot"></span><span>${date}</span></div>
-            <div class="topic-tags">${tagsHtml}</div>
+            ${quick ? '' : `<div class="topic-tags">${tagsHtml}</div>`}
         </div>`;
     }).join('');
 }
 
-function showNewsDetail(id) {
+function showNewsDetail(id, resetMode = true) {
     const activeDate = document.querySelector('.date-btn-side.active')?.dataset.date || Object.keys(NEWS_DATA).sort((a,b)=>b.localeCompare(a))[0];
     const item = (NEWS_DATA[activeDate] || []).find(n => n.id === id);
     if (!item) return;
     currentNewsItem = item;   // 记下当前新闻，供节点详情卡「返回新闻」重开
+    // 仅"从卡片点开新面板"时，单篇模式默认跟随外部大开关；
+    // 详情内小开关切换时传 resetMode=false，保留用户刚设的单篇模式（不锁死外部大开关）
+    if (resetMode) detailMode = newsMode;
+    const effectiveMode = detailMode;
     const panel = document.getElementById('newsPanel');
     const header = document.getElementById('newsPanelHeader');
     const body = document.getElementById('newsPanelBody');
@@ -4914,10 +4973,19 @@ function showNewsDetail(id) {
         : (item.source === '微博热搜'
             ? 'https://s.weibo.com/weibo?q=' + encodeURIComponent(item.title)
             : 'https://www.baidu.com/s?wd=' + encodeURIComponent(item.title));
+    const detailModeSwitchHtml = `
+    <div class="dp-mode-switch" id="detailModeSwitch" role="group" aria-label="单篇阅读模式">
+      <button class="dp-mode-btn ${effectiveMode === 'quick' ? 'active' : ''}" data-mode="quick" type="button" onclick="setDetailMode('quick')">速用</button>
+      <button class="dp-mode-btn ${effectiveMode === 'full' ? 'active' : ''}" data-mode="full" type="button" onclick="setDetailMode('full')">完整</button>
+    </div>
+    `;
     header.innerHTML = `
         <button class="dp-close" onclick="closeNewsDetail()">✕</button>
-        ${item.kicker ? `<div class="dp-kicker">${item.kicker}</div>` : ''}
-        <div class="dp-cat" style="background:var(--red-soft);color:var(--red)">社会热点</div>
+        <div class="dp-meta-row">
+            ${detailModeSwitchHtml}
+            ${item.kicker ? `<span class="dp-kicker">${item.kicker}</span>` : ''}
+            <span class="dp-cat" style="background:var(--red-soft);color:var(--red)">社会热点</span>
+        </div>
         <a class="dp-title dp-title-link" href="${srcUrl}" target="_blank" rel="noopener noreferrer" title="点击查看新闻源" style="font-size:20px">${item.title} <span class="dp-ext" aria-hidden="true">↗</span></a>
         <div class="dp-en">${item.source} · ${activeDate}</div>
     `;
@@ -4941,23 +5009,24 @@ function showNewsDetail(id) {
     }
 
     const hasNew = item.gist || (item.interpretations && item.interpretations.length);
-    let html = '';
+    let newsHtml = '';
+    let interpHtml = '';
 
     // ===== 新结构（v1.16）：gist / 事件脉络 / 疑问驱动解读 =====
     if (hasNew) {
-        if (item.gist) html += `<div class="dp-gist">${item.gist}</div>`;
+        if (item.gist) newsHtml += `<div class="dp-gist">${item.gist}</div>`;
         if (item.thread && item.thread.length) {
-            html += `<div class="dp-section"><div class="dp-section-title">🧵 事件脉络</div><div class="dp-thread">`;
+            newsHtml += `<div class="dp-section"><div class="dp-section-title">🧵 事件脉络</div><div class="dp-thread">`;
             item.thread.forEach(s => {
-                html += `<div class="dp-thread-step"><div class="dp-thread-t">${s.t}</div><div class="dp-thread-x">${s.x}</div></div>`;
+                newsHtml += `<div class="dp-thread-step"><div class="dp-thread-t">${s.t}</div><div class="dp-thread-x">${s.x}</div></div>`;
             });
-            html += `</div></div>`;
+            newsHtml += `</div></div>`;
         }
         if (item.interpretations && item.interpretations.length) {
-            html += `<div class="dp-section"><div class="dp-section-title">🔍 社科视角解读</div>
+            interpHtml += `<div class="dp-section"><div class="dp-section-title">🔍 社科视角解读</div>
             <p style="font-size:12px;color:var(--text-light);margin-bottom:16px;font-style:italic">以下用你真正会问的问题，拆解这条新闻背后的社会逻辑：</p>`;
             item.interpretations.forEach((p) => {
-                html += `<div class="dp-interp">
+                interpHtml += `<div class="dp-interp">
                     <div class="dp-interp-q"><span class="dp-qm">?</span><span>${p.q}</span></div>
                     ${p.naive ? `<div class="dp-interp-naive">常以为：${p.naive}</div>` : ''}
                     <div class="dp-interp-badge">用「${p.lens}」解读</div>
@@ -4966,19 +5035,19 @@ function showNewsDetail(id) {
                     ${p.research ? newsResearchCard(p.research) : ''}
                 </div>`;
             });
-            html += `</div>`;
+            interpHtml += `</div>`;
         }
     } else {
         // ===== 旧结构兼容降级（历史日期新闻）=====
         const perspectives = item.perspectives || (item.analysis && item.analysis.perspectives) || [];
-        if (item.background) html += `<div class="dp-section"><div class="dp-section-title">📋 背景</div><div class="dp-text"><p>${item.background}</p></div></div>`;
-        if (item.event) html += `<div class="dp-section"><div class="dp-section-title">📰 事件</div><div class="dp-text"><p>${item.event}</p></div></div>`;
-        if (item.outcome) html += `<div class="dp-section"><div class="dp-section-title">📊 结果与影响</div><div class="dp-text"><p>${item.outcome}</p></div></div>`;
+        if (item.background) newsHtml += `<div class="dp-section"><div class="dp-section-title">📋 背景</div><div class="dp-text"><p>${item.background}</p></div></div>`;
+        if (item.event) newsHtml += `<div class="dp-section"><div class="dp-section-title">📰 事件</div><div class="dp-text"><p>${item.event}</p></div></div>`;
+        if (item.outcome) newsHtml += `<div class="dp-section"><div class="dp-section-title">📊 结果与影响</div><div class="dp-text"><p>${item.outcome}</p></div></div>`;
         if (perspectives && perspectives.length) {
-            html += `<div class="dp-section"><div class="dp-section-title">🔍 社会科学视角解读</div>
+            interpHtml += `<div class="dp-section"><div class="dp-section-title">🔍 社会科学视角解读</div>
             <p style="font-size:12px;color:var(--text-light);margin-bottom:16px;font-style:italic">以下从${perspectives.length}个社会科学理论视角解读这条新闻：</p>`;
             perspectives.forEach((p, idx) => {
-                html += `<div class="news-perspective" style="margin-bottom:16px">
+                interpHtml += `<div class="news-perspective" style="margin-bottom:16px">
                     <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
                         <span style="background:var(--red);color:#fff;width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600">${idx + 1}</span>
                         <h6 style="margin:0;font-size:14px">${p.label || p.theory}</h6>
@@ -4994,30 +5063,42 @@ function showNewsDetail(id) {
                     ${p.research ? newsResearchCard(p.research) : ''}
                 </div>`;
             });
-            html += `</div>`;
+            interpHtml += `</div>`;
         }
     }
 
+    let relatedHtml = '';
     if (item.theories && item.theories.length) {
         const refs = item.theories.map(t => ({ id:t.id, label:t.label, node: getNode(t.id) })).filter(x => x.node);
         // 关联知识维持仅 theories（前沿研究的源节点改由视角内「溯源 →」按钮 + 上游知识解读呈现）
         const groups = { soc:[], econ:[], psy:[] };
         refs.forEach(x => { const d = x.node.disc || 'soc'; (groups[d] = groups[d] || []).push(x); });
         const order = ['soc','econ','psy'].filter(d => groups[d] && groups[d].length);
-        html += `<div class="dp-section"><div class="dp-section-title">关联知识 <span class="dp-count">${refs.length} 个关联点</span></div>`;
+        relatedHtml += `<div class="dp-section"><div class="dp-section-title">关联知识 <span class="dp-count">${refs.length} 个关联点</span></div>`;
         order.forEach(d => {
             const meta = DISC_META[d] || { label:d, color:'#888' };
-            html += `<div class="dp-related-group"><span class="dp-related-glabel" style="color:${meta.color}">${meta.label}</span><div class="dp-related">`;
+            relatedHtml += `<div class="dp-related-group"><span class="dp-related-glabel" style="color:${meta.color}">${meta.label}</span><div class="dp-related">`;
             groups[d].forEach(t => {
-                html += `<button class="dp-related-btn" style="border-color:${meta.color}55" onclick="focusNode('${t.id}', ${item.id})" title="在知识图谱中聚焦该节点">${t.label}</button>`;
+                relatedHtml += `<button class="dp-related-btn" style="border-color:${meta.color}55" onclick="focusNode('${t.id}', ${item.id})" title="在知识图谱中聚焦该节点">${t.label}</button>`;
             });
-            html += `</div></div>`;
+            relatedHtml += `</div></div>`;
         });
-        html += `<button class="dp-subgraph-btn" onclick="openRelatedModal(${item.id})">⛶ 在知识图谱中查看关联网络</button>`;
-        html += `</div>`;
+        relatedHtml += `<button class="dp-subgraph-btn" onclick="openRelatedModal(${item.id})">⛶ 在知识图谱中查看关联网络</button>`;
+        relatedHtml += `</div>`;
     }
 
-    body.innerHTML = html;
+    // 速用模式详情仅保留：① 新闻事实（gist） ② 作文素材卡；完整模式维持全量
+    const gistOnlyHtml = item.gist ? `<div class="dp-gist">${item.gist}</div>` : '';
+    const quoteCardHtml = item.essayQuote ? `<div class="dp-quick">
+        <div class="dp-quick-label">📝 作文素材卡 · 可直接引用</div>
+        <div class="dp-quick-text">${item.essayQuote}</div>
+    </div>` : '';
+
+    if (effectiveMode === 'quick' && item.essayQuote) {
+        body.innerHTML = gistOnlyHtml + quoteCardHtml;
+    } else {
+        body.innerHTML = newsHtml + interpHtml + relatedHtml;
+    }
     panel.classList.add('open');
 }
 

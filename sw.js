@@ -1,8 +1,7 @@
-const CACHE = 'shehui-ren-v19';
+const CACHE = 'shehui-ren-v27';
 const SHELL = [
   './',
   'sociology-map.html',
-  'news-export.html',
   'news-data.js',
   'manifest.webmanifest',
   'favicon.svg',
