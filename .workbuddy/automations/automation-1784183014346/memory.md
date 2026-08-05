@@ -1,5 +1,18 @@
 # 自动化执行记录 — 社会人 新闻全自动更新
 
+## 2026-08-05 (morning, ~09:36)
+- 批次日期: 2026-08-05（morning 槽，近24h）；候选池约 50 条（微博/百度/知乎/抖音/头条 + 央媒/部委编辑源；多源 WebSearch + 重抓主源核对 title/gist 关键事实）
+- 入库: 15 条（4 特大 + 11 非特大），日期键插入 NEWS_DATA 首位；删除最旧 2026-07-29，日期数保持 7（08-05~07-30）
+- 特大(4, 均≥4平台): #1 超强台风"白海豚"加强至16级(risk_society/social_capital)、#2 泰航拒载22名中国乘客做"拉眼角"歧视手势(othering/globalization)、#3 全国高温首现50℃+国家级站(risk_society/health,research)、#4 "竹知了"反噬华为触发史翠珊效应(media/attention_economy/psy_social_influence,research)
+- 非特大(11): 信用卡三年消失1.2亿张(econ_behavioral/econ_finance)、超60城优化公积金(econ_welfare/social_capital)、求职者问午休被回怼(work/law)、买错机票7分钟扣2022元(econ_info_asym/econ_behavioral)、四大行5年期大额存单返场(econ_monetary_policy/econ_macro)、单亲妈妈扛钢管女儿考上北大(education/stratification,research)、男子私密视频勒索前女友获刑(law/deviance)、录取通知书本科印成专科(education/institutionalism)、新人高铁当婚车(family/attention_economy)、患癌妻子申请销毁婚外胚胎(family/law)、姚洋称智商低于150搞不好数学(psy_growth_mindset/education,research)
+- 学科覆盖: soc 15 / econ 5 / psy 4，三科全覆盖；节点 id 全部∈311节点集（逐一比对 risk_society/social_capital/othering/globalization/health/media/attention_economy/psy_social_influence/econ_behavioral/econ_finance/econ_welfare/work/law/econ_info_asym/econ_monetary_policy/econ_macro/education/stratification/deviance/institutionalism/family/psy_growth_mindset 等均存在）
+- S9 前沿研究: 4 条（#3 高温→Liu et al. 2025 Lancet Regional Health – Western Pacific (Lancet Countdown China) fromNode=health；#4 竹知了→Hu & Wang 2025 Online Media and Global Communication DOI 10.1515/omgc-2024-0063 fromNode=psy_social_influence；#10 北大录取→《寒门何以出贵子》2026 fromNode=stratification；#15 姚洋→Blackwell/Trzesniewski/Dweck 2007 Child Development DOI 10.1111/j.1467-8624.2007.00995.x fromNode=psy_growth_mindset），均嵌 interpretation.research，url 真实、fromNode∈311节点集
+- 质检: 临时副本注入 navigator/matchMedia/localStorage/sessionStorage/location 桩后 `node news-validate.js` → **FAIL=0 WARN=0**（7日期各15条，311节点）；S2 平台阈值核对 4 条 major 均≥4平台；节点 id 全合法
+- S0 剔除/未纳入: 国际政治(特朗普/伊朗/莫斯科)、娱乐八卦、纯UGC个人帖、网传无源灾情、台风红霞(7/24–26已连续覆盖达上限)、仅 weak 链接弱关联候选
+- 同步: news-data.js + news-review-log.json 已 cp 至 D:/Users/wtianyi/ctrip-claw/
+- 部署: deploy-netlify.js 生产先报 Forbidden，自动「草稿部署+发布」兜底成功，Production https://shehui-ren.com（deploy id 6a7293c2a2b05283974701cc，退出码 0）；并同步 Gitee(commit "news: auto-sync 2026-08-05" push master)
+- 红线: 未改 sociology-map.html/deploy-netlify.js/.netlify_token；临时脚本(_ins_0805/_validate_run/_blk_0805/_extract_nodes_now) 跑完已删
+
 ## 2026-08-03 (morning, ~10:43)
 - 批次日期: 2026-08-03（morning 槽，取近24h）；候选池约 50+ 条（微博/百度/知乎/抖音/头条/腾讯 6 指数 + 央媒/部委编辑源；多源 WebSearch 并行检索 + 重抓主源核对 title/gist 关键事实一致性）
 - 入库: 15 条（7 特大 + 8 非特大），日期键插入 NEWS_DATA 首位；删除最旧 2026-07-27，日期数保持 7（08-03~07-28）

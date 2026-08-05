@@ -683,7 +683,7 @@
     <section id="overview">
         <h1>社会人 <em>功能模块说明</em></h1>
         <p class="subtitle">帮助初学者理解社会科学理论的可视化网站 · 本文档是功能契约，所有改动需同步更新</p>
-        <span class="version-badge">v1.38 · 2026-08-04</span>
+        <span class="version-badge">v1.39 · 2026-08-05</span>
 
         <h3>产品定位</h3>
         <p><strong>用社会科学看社会</strong> —— 将高大上的理论落地到社会生活的实践中。网站包含两个页面：</p>
@@ -1493,6 +1493,7 @@
         <table class="module-table" id="clTable">
             <thead><tr><th>日期</th><th>版本</th><th>改动内容</th><th>涉及模块</th></tr></thead>
             <tbody>
+                <tr><td>2026-08-05</td><td>v1.39</td><td><strong>[作文主题标签库（受控词表）上线 · 仅速用模式] 回应"速览模式不仅给金句、还要告知适用作文主题并打标签"：</strong>① <strong>定稿受控词表 `TOPIC_LIB`（shehui-topics-v1，9 维度 / 34 叶子标签）</strong>——对齐真实高考议论文母题（青春奋斗·青年担当 / 家国情怀·时代使命 / 文化自信·传统创新 / 科技与人文 / 思辨辩证 / 道德修养·价值选择 / 社会现实·人类关怀 / 生态文明·人与自然 / 读书学习·自我认知），每个标签带定义 + 维度，<strong>封闭词表、自动标注只可多选不可造词</strong>，从结构上杜绝"标签越标越乱/泛化"；新增标签须人工评审并 bump 版本。<strong>本阶段作文主题不关联社科知识节点（nodes 字段暂不使用）</strong>。② <strong>数据标注</strong>——新增 `_annotate_topics.js`，以"节点交集 + 关键词兜底"从受控词表为全部 105 条新闻补 `essayTopics:[{id,label}]`（均值为 3.9 个/条，31/34 标签被使用）。③ <strong>预览卡片（仅速用模式）</strong>——速用模式卡片底部显示最多 3 个作文主题 chip（暖琥珀色，区别于社科节点青色 chip），点按即开详情；<strong>完整模式回退为原有社科节点标签</strong>，不显示作文主题。④ <strong>详情面板（仅速用模式）</strong>——速用模式详情新增「适用作文主题」区块，列出本条全部主题（含维度与定义），<strong>不挂社科节点按钮</strong>；完整模式维持原有全量（事实/解读/关联知识），不含作文主题区。⑤ service worker 缓存 <code>shehui-ren-v28</code>→<code>shehui-ren-v29</code>。</td><td>A8, A11, 社会热点</td></tr>
                 <tr><td>2026-08-04</td><td>v1.38</td><td><strong>[双模式 UI 打磨 + 作文金句全量补齐并正式发布] 汇总 v1.37.5–v1.37.7 手机端打磨与 v1.38 内容补齐：</strong>① <strong>日期触发器圆角胶囊</strong>——`.date-trigger` 由 `var(--radius-sm)` 改 `999px`，与顶部「速用/完整」模式开关同款胶囊，并按用户要求与模式开关强制等高（`align-items:stretch`）；② <strong>去日历 icon + 防换行</strong>——仅留「YYYY-MM-DD ▾」纯文字、`white-space:nowrap`；③ <strong>默认进入速用模式</strong>——`newsMode` 默认 `'quick'`（localStorage 记忆优先）；④ <strong>作文素材金句全量补齐（核心）</strong>——为全部 105 条新闻逐条生成 `essayQuote`（A 风满分作文议论段、紧扣真实社科内核、80–150 字），此前仅前 6 条 demo。脚本清洗内部 ASCII 引号、原位前 6 条 + 末尾赋值块 99 条统一写入，经校验 105 条字数全部落在 124–150 字区间、无缺漏、文件可正常 eval；速用模式预览卡片与详情面板均已接入。⑤ service worker 缓存 <code>shehui-ren-v26</code>→<code>shehui-ren-v27</code>。本版走预览验收后正式发布至 shehui-ren.com。</td><td>A8, A11, 社会热点, 移动端</td></tr>
                 <tr><td>2026-08-04</td><td>v1.37.7</td><td><strong>[手机端日期触发器与模式开关等高] 接用户 8/4 反馈：</strong>顶部一行里「日期胶囊」与「速用/完整开关」视觉不等高（前者单层 padding 显细、后者容器 padding4+按钮 padding12 嵌套显粗）。把 `.topics-topbar` 的 `align-items:center` 改为 `align-items:stretch`，让两个胶囊在 flex 行内强制等高，日期触发器内部文字仍垂直居中。service worker 缓存 <code>shehui-ren-v25</code>→<code>shehui-ren-v26</code>。</td><td>A8, A11, 社会热点, 移动端</td></tr>
                 <tr><td>2026-08-04</td><td>v1.37.6</td><td><strong>[日期触发器圆角胶囊 + 默认速用模式] 接用户 8/4 反馈 2 点：</strong>① <strong>日期触发器改为圆角胶囊</strong>——`.date-trigger` 基础样式由 `border-radius:var(--radius-sm)` 改为 `999px`、`font-size:14→13px`、`padding:12px 16px→10px 16px`、`justify-content:space-between→flex-start+gap:4px`，外观与顶部"速用/完整"模式开关（同为 bg-card + border-light + 999px 胶囊）统一，消除"长方形 vs 圆角容器"的突兀感；桌面端 `.date-trigger` 仍 `display:none` 不受影响。② <strong>默认模式改为速用</strong>——`newsMode` 默认值由 `'full'` 改为 `'quick'`（localStorage 记忆仍优先，仅首次/未选时默认速用）。service worker 缓存 <code>shehui-ren-v24</code>→<code>shehui-ren-v25</code>。</td><td>A8, A11, 社会热点, 移动端</td></tr>
