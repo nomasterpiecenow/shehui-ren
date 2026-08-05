@@ -37,6 +37,7 @@ var NEWS_DATA = {
         }
       ],
       theories: [{id:'risk_society',label:'风险社会理论'},{id:'social_capital',label:'社会资本'}],
+      essayTopics: [{"id":"altruism","label":"利他"},{"id":"trust","label":"信任"},{"id":"community","label":"共同体"},{"id":"risk_uncertain","label":"风险与不确定"}],
       essayQuote: '一场远在海上的风暴，最先搅动的其实不是风浪，而是人们对“风险何时到来、由谁承担”的持续追问。现代社会把安全托付给预警系统与专业判断，可不确定性从未消失，它只是被折叠进每一次“可能”与“两种路径”的谨慎表述里。真正成熟的防灾，不是许诺风平浪静，而是让每个人在未知面前保有准备与从容。',
       review: {strength:'strong', disciplines:['soc']}
     },
@@ -71,6 +72,7 @@ var NEWS_DATA = {
         }
       ],
       theories: [{id:'othering',label:'他者化'},{id:'globalization',label:'全球化'}],
+      essayTopics: [{"id":"civ_exchange","label":"文明互鉴"},{"id":"prejudice","label":"偏见与歧视"},{"id":"community","label":"共同体"},{"id":"altruism","label":"利他"}],
       essayQuote: '一桩航班拒载，最终被一个手势点燃，是因为它戳中了一群人最敏感的神经：我们走得越远，越发现“被平等对待”并不总是理所当然。全球化把世界摊平了航线，却没有自动抹去那些藏在眼神与动作里的高低之分。真正的体面，不在护照的厚度，而在每一次相遇里是否把对方当成一个完整的人。',
       review: {strength:'strong', disciplines:['soc']}
     },
@@ -114,6 +116,7 @@ var NEWS_DATA = {
         }
       ],
       theories: [{id:'risk_society',label:'风险社会理论'},{id:'health',label:'健康'}],
+      essayTopics: [{"id":"risk_uncertain","label":"风险与不确定"},{"id":"fairness","label":"公平正义"},{"id":"harmony_nature","label":"人与自然和谐"}],
       essayQuote: '“地球正在发烧”不再是比喻。当50℃出现在国家级气象站、当2万余人因热浪过早离世，高温就从一个气象词条变成了一道公共健康考题。它最先击中的，永远是那些没有空调、没有选择、不得不在烈日下维持城市运转的人。适应气候变化，首先该适配的，是保护弱者的公共能力。',
       review: {strength:'strong', disciplines:['soc']}
     },
@@ -157,6 +160,7 @@ var NEWS_DATA = {
         }
       ],
       theories: [{id:'media',label:'媒介'},{id:'attention_economy',label:'注意力经济'},{id:'psy_social_influence',label:'社会影响'}],
+      essayTopics: [{"id":"info_cocoon","label":"信息茧房"},{"id":"virtual_real","label":"虚拟与真实"},{"id":"fast_slow","label":"快与慢"},{"id":"deep_think","label":"深度思考"}],
       essayQuote: '一只几毛钱的竹知了，戳破的是巨头与普通人之间那道微妙的距离感。法理上华为没错，但互联网最朴素的规律是：你越想按住声音，声音就越响。当企业高管被“标签化”为一种符号，品牌便要承接这份符号带来的一切——包括调侃。成熟的巨头，懂得在维权与接住情绪之间留一点余地。',
       review: {strength:'strong', disciplines:['soc','psy']}
     },
@@ -189,6 +193,7 @@ var NEWS_DATA = {
         }
       ],
       theories: [{id:'econ_behavioral',label:'行为经济学'},{id:'econ_finance',label:'金融'}],
+      essayTopics: [{"id":"righteousness_interest","label":"义与利"},{"id":"fairness","label":"公平正义"},{"id":"youth_struggle","label":"青春奋斗"},{"id":"virtual_real","label":"虚拟与真实"}],
       essayQuote: '1.2亿张信用卡的“消失”，表面是年轻人不爱透支了，底层却是支付场景的整体迁移：信用消费没变小，只是从塑料卡流进了手机里的花呗与白条。银行从跑马圈地转向精耕细作，消费者从冲动负债转向理性算账——这场静悄悄的转移，改写的是整个信用体系的入口。',
       review: {strength:'strong', disciplines:['econ']}
     },
@@ -221,6 +226,7 @@ var NEWS_DATA = {
         }
       ],
       theories: [{id:'econ_welfare',label:'福利经济学'},{id:'social_capital',label:'社会资本'}],
+      essayTopics: [{"id":"altruism","label":"利他"},{"id":"fairness","label":"公平正义"},{"id":"trust","label":"信任"},{"id":"community","label":"共同体"}],
       essayQuote: '超60城优化公积金，看似是贷款额度的数字游戏，实则把保障网的边界往外推了一大圈：外卖员能缴存了，装修物业费能提了，子女的公积金能给父母装电梯了。一部运行二十多年的制度向新就业群体与存量提质转身，说明真正的民生温度，藏在“谁能参与、钱怎么用”这些细节里。',
       review: {strength:'strong', disciplines:['econ','soc']}
     },
@@ -253,6 +259,7 @@ var NEWS_DATA = {
         }
       ],
       theories: [{id:'work',label:'工作'},{id:'law',label:'法律'}],
+      essayTopics: [{"id":"freedom_rules","label":"自由与规则"},{"id":"persist_flex","label":"坚守与变通"},{"id":"integrity","label":"诚信"},{"id":"duty_devote","label":"责任奉献"}],
       essayQuote: '一句“中午有午休吗”，换来的是百字回怼和满屏共鸣。它戳破的是职场里一种隐蔽的傲慢：把员工的休息权当成额外的索取，把奉献当成默认的义务。招聘信息可以写清工作内容，却常对作息与休假语焉不详——当问一句权益都需要勇气，说明劳资之间的天平还远没摆平。',
       review: {strength:'strong', disciplines:['soc']}
     },
@@ -285,6 +292,7 @@ var NEWS_DATA = {
         }
       ],
       theories: [{id:'econ_info_asym',label:'信息不对称'},{id:'econ_behavioral',label:'行为经济学'}],
+      essayTopics: [{"id":"righteousness_interest","label":"义与利"},{"id":"trust","label":"信任"},{"id":"knowledge_anxiety","label":"知识焦虑"},{"id":"freedom_rules","label":"自由与规则"}],
       essayQuote: '7分钟、2022元——数字刺眼，是因为它暴露了每个人都在用的App里那道“信息黑箱”：票价醒目、退改小字折叠，等你发现时已扣款。律师说75%的扣费可能显失公平，但更重要的提醒是：当关键条款藏在角落，所谓的“自愿”只是被设计出来的结果。',
       review: {strength:'strong', disciplines:['econ']}
     },
@@ -317,6 +325,7 @@ var NEWS_DATA = {
         }
       ],
       theories: [{id:'econ_monetary_policy',label:'货币政策'},{id:'econ_macro',label:'宏观经济学'}],
+      essayTopics: [{"id":"fairness","label":"公平正义"},{"id":"self_vs_greater","label":"小我与大我"},{"id":"harmony_nature","label":"人与自然和谐"}],
       essayQuote: '四大行5年期大额存单“去而复返”，距离集体下架还不到一年。这不是利率拐点，而是银行在净息差承压下的阶段性腾挪：用约1.6%的低成本锁住五年期资金，缓解久期错配。对普通人而言，它提醒我们——存单利率的每一丝起伏，都连着宏观经济的资金水位。',
       review: {strength:'strong', disciplines:['econ']}
     },
@@ -358,6 +367,7 @@ var NEWS_DATA = {
         }
       ],
       theories: [{id:'education',label:'教育'},{id:'stratification',label:'社会分层'}],
+      essayTopics: [{"id":"fairness","label":"公平正义"},{"id":"prejudice","label":"偏见与歧视"},{"id":"lifelong_learn","label":"终身学习"},{"id":"virtual_real","label":"虚拟与真实"}],
       essayQuote: '凌晨3点40的闹钟，和一条“北京大学”的短信，串起了一个母亲十八年的托举。邹品芝说自己是“三无人员”，却托出了两个女儿——一个行医、一个进北大。这个故事让人破防，是因为在阶层日益固化的焦虑里，它证明教育这条门还没完全关上；只是打开它的，常常是一位母亲扛了十八年的钢管。',
       review: {strength:'strong', disciplines:['soc']}
     },
@@ -390,6 +400,7 @@ var NEWS_DATA = {
         }
       ],
       theories: [{id:'law',label:'法律'},{id:'deviance',label:'越轨'}],
+      essayTopics: [{"id":"freedom_rules","label":"自由与规则"},{"id":"persist_flex","label":"坚守与变通"},{"id":"integrity","label":"诚信"},{"id":"fairness","label":"公平正义"}],
       essayQuote: '50多次威胁、9766.5元——数字不大，却足以把一段亲密关系异化成犯罪的现场。法院以敲诈勒索罪判处实刑，释放的信号很清楚：恋爱不是违法的护身符，私密影像更不是要挟的筹码。真正该被提醒的，是那些因羞耻而选择沉默的人——取证、报警，才是把主动权拿回来的第一步。',
       review: {strength:'strong', disciplines:['soc']}
     },
@@ -422,6 +433,7 @@ var NEWS_DATA = {
         }
       ],
       theories: [{id:'education',label:'教育'},{id:'institutionalism',label:'制度主义'}],
+      essayTopics: [{"id":"persist_flex","label":"坚守与变通"},{"id":"fairness","label":"公平正义"},{"id":"lifelong_learn","label":"终身学习"},{"id":"youth_struggle","label":"青春奋斗"}],
       essayQuote: '“本科”印成“专科”、“身份证”写成“身证份”，笑话背后是数道审核关口的集体失明。录取通知书是大学递给新生的第一张名片，它的分量从不在纸张厚薄，而在是否对得起那份期待。当流程沦为走过场，低级错误便能在制度缝隙里一路绿灯——方寸之间的用心与否，恰折射一所学校的育人态度。',
       review: {strength:'strong', disciplines:['soc']}
     },
@@ -454,6 +466,7 @@ var NEWS_DATA = {
         }
       ],
       theories: [{id:'family',label:'家庭'},{id:'attention_economy',label:'注意力经济'}],
+      essayTopics: [{"id":"info_cocoon","label":"信息茧房"},{"id":"fast_slow","label":"快与慢"},{"id":"community","label":"共同体"},{"id":"deep_think","label":"深度思考"}],
       essayQuote: '“1.8亿的婚车，人均车票86块。”这届年轻人用高铁、公交甚至单车接亲，把婚礼从面子工程还原成一场与陌生人分享的温暖旅程。当豪车长队不再等于幸福厚度，婚俗便悄悄完成一次温柔的革命：最好的仪式感，不是最贵的排场，而是把喜悦分给同行者的那份坦诚。',
       review: {strength:'strong', disciplines:['soc']}
     },
@@ -486,6 +499,7 @@ var NEWS_DATA = {
         }
       ],
       theories: [{id:'family',label:'家庭'},{id:'law',label:'法律'}],
+      essayTopics: [{"id":"freedom_rules","label":"自由与规则"},{"id":"persist_flex","label":"坚守与变通"},{"id":"integrity","label":"诚信"},{"id":"fairness","label":"公平正义"}],
       essayQuote: '一枚婚外胚胎，把一段二十年婚姻撕开了一道最私密的口子。卫健委“无相应职责、建议走司法”的答复，看似冷淡，却点出一个真问题：胚胎的去留涉及人格权与辅助生殖伦理，必须由法院在权利框架内裁断，而非某个部门一锤定音。当家庭边界崩塌，最后兜底的，往往是法律对“人”的重新界定。',
       review: {strength:'strong', disciplines:['soc']}
     },
@@ -527,6 +541,7 @@ var NEWS_DATA = {
         }
       ],
       theories: [{id:'psy_growth_mindset',label:'成长型思维'},{id:'education',label:'教育'}],
+      essayTopics: [{"id":"lifelong_learn","label":"终身学习"},{"id":"deep_think","label":"深度思考"},{"id":"no_lying_flat","label":"拒绝躺平"},{"id":"self_aware","label":"自我认知"}],
       essayQuote: '“智商低于150搞不好数学”——这句话扎心，是因为它把无数普通人的努力轻轻抹去。顶尖数学研究确有智力门槛，这不容否认；但把成就全归“天生”，却会让更多孩子早早给自己贴上“我不行”的标签。成长型思维告诉我们：天赋决定天花板，努力决定你能不能真的够到它。教育的意义，从来不是预言谁不行。',
       review: {strength:'strong', disciplines:['psy','soc']}
     },
@@ -563,6 +578,7 @@ var NEWS_DATA = {
         }
       ],
       theories: [{id:'risk_society',label:'风险社会理论'},{id:'social_capital',label:'社会资本'}],
+      essayTopics: [{"id":"altruism","label":"利他"},{"id":"trust","label":"信任"},{"id":"community","label":"共同体"},{"id":"risk_uncertain","label":"风险与不确定"}],
       essayQuote: '一场远在海上的风暴，最先搅动的其实不是风浪，而是人们对「风险何时到来、由谁承担」的持续追问。现代社会把安全托付给预警系统与专业判断，可不确定性从未消失，它只是被折叠进每一次「可能」与「两种路径」的谨慎表述里。真正成熟的防灾，不是许诺风平浪静，而是让每个人在未知面前保有准备与从容。',
       review: {strength:'strong', disciplines:['soc']}
     },
@@ -594,6 +610,7 @@ var NEWS_DATA = {
         }
       ],
       theories: [{id:'deviance',label:'越轨'},{id:'econ_moral_hazard',label:'道德风险'}],
+      essayTopics: [{"id":"freedom_rules","label":"自由与规则"},{"id":"integrity","label":"诚信"},{"id":"righteousness_interest","label":"义与利"},{"id":"trust","label":"信任"}],
       essayQuote: '「牛蛙抗生素」冲上热搜的瞬间，消费者焦虑的不只是舌尖安全，更是「我吃的东西到底谁在把关」的信任缺口。当养殖端违规用药一次次曝光，监管滞后与信息不对称便浮出水面。食品安全从来不是靠个人避坑就能解决的私事，它需要可追溯的链条与有牙齿的问责，否则每一次「封存送检」都只是下一场恐慌的序曲。',
       review: {strength:'strong', disciplines:['soc','econ']}
     },
@@ -634,6 +651,7 @@ var NEWS_DATA = {
         }
       ],
       theories: [{id:'econ_labor',label:'劳动力市场'},{id:'work',label:'工作社会学'}],
+      essayTopics: [{"id":"duty_devote","label":"责任奉献"},{"id":"fairness","label":"公平正义"},{"id":"ai_ethics","label":"AI伦理"},{"id":"virtual_real","label":"虚拟与真实"}],
       essayQuote: '上海约谈十二家平台、处罚四百七十九辆不合规车、罚款超两千五百万元，击中平台经济最隐秘的病灶：算法把效率推到极致，却把劳动者的合规身份与保障责任悄悄稀释。当「灵活就业」成为规避成本的通道，监管就必须把「灵活」关进制度的笼子。每一次重罚，都是在替那些跑在系统里、却不被系统承认的人，讨回一份体面。',
       review: {strength:'strong', disciplines:['econ','soc']}
     },
@@ -665,6 +683,7 @@ var NEWS_DATA = {
         }
       ],
       theories: [{id:'attention_economy',label:'注意力经济'},{id:'psy_emotion',label:'情绪与动机'}],
+      essayTopics: [{"id":"info_cocoon","label":"信息茧房"},{"id":"fast_slow","label":"快与慢"},{"id":"deep_think","label":"深度思考"},{"id":"self_aware","label":"自我认知"}],
       essayQuote: '网信办一纸处置令，一千八百余个违规账号消失在直播间里，照见的是「情感动员」如何被异化为收割注意力的生意。团播把陪伴做成表演、把打赏做成冲动，PK刺激下的数字礼物，实则是孤独被标价的痕迹。平台不是中立的舞台，它制定规则也分享收益，因此守住打赏的边界，从来不只是道德呼吁，更是平台必须承担的治理责任。',
       review: {strength:'strong', disciplines:['soc','psy']}
     },
@@ -696,6 +715,7 @@ var NEWS_DATA = {
         }
       ],
       theories: [{id:'technology',label:'科技社会学'},{id:'psy_attachment',label:'依恋理论'}],
+      essayTopics: [{"id":"tech_for_good","label":"科技向善"},{"id":"ai_ethics","label":"AI伦理"},{"id":"self_aware","label":"自我认知"},{"id":"virtual_real","label":"虚拟与真实"}],
       essayQuote: '一个虚拟女主商单报价二十五点八万、超过多数真人网红，这串数字戳破的不只是「虚拟偶像能否赚钱」，更是真实与拟像边界的加速坍塌。当数字人开始承接代言与陪伴，情感正被拆解为可批量生产的商品。我们迷恋的究竟是角色，还是被算法精准投喂的情绪慰藉？技术能复制面孔，却复制不了人与人之间那份不可计算的真诚。',
       review: {strength:'strong', disciplines:['soc','psy']}
     },
@@ -727,6 +747,7 @@ var NEWS_DATA = {
         }
       ],
       theories: [{id:'cultural_capital',label:'文化资本'},{id:'education',label:'教育社会学'}],
+      essayTopics: [{"id":"inherit_innovate","label":"守正创新"},{"id":"tradition_activate","label":"传统文化活化"},{"id":"lifelong_learn","label":"终身学习"},{"id":"times_mission","label":"时代使命"}],
       essayQuote: '历史学家许倬云离世，留给时代的却是温热的提醒：他毕生「为常民写史」，把宏大的王朝叙事，拉回炊烟升起、市井喧嚣的普通人生活。在英雄史观长期占据教科书的年代，这份转向本身就是一种立场——历史的主角从来不是权柄顶端的少数，而是无数沉默却真实活过的生命。念念不忘的，从来不是功业，而是人。',
       review: {strength:'strong', disciplines:['soc']}
     },
@@ -758,6 +779,7 @@ var NEWS_DATA = {
         }
       ],
       theories: [{id:'law',label:'法律社会学'},{id:'econ_moral_hazard',label:'道德风险'}],
+      essayTopics: [{"id":"freedom_rules","label":"自由与规则"},{"id":"persist_flex","label":"坚守与变通"},{"id":"integrity","label":"诚信"},{"id":"righteousness_interest","label":"义与利"}],
       review: {strength:'strong', disciplines:['soc','econ']}
     },
     {
@@ -788,6 +810,7 @@ var NEWS_DATA = {
         }
       ],
       theories: [{id:'technology',label:'科技社会学'},{id:'institutionalism',label:'新制度主义'}],
+      essayTopics: [{"id":"tech_for_good","label":"科技向善"},{"id":"ai_ethics","label":"AI伦理"},{"id":"persist_flex","label":"坚守与变通"},{"id":"fairness","label":"公平正义"}],
       review: {strength:'strong', disciplines:['soc','econ']}
     },
     {
@@ -818,6 +841,7 @@ var NEWS_DATA = {
         }
       ],
       theories: [{id:'environment',label:'环境社会学'},{id:'econ_environmental_econ',label:'环境经济学'}],
+      essayTopics: [{"id":"harmony_nature","label":"人与自然和谐"},{"id":"green_dev","label":"绿色发展"},{"id":"deep_think","label":"深度思考"}],
       review: {strength:'strong', disciplines:['soc','econ']}
     },
     {
@@ -849,6 +873,7 @@ var NEWS_DATA = {
         }
       ],
       theories: [{id:'institutionalism',label:'新制度主义'},{id:'stratification',label:'社会分层'}],
+      essayTopics: [{"id":"persist_flex","label":"坚守与变通"},{"id":"fairness","label":"公平正义"},{"id":"prejudice","label":"偏见与歧视"},{"id":"gain_loss","label":"得与失"}],
       review: {strength:'strong', disciplines:['soc']}
     },
     {
@@ -888,6 +913,7 @@ var NEWS_DATA = {
         }
       ],
       theories: [{id:'econ_behavioral',label:'行为经济学'},{id:'psy_cognitive_bias',label:'认知偏差'}],
+      essayTopics: [{"id":"info_cocoon","label":"信息茧房"},{"id":"righteousness_interest","label":"义与利"},{"id":"deep_think","label":"深度思考"},{"id":"knowledge_anxiety","label":"知识焦虑"}],
       review: {strength:'strong', disciplines:['econ','psy']}
     },
     {
@@ -918,6 +944,7 @@ var NEWS_DATA = {
         }
       ],
       theories: [{id:'econ_supply_demand',label:'供给与需求'},{id:'econ_veblen',label:'索尔斯坦·凡勃伦'}],
+      essayTopics: [{"id":"righteousness_interest","label":"义与利"},{"id":"fairness","label":"公平正义"},{"id":"harmony_nature","label":"人与自然和谐"}],
       review: {strength:'strong', disciplines:['econ']}
     },
     {
@@ -957,6 +984,7 @@ var NEWS_DATA = {
         }
       ],
       theories: [{id:'work',label:'工作社会学'},{id:'law',label:'法律社会学'}],
+      essayTopics: [{"id":"freedom_rules","label":"自由与规则"},{"id":"persist_flex","label":"坚守与变通"},{"id":"integrity","label":"诚信"},{"id":"duty_devote","label":"责任奉献"}],
       review: {strength:'strong', disciplines:['soc','econ']}
     },
     {
@@ -987,6 +1015,7 @@ var NEWS_DATA = {
         }
       ],
       theories: [{id:'institutionalism',label:'新制度主义'},{id:'cultural_capital',label:'文化资本'}],
+      essayTopics: [{"id":"inherit_innovate","label":"守正创新"},{"id":"tradition_activate","label":"传统文化活化"},{"id":"persist_flex","label":"坚守与变通"},{"id":"fairness","label":"公平正义"}],
       review: {strength:'strong', disciplines:['soc']}
     },
     {
@@ -1017,6 +1046,7 @@ var NEWS_DATA = {
         }
       ],
       theories: [{id:'econ_growth',label:'经济增长'},{id:'technology',label:'科技社会学'}],
+      essayTopics: [{"id":"tech_for_good","label":"科技向善"},{"id":"ai_ethics","label":"AI伦理"},{"id":"green_dev","label":"绿色发展"}],
       review: {strength:'strong', disciplines:['econ']}
     },
   ],
@@ -1064,6 +1094,7 @@ var NEWS_DATA = {
         {id:'law', label:'法律'},
         {id:'institutionalism', label:'制度主义'}
       ],
+      essayTopics: [{"id":"freedom_rules","label":"自由与规则"},{"id":"persist_flex","label":"坚守与变通"},{"id":"integrity","label":"诚信"},{"id":"fairness","label":"公平正义"}],
       review: {strength:'strong', disciplines:['soc','psy']}
     },
     {
@@ -1100,6 +1131,7 @@ var NEWS_DATA = {
         {id:'econ_supply_demand', label:'供给与需求'},
         {id:'technology', label:'技术'}
       ],
+      essayTopics: [{"id":"tech_for_good","label":"科技向善"},{"id":"ai_ethics","label":"AI伦理"},{"id":"fairness","label":"公平正义"},{"id":"self_vs_greater","label":"小我与大我"}],
       review: {strength:'strong', disciplines:['econ','soc']}
     },
     {
@@ -1136,6 +1168,7 @@ var NEWS_DATA = {
         {id:'technology', label:'技术'},
         {id:'risk_society', label:'风险社会'}
       ],
+      essayTopics: [{"id":"tech_for_good","label":"科技向善"},{"id":"ai_ethics","label":"AI伦理"},{"id":"risk_uncertain","label":"风险与不确定"},{"id":"virtual_real","label":"虚拟与真实"}],
       review: {strength:'strong', disciplines:['soc','econ']}
     },
     {
@@ -1172,6 +1205,7 @@ var NEWS_DATA = {
         {id:'health', label:'健康'},
         {id:'deviance', label:'越轨'}
       ],
+      essayTopics: [{"id":"freedom_rules","label":"自由与规则"},{"id":"risk_uncertain","label":"风险与不确定"},{"id":"virtual_real","label":"虚拟与真实"},{"id":"righteousness_interest","label":"义与利"}],
       review: {strength:'strong', disciplines:['soc','psy']}
     },
     {
@@ -1217,6 +1251,7 @@ var NEWS_DATA = {
         {id:'risk_society', label:'风险社会'},
         {id:'social_capital', label:'社会资本'}
       ],
+      essayTopics: [{"id":"altruism","label":"利他"},{"id":"trust","label":"信任"},{"id":"community","label":"共同体"},{"id":"risk_uncertain","label":"风险与不确定"}],
       review: {strength:'strong', disciplines:['soc','psy']}
     },
     {
@@ -1253,6 +1288,7 @@ var NEWS_DATA = {
         {id:'institutionalism', label:'制度主义'},
         {id:'education', label:'教育'}
       ],
+      essayTopics: [{"id":"persist_flex","label":"坚守与变通"},{"id":"fairness","label":"公平正义"},{"id":"lifelong_learn","label":"终身学习"},{"id":"knowledge_anxiety","label":"知识焦虑"}],
       review: {strength:'strong', disciplines:['soc','psy']}
     },
     {
@@ -1289,6 +1325,7 @@ var NEWS_DATA = {
         {id:'emotional_labor', label:'情绪劳动'},
         {id:'media', label:'媒介'}
       ],
+      essayTopics: [{"id":"info_cocoon","label":"信息茧房"},{"id":"virtual_real","label":"虚拟与真实"},{"id":"duty_devote","label":"责任奉献"},{"id":"deep_think","label":"深度思考"}],
       review: {strength:'strong', disciplines:['soc','psy']}
     },
     {
@@ -1323,6 +1360,7 @@ var NEWS_DATA = {
         {id:'institutionalism', label:'制度主义'},
         {id:'cultural_capital', label:'文化资本'}
       ],
+      essayTopics: [{"id":"inherit_innovate","label":"守正创新"},{"id":"tradition_activate","label":"传统文化活化"},{"id":"persist_flex","label":"坚守与变通"},{"id":"fairness","label":"公平正义"}],
       review: {strength:'strong', disciplines:['soc']}
     },
     {
@@ -1357,6 +1395,7 @@ var NEWS_DATA = {
         {id:'econ_welfare', label:'福利经济学'},
         {id:'stratification', label:'社会分层'}
       ],
+      essayTopics: [{"id":"fairness","label":"公平正义"},{"id":"prejudice","label":"偏见与歧视"},{"id":"youth_struggle","label":"青春奋斗"},{"id":"freedom_rules","label":"自由与规则"}],
       review: {strength:'strong', disciplines:['econ','soc']}
     },
     {
@@ -1391,6 +1430,7 @@ var NEWS_DATA = {
         {id:'econ_behavioral', label:'行为经济学'},
         {id:'law', label:'法律'}
       ],
+      essayTopics: [{"id":"freedom_rules","label":"自由与规则"},{"id":"persist_flex","label":"坚守与变通"},{"id":"integrity","label":"诚信"},{"id":"righteousness_interest","label":"义与利"}],
       review: {strength:'strong', disciplines:['econ','soc']}
     },
     {
@@ -1425,6 +1465,7 @@ var NEWS_DATA = {
         {id:'work', label:'工作'},
         {id:'law', label:'法律'}
       ],
+      essayTopics: [{"id":"freedom_rules","label":"自由与规则"},{"id":"persist_flex","label":"坚守与变通"},{"id":"integrity","label":"诚信"},{"id":"duty_devote","label":"责任奉献"}],
       review: {strength:'strong', disciplines:['soc','econ']}
     },
     {
@@ -1459,6 +1500,7 @@ var NEWS_DATA = {
         {id:'media', label:'媒介'},
         {id:'attention_economy', label:'注意力经济'}
       ],
+      essayTopics: [{"id":"info_cocoon","label":"信息茧房"},{"id":"virtual_real","label":"虚拟与真实"},{"id":"fast_slow","label":"快与慢"},{"id":"deep_think","label":"深度思考"}],
       review: {strength:'strong', disciplines:['soc','econ']}
     },
     {
@@ -1493,6 +1535,7 @@ var NEWS_DATA = {
         {id:'technology', label:'技术'},
         {id:'alienation', label:'异化'}
       ],
+      essayTopics: [{"id":"tech_for_good","label":"科技向善"},{"id":"ai_ethics","label":"AI伦理"},{"id":"fairness","label":"公平正义"},{"id":"self_aware","label":"自我认知"}],
       review: {strength:'strong', disciplines:['soc','econ']}
     },
     {
@@ -1527,6 +1570,7 @@ var NEWS_DATA = {
         {id:'psy_cognitive_bias', label:'认知偏差'},
         {id:'media', label:'媒介'}
       ],
+      essayTopics: [{"id":"info_cocoon","label":"信息茧房"},{"id":"virtual_real","label":"虚拟与真实"},{"id":"deep_think","label":"深度思考"},{"id":"knowledge_anxiety","label":"知识焦虑"}],
       review: {strength:'strong', disciplines:['psy','soc']}
     },
     {
@@ -1561,6 +1605,7 @@ var NEWS_DATA = {
         {id:'econ_monetary_policy', label:'货币政策'},
         {id:'econ_macro', label:'宏观经济学'}
       ],
+      essayTopics: [{"id":"fairness","label":"公平正义"},{"id":"virtual_real","label":"虚拟与真实"},{"id":"risk_uncertain","label":"风险与不确定"}],
       review: {strength:'strong', disciplines:['econ','soc']}
     },
   ],
@@ -1600,6 +1645,7 @@ var NEWS_DATA = {
         {id:'econ_welfare', label:'福利经济学'},
         {id:'stratification', label:'社会分层'}
       ],
+      essayTopics: [{"id":"fairness","label":"公平正义"},{"id":"prejudice","label":"偏见与歧视"},{"id":"youth_struggle","label":"青春奋斗"},{"id":"persist_flex","label":"坚守与变通"}],
       review: {strength:'strong', disciplines:['econ','soc']}
     },
     {
@@ -1634,6 +1680,7 @@ var NEWS_DATA = {
         {id:'econ_labor', label:'劳动力市场'},
         {id:'work', label:'工作社会学'}
       ],
+      essayTopics: [{"id":"duty_devote","label":"责任奉献"},{"id":"fairness","label":"公平正义"},{"id":"youth_struggle","label":"青春奋斗"},{"id":"risk_uncertain","label":"风险与不确定"}],
       review: {strength:'strong', disciplines:['econ','soc']}
     },
     {
@@ -1670,6 +1717,7 @@ var NEWS_DATA = {
         {id:'risk_society', label:'风险社会理论'},
         {id:'work', label:'工作社会学'}
       ],
+      essayTopics: [{"id":"duty_devote","label":"责任奉献"},{"id":"fairness","label":"公平正义"},{"id":"risk_uncertain","label":"风险与不确定"},{"id":"gain_loss","label":"得与失"}],
       review: {strength:'strong', disciplines:['soc']}
     },
     {
@@ -1695,6 +1743,7 @@ var NEWS_DATA = {
       theories: [
         {id:'risk_society', label:'风险社会理论'}
       ],
+      essayTopics: [{"id":"risk_uncertain","label":"风险与不确定"},{"id":"virtual_real","label":"虚拟与真实"},{"id":"community","label":"共同体"}],
       review: {strength:'medium', disciplines:['soc']}
     },
     {
@@ -1720,6 +1769,7 @@ var NEWS_DATA = {
       theories: [
         {id:'education', label:'教育社会学'}
       ],
+      essayTopics: [{"id":"lifelong_learn","label":"终身学习"},{"id":"fairness","label":"公平正义"},{"id":"knowledge_anxiety","label":"知识焦虑"}],
       review: {strength:'medium', disciplines:['soc']}
     },
     {
@@ -1753,6 +1803,7 @@ var NEWS_DATA = {
         {id:'family', label:'家庭社会学'},
         {id:'education', label:'教育社会学'}
       ],
+      essayTopics: [{"id":"community","label":"共同体"},{"id":"lifelong_learn","label":"终身学习"},{"id":"youth_struggle","label":"青春奋斗"},{"id":"self_vs_greater","label":"小我与大我"}],
       review: {strength:'strong', disciplines:['soc']}
     },
     {
@@ -1786,6 +1837,7 @@ var NEWS_DATA = {
         {id:'econ_welfare', label:'福利经济学'},
         {id:'poverty', label:'贫困社会学'}
       ],
+      essayTopics: [{"id":"altruism","label":"利他"},{"id":"fairness","label":"公平正义"},{"id":"risk_uncertain","label":"风险与不确定"}],
       review: {strength:'strong', disciplines:['econ','soc']}
     },
     {
@@ -1819,6 +1871,7 @@ var NEWS_DATA = {
         {id:'family', label:'家庭社会学'},
         {id:'social_capital', label:'社会资本'}
       ],
+      essayTopics: [{"id":"altruism","label":"利他"},{"id":"trust","label":"信任"},{"id":"community","label":"共同体"}],
       review: {strength:'medium', disciplines:['soc']}
     },
     {
@@ -1853,6 +1906,7 @@ var NEWS_DATA = {
         {id:'econ_welfare', label:'福利经济学'},
         {id:'poverty', label:'贫困社会学'}
       ],
+      essayTopics: [{"id":"altruism","label":"利他"},{"id":"fairness","label":"公平正义"},{"id":"virtual_real","label":"虚拟与真实"},{"id":"risk_uncertain","label":"风险与不确定"}],
       review: {strength:'strong', disciplines:['econ','soc']}
     },
     {
@@ -1898,6 +1952,7 @@ var NEWS_DATA = {
         {id:'psy_mental_health', label:'心理健康'},
         {id:'psy_positive', label:'积极心理学'}
       ],
+      essayTopics: [{"id":"self_aware","label":"自我认知"},{"id":"youth_struggle","label":"青春奋斗"},{"id":"times_mission","label":"时代使命"},{"id":"ai_ethics","label":"AI伦理"}],
       review: {strength:'strong', disciplines:['psy']}
     },
     {
@@ -1931,6 +1986,7 @@ var NEWS_DATA = {
         {id:'psy_mental_health', label:'心理健康'},
         {id:'family', label:'家庭社会学'}
       ],
+      essayTopics: [{"id":"community","label":"共同体"},{"id":"self_aware","label":"自我认知"},{"id":"inherit_innovate","label":"守正创新"},{"id":"ai_ethics","label":"AI伦理"}],
       review: {strength:'medium', disciplines:['soc','psy']}
     },
     {
@@ -1967,6 +2023,7 @@ var NEWS_DATA = {
         {id:'alienation', label:'异化'},
         {id:'work', label:'工作社会学'}
       ],
+      essayTopics: [{"id":"duty_devote","label":"责任奉献"},{"id":"fairness","label":"公平正义"},{"id":"self_aware","label":"自我认知"},{"id":"youth_struggle","label":"青春奋斗"}],
       review: {strength:'strong', disciplines:['soc','econ']}
     },
     {
@@ -2000,6 +2057,7 @@ var NEWS_DATA = {
         {id:'work', label:'工作社会学'},
         {id:'alienation', label:'异化'}
       ],
+      essayTopics: [{"id":"duty_devote","label":"责任奉献"},{"id":"fairness","label":"公平正义"},{"id":"self_aware","label":"自我认知"},{"id":"self_vs_greater","label":"小我与大我"}],
       review: {strength:'medium', disciplines:['soc','econ']}
     },
     {
@@ -2034,6 +2092,7 @@ var NEWS_DATA = {
         {id:'stratification', label:'社会分层'},
         {id:'econ_welfare', label:'福利经济学'}
       ],
+      essayTopics: [{"id":"fairness","label":"公平正义"},{"id":"prejudice","label":"偏见与歧视"},{"id":"times_mission","label":"时代使命"},{"id":"risk_uncertain","label":"风险与不确定"}],
       review: {strength:'strong', disciplines:['econ','soc']}
     },
     {
@@ -2075,6 +2134,7 @@ var NEWS_DATA = {
         {id:'meritocracy', label:'优绩主义'},
         {id:'psy_mental_health', label:'心理健康'}
       ],
+      essayTopics: [{"id":"righteousness_interest","label":"义与利"},{"id":"fairness","label":"公平正义"},{"id":"prejudice","label":"偏见与歧视"},{"id":"self_aware","label":"自我认知"}],
       review: {strength:'strong', disciplines:['soc','psy']}
     },
   ],
@@ -2113,6 +2173,7 @@ var NEWS_DATA = {
         {id:'risk_society', label:'风险社会理论'},
         {id:'social_capital', label:'社会资本'}
       ],
+      essayTopics: [{"id":"altruism","label":"利他"},{"id":"trust","label":"信任"},{"id":"community","label":"共同体"},{"id":"risk_uncertain","label":"风险与不确定"}],
       review: { strength:'risk_society', disciplines:['soc'] }
     },
     {
@@ -2147,6 +2208,7 @@ var NEWS_DATA = {
         {id:'risk_society', label:'风险社会理论'},
         {id:'urban', label:'城市社会学'}
       ],
+      essayTopics: [{"id":"community","label":"共同体"},{"id":"risk_uncertain","label":"风险与不确定"},{"id":"altruism","label":"利他"},{"id":"fairness","label":"公平正义"}],
       review: { strength:'risk_society', disciplines:['soc'] }
     },
     {
@@ -2182,6 +2244,7 @@ var NEWS_DATA = {
         {id:'econ_welfare', label:'福利经济学'},
         {id:'econ_moral_hazard', label:'道德风险'}
       ],
+      essayTopics: [{"id":"integrity","label":"诚信"},{"id":"righteousness_interest","label":"义与利"},{"id":"fairness","label":"公平正义"},{"id":"trust","label":"信任"}],
       review: { strength:'econ_welfare', disciplines:['econ'] }
     },
     {
@@ -2216,6 +2279,7 @@ var NEWS_DATA = {
         {id:'law', label:'法律社会学'},
         {id:'institutionalism', label:'新制度主义'}
       ],
+      essayTopics: [{"id":"freedom_rules","label":"自由与规则"},{"id":"persist_flex","label":"坚守与变通"},{"id":"integrity","label":"诚信"},{"id":"fairness","label":"公平正义"}],
       review: { strength:'law', disciplines:['soc'] }
     },
     {
@@ -2250,6 +2314,7 @@ var NEWS_DATA = {
         {id:'econ_welfare', label:'福利经济学'},
         {id:'social_capital', label:'社会资本'}
       ],
+      essayTopics: [{"id":"altruism","label":"利他"},{"id":"fairness","label":"公平正义"},{"id":"trust","label":"信任"},{"id":"community","label":"共同体"}],
       review: { strength:'econ_welfare', disciplines:['econ'] }
     },
     {
@@ -2284,6 +2349,7 @@ var NEWS_DATA = {
         {id:'deviance', label:'越轨'},
         {id:'econ_moral_hazard', label:'道德风险'}
       ],
+      essayTopics: [{"id":"freedom_rules","label":"自由与规则"},{"id":"integrity","label":"诚信"},{"id":"righteousness_interest","label":"义与利"},{"id":"trust","label":"信任"}],
       review: { strength:'deviance', disciplines:['soc'] }
     },
     {
@@ -2318,6 +2384,7 @@ var NEWS_DATA = {
         {id:'health', label:'健康社会学'},
         {id:'law', label:'法律社会学'}
       ],
+      essayTopics: [{"id":"freedom_rules","label":"自由与规则"},{"id":"persist_flex","label":"坚守与变通"},{"id":"integrity","label":"诚信"},{"id":"fairness","label":"公平正义"}],
       review: { strength:'health', disciplines:['soc'] }
     },
     {
@@ -2352,6 +2419,7 @@ var NEWS_DATA = {
         {id:'rationalization_theory', label:'理性化理论'},
         {id:'technology', label:'科技社会学'}
       ],
+      essayTopics: [{"id":"tech_for_good","label":"科技向善"},{"id":"ai_ethics","label":"AI伦理"},{"id":"virtual_real","label":"虚拟与真实"},{"id":"gain_loss","label":"得与失"}],
       review: { strength:'rationalization_theory', disciplines:['soc'] }
     },
     {
@@ -2386,6 +2454,7 @@ var NEWS_DATA = {
         {id:'econ_growth', label:'经济增长'},
         {id:'technology', label:'科技社会学'}
       ],
+      essayTopics: [{"id":"tech_for_good","label":"科技向善"},{"id":"ai_ethics","label":"AI伦理"},{"id":"green_dev","label":"绿色发展"},{"id":"nation_resonance","label":"家国同频"}],
       review: { strength:'econ_growth', disciplines:['econ'] }
     },
     {
@@ -2420,6 +2489,7 @@ var NEWS_DATA = {
         {id:'education', label:'教育社会学'},
         {id:'health', label:'健康社会学'}
       ],
+      essayTopics: [{"id":"risk_uncertain","label":"风险与不确定"},{"id":"lifelong_learn","label":"终身学习"},{"id":"youth_struggle","label":"青春奋斗"}],
       review: { strength:'education', disciplines:['soc'] }
     },
     {
@@ -2454,6 +2524,7 @@ var NEWS_DATA = {
         {id:'econ_monopoly', label:'垄断'},
         {id:'technology', label:'科技社会学'}
       ],
+      essayTopics: [{"id":"tech_for_good","label":"科技向善"},{"id":"ai_ethics","label":"AI伦理"},{"id":"fairness","label":"公平正义"},{"id":"info_cocoon","label":"信息茧房"}],
       review: { strength:'econ_monopoly', disciplines:['econ'] }
     },
     {
@@ -2489,6 +2560,7 @@ var NEWS_DATA = {
         {id:'work', label:'工作社会学'},
         {id:'psy_self_efficacy', label:'自我效能'}
       ],
+      essayTopics: [{"id":"duty_devote","label":"责任奉献"},{"id":"fairness","label":"公平正义"},{"id":"self_aware","label":"自我认知"},{"id":"youth_struggle","label":"青春奋斗"}],
       review: { strength:'work', disciplines:['soc','psy'] }
     },
     {
@@ -2523,6 +2595,7 @@ var NEWS_DATA = {
         {id:'econ_moral_hazard', label:'道德风险'},
         {id:'law', label:'法律社会学'}
       ],
+      essayTopics: [{"id":"freedom_rules","label":"自由与规则"},{"id":"persist_flex","label":"坚守与变通"},{"id":"integrity","label":"诚信"},{"id":"righteousness_interest","label":"义与利"}],
       review: { strength:'econ_moral_hazard', disciplines:['econ'] }
     },
     {
@@ -2557,6 +2630,7 @@ var NEWS_DATA = {
         {id:'media', label:'媒介社会学'},
         {id:'psy_emotion', label:'情绪与动机'}
       ],
+      essayTopics: [{"id":"info_cocoon","label":"信息茧房"},{"id":"virtual_real","label":"虚拟与真实"},{"id":"deep_think","label":"深度思考"},{"id":"self_aware","label":"自我认知"}],
       review: { strength:'media', disciplines:['soc'] }
     },
     {
@@ -2591,6 +2665,7 @@ var NEWS_DATA = {
         {id:'media', label:'媒介社会学'},
         {id:'attention_economy', label:'注意力经济'}
       ],
+      essayTopics: [{"id":"info_cocoon","label":"信息茧房"},{"id":"virtual_real","label":"虚拟与真实"},{"id":"fast_slow","label":"快与慢"},{"id":"deep_think","label":"深度思考"}],
       review: { strength:'media', disciplines:['soc'] }
     },
   ],
@@ -2630,6 +2705,7 @@ var NEWS_DATA = {
         {id:'risk_society', label:'风险社会理论'},
         {id:'social_capital', label:'社会资本'}
       ],
+      essayTopics: [{"id":"altruism","label":"利他"},{"id":"trust","label":"信任"},{"id":"community","label":"共同体"},{"id":"risk_uncertain","label":"风险与不确定"}],
       review: { strength:'risk_society', disciplines:['soc'] }
     },
     {
@@ -2664,6 +2740,7 @@ var NEWS_DATA = {
         {id:'institutionalism', label:'新制度主义'},
         {id:'education', label:'教育社会学'}
       ],
+      essayTopics: [{"id":"persist_flex","label":"坚守与变通"},{"id":"fairness","label":"公平正义"},{"id":"lifelong_learn","label":"终身学习"},{"id":"youth_struggle","label":"青春奋斗"}],
       review: { strength:'institutionalism', disciplines:['soc'] }
     },
     {
@@ -2699,6 +2776,7 @@ var NEWS_DATA = {
         {id:'econ_moral_hazard', label:'道德风险'},
         {id:'deviance', label:'越轨'}
       ],
+      essayTopics: [{"id":"freedom_rules","label":"自由与规则"},{"id":"integrity","label":"诚信"},{"id":"righteousness_interest","label":"义与利"},{"id":"trust","label":"信任"}],
       review: { strength:'econ_moral_hazard', disciplines:['econ','soc'] }
     },
     {
@@ -2727,6 +2805,7 @@ var NEWS_DATA = {
         {id:'work', label:'工作社会学'},
         {id:'econ_labor', label:'劳动力市场'}
       ],
+      essayTopics: [{"id":"duty_devote","label":"责任奉献"},{"id":"fairness","label":"公平正义"},{"id":"times_mission","label":"时代使命"},{"id":"ai_ethics","label":"AI伦理"}],
       review: { strength:'work', disciplines:['soc','econ'] }
     },
     {
@@ -2762,6 +2841,7 @@ var NEWS_DATA = {
         {id:'econ_welfare', label:'福利经济学'},
         {id:'social_capital', label:'社会资本'}
       ],
+      essayTopics: [{"id":"altruism","label":"利他"},{"id":"fairness","label":"公平正义"},{"id":"trust","label":"信任"},{"id":"community","label":"共同体"}],
       review: { strength:'econ_welfare', disciplines:['econ','soc'] }
     },
     {
@@ -2797,6 +2877,7 @@ var NEWS_DATA = {
         {id:'econ_supply_demand', label:'供给与需求'},
         {id:'technology', label:'科技社会学'}
       ],
+      essayTopics: [{"id":"tech_for_good","label":"科技向善"},{"id":"ai_ethics","label":"AI伦理"},{"id":"fairness","label":"公平正义"},{"id":"self_vs_greater","label":"小我与大我"}],
       review: { strength:'econ_supply_demand', disciplines:['econ','soc'] }
     },
     {
@@ -2832,6 +2913,7 @@ var NEWS_DATA = {
         {id:'econ_labor', label:'劳动力市场'},
         {id:'work', label:'工作社会学'}
       ],
+      essayTopics: [{"id":"duty_devote","label":"责任奉献"},{"id":"fairness","label":"公平正义"},{"id":"times_mission","label":"时代使命"},{"id":"virtual_real","label":"虚拟与真实"}],
       review: { strength:'econ_labor', disciplines:['econ','soc'] }
     },
     {
@@ -2866,6 +2948,7 @@ var NEWS_DATA = {
         {id:'rationalization_theory', label:'理性化理论'},
         {id:'technology', label:'科技社会学'}
       ],
+      essayTopics: [{"id":"tech_for_good","label":"科技向善"},{"id":"ai_ethics","label":"AI伦理"},{"id":"freedom_rules","label":"自由与规则"},{"id":"harmony_nature","label":"人与自然和谐"}],
       review: { strength:'rationalization_theory', disciplines:['soc'] }
     },
     {
@@ -2901,6 +2984,7 @@ var NEWS_DATA = {
         {id:'media', label:'媒介社会学'},
         {id:'attention_economy', label:'注意力经济'}
       ],
+      essayTopics: [{"id":"info_cocoon","label":"信息茧房"},{"id":"virtual_real","label":"虚拟与真实"},{"id":"fast_slow","label":"快与慢"},{"id":"deep_think","label":"深度思考"}],
       review: { strength:'media', disciplines:['soc','econ'] }
     },
     {
@@ -2936,6 +3020,7 @@ var NEWS_DATA = {
         {id:'health', label:'健康社会学'},
         {id:'risk_society', label:'风险社会理论'}
       ],
+      essayTopics: [{"id":"risk_uncertain","label":"风险与不确定"},{"id":"gain_loss","label":"得与失"},{"id":"community","label":"共同体"},{"id":"harmony_nature","label":"人与自然和谐"}],
       review: { strength:'health', disciplines:['soc'] }
     },
     {
@@ -2970,6 +3055,7 @@ var NEWS_DATA = {
         {id:'science', label:'科学社会学'},
         {id:'econ_growth', label:'经济增长'}
       ],
+      essayTopics: [{"id":"tech_for_good","label":"科技向善"},{"id":"green_dev","label":"绿色发展"},{"id":"persist_flex","label":"坚守与变通"},{"id":"community","label":"共同体"}],
       review: { strength:'science', disciplines:['soc','econ'] }
     },
     {
@@ -3004,6 +3090,7 @@ var NEWS_DATA = {
         {id:'media', label:'媒介社会学'},
         {id:'psy_emotion', label:'情绪与动机'}
       ],
+      essayTopics: [{"id":"info_cocoon","label":"信息茧房"},{"id":"virtual_real","label":"虚拟与真实"},{"id":"deep_think","label":"深度思考"},{"id":"self_aware","label":"自我认知"}],
       review: { strength:'media', disciplines:['soc','psy'] }
     },
     {
@@ -3038,6 +3125,7 @@ var NEWS_DATA = {
         {id:'econ_human_capital', label:'人力资本'},
         {id:'work', label:'工作社会学'}
       ],
+      essayTopics: [{"id":"duty_devote","label":"责任奉献"},{"id":"fairness","label":"公平正义"},{"id":"lifelong_learn","label":"终身学习"},{"id":"youth_struggle","label":"青春奋斗"}],
       review: { strength:'econ_human_capital', disciplines:['econ','soc'] }
     },
     {
@@ -3072,6 +3160,7 @@ var NEWS_DATA = {
         {id:'cultural_capital', label:'文化资本'},
         {id:'institutionalism', label:'新制度主义'}
       ],
+      essayTopics: [{"id":"inherit_innovate","label":"守正创新"},{"id":"tradition_activate","label":"传统文化活化"},{"id":"persist_flex","label":"坚守与变通"},{"id":"fairness","label":"公平正义"}],
       review: { strength:'cultural_capital', disciplines:['soc','econ'] }
     },
     {
@@ -3106,6 +3195,7 @@ var NEWS_DATA = {
         {id:'stratification', label:'社会分层'},
         {id:'psy_stress', label:'压力与应对'}
       ],
+      essayTopics: [{"id":"fairness","label":"公平正义"},{"id":"prejudice","label":"偏见与歧视"},{"id":"self_aware","label":"自我认知"},{"id":"youth_struggle","label":"青春奋斗"}],
       review: { strength:'stratification', disciplines:['soc','psy'] }
     },
   ],
@@ -3141,6 +3231,7 @@ var NEWS_DATA = {
         }
       ],
       theories: [{id:'risk_society',label:'风险社会理论'},{id:'globalization',label:'全球化'},{id:'econ_supply_demand',label:'供给与需求'}],
+      essayTopics: [{"id":"civ_exchange","label":"文明互鉴"},{"id":"fairness","label":"公平正义"},{"id":"community","label":"共同体"},{"id":"risk_uncertain","label":"风险与不确定"}],
       major: true,
       platforms: ['微博热搜','百度热搜','今日头条','知乎热榜'],
       review: {strength:'strong', disciplines:['soc','econ']}
@@ -3175,6 +3266,7 @@ var NEWS_DATA = {
         }
       ],
       theories: [{id:'econ_adverse_selection',label:'逆向选择'},{id:'deviance',label:'越轨'},{id:'econ_moral_hazard',label:'道德风险'}],
+      essayTopics: [{"id":"freedom_rules","label":"自由与规则"},{"id":"integrity","label":"诚信"},{"id":"righteousness_interest","label":"义与利"},{"id":"fairness","label":"公平正义"}],
       review: {strength:'strong', disciplines:['soc','econ']}
     },
     {
@@ -3207,6 +3299,7 @@ var NEWS_DATA = {
         }
       ],
       theories: [{id:'econ_public_goods',label:'公共物品'},{id:'law',label:'法律社会学'},{id:'digital',label:'数字社会学'}],
+      essayTopics: [{"id":"tech_for_good","label":"科技向善"},{"id":"ai_ethics","label":"AI伦理"},{"id":"info_cocoon","label":"信息茧房"},{"id":"virtual_real","label":"虚拟与真实"}],
       review: {strength:'strong', disciplines:['soc','econ']}
     },
     {
@@ -3239,6 +3332,7 @@ var NEWS_DATA = {
         }
       ],
       theories: [{id:'emotional_labor',label:'情绪劳动'},{id:'econ_behavioral',label:'行为经济学'},{id:'socialization',label:'社会化'}],
+      essayTopics: [{"id":"duty_devote","label":"责任奉献"},{"id":"righteousness_interest","label":"义与利"},{"id":"deep_think","label":"深度思考"},{"id":"self_aware","label":"自我认知"}],
       review: {strength:'strong', disciplines:['soc','econ','psy']}
     },
     {
@@ -3271,6 +3365,7 @@ var NEWS_DATA = {
         }
       ],
       theories: [{id:'econ_moral_hazard',label:'道德风险'},{id:'technology',label:'科技社会学'},{id:'psy_loss_aversion',label:'损失厌恶'}],
+      essayTopics: [{"id":"tech_for_good","label":"科技向善"},{"id":"ai_ethics","label":"AI伦理"},{"id":"integrity","label":"诚信"},{"id":"righteousness_interest","label":"义与利"}],
       review: {strength:'strong', disciplines:['econ','soc','psy']}
     },
     {
@@ -3304,6 +3399,7 @@ var NEWS_DATA = {
         }
       ],
       theories: [{id:'panopticon',label:'全景敞视'},{id:'goffman',label:'戈夫曼'},{id:'digital',label:'数字社会学'}],
+      essayTopics: [{"id":"tech_for_good","label":"科技向善"},{"id":"ai_ethics","label":"AI伦理"},{"id":"info_cocoon","label":"信息茧房"},{"id":"virtual_real","label":"虚拟与真实"}],
       review: {strength:'strong', disciplines:['soc']}
     },
     {
@@ -3336,6 +3432,7 @@ var NEWS_DATA = {
         }
       ],
       theories: [{id:'capital_forms',label:'资本形式'},{id:'media',label:'媒介社会学'},{id:'education',label:'教育社会学'}],
+      essayTopics: [{"id":"inherit_innovate","label":"守正创新"},{"id":"info_cocoon","label":"信息茧房"},{"id":"virtual_real","label":"虚拟与真实"},{"id":"lifelong_learn","label":"终身学习"}],
       review: {strength:'strong', disciplines:['soc']}
     },
     {
@@ -3368,6 +3465,7 @@ var NEWS_DATA = {
         }
       ],
       theories: [{id:'psy_obedience',label:'服从权威'},{id:'psy_milgram',label:'斯坦利·米尔格拉姆'},{id:'education',label:'教育社会学'}],
+      essayTopics: [{"id":"freedom_rules","label":"自由与规则"},{"id":"lifelong_learn","label":"终身学习"},{"id":"self_aware","label":"自我认知"},{"id":"youth_struggle","label":"青春奋斗"}],
       review: {strength:'strong', disciplines:['soc','psy']}
     },
     {
@@ -3400,6 +3498,7 @@ var NEWS_DATA = {
         }
       ],
       theories: [{id:'technology',label:'科技社会学'},{id:'rationalization_concept',label:'理性化'},{id:'law',label:'法律社会学'}],
+      essayTopics: [{"id":"tech_for_good","label":"科技向善"},{"id":"ai_ethics","label":"AI伦理"},{"id":"freedom_rules","label":"自由与规则"},{"id":"persist_flex","label":"坚守与变通"}],
       review: {strength:'strong', disciplines:['soc']}
     },
     {
@@ -3432,6 +3531,7 @@ var NEWS_DATA = {
         }
       ],
       theories: [{id:'econ_human_capital',label:'人力资本'},{id:'institutionalism',label:'新制度主义'},{id:'work',label:'工作社会学'}],
+      essayTopics: [{"id":"persist_flex","label":"坚守与变通"},{"id":"duty_devote","label":"责任奉献"},{"id":"fairness","label":"公平正义"},{"id":"lifelong_learn","label":"终身学习"}],
       review: {strength:'strong', disciplines:['econ','soc']}
     },
     {
@@ -3464,6 +3564,7 @@ var NEWS_DATA = {
         }
       ],
       theories: [{id:'econ_gdp',label:'国内生产总值'},{id:'urban',label:'城市社会学'},{id:'stratification',label:'社会分层'}],
+      essayTopics: [{"id":"fairness","label":"公平正义"},{"id":"prejudice","label":"偏见与歧视"},{"id":"community","label":"共同体"},{"id":"risk_uncertain","label":"风险与不确定"}],
       review: {strength:'strong', disciplines:['econ','soc']}
     },
     {
@@ -3496,6 +3597,7 @@ var NEWS_DATA = {
         }
       ],
       theories: [{id:'econ_monetary_policy',label:'货币政策'},{id:'econ_inflation',label:'通货膨胀'},{id:'globalization',label:'全球化'}],
+      essayTopics: [{"id":"civ_exchange","label":"文明互鉴"},{"id":"fairness","label":"公平正义"},{"id":"community","label":"共同体"},{"id":"virtual_real","label":"虚拟与真实"}],
       review: {strength:'strong', disciplines:['econ']}
     },
     {
@@ -3528,6 +3630,7 @@ var NEWS_DATA = {
         }
       ],
       theories: [{id:'econ_behavioral',label:'行为经济学'},{id:'econ_public_finance',label:'公共财政'},{id:'durkheim',label:'涂尔干'}],
+      essayTopics: [{"id":"righteousness_interest","label":"义与利"},{"id":"fairness","label":"公平正义"},{"id":"community","label":"共同体"},{"id":"self_vs_greater","label":"小我与大我"}],
       review: {strength:'strong', disciplines:['econ','psy','soc']}
     },
     {
@@ -3561,6 +3664,7 @@ var NEWS_DATA = {
         }
       ],
       theories: [{id:'media',label:'媒介社会学'},{id:'family',label:'家庭社会学'},{id:'psy_conformity',label:'从众'}],
+      essayTopics: [{"id":"info_cocoon","label":"信息茧房"},{"id":"virtual_real","label":"虚拟与真实"},{"id":"community","label":"共同体"},{"id":"deep_think","label":"深度思考"}],
       review: {strength:'strong', disciplines:['soc','psy']}
     },
     {
@@ -3593,6 +3697,7 @@ var NEWS_DATA = {
         }
       ],
       theories: [{id:'econ_supply_demand',label:'供给与需求'},{id:'technology',label:'科技社会学'},{id:'globalization',label:'全球化'}],
+      essayTopics: [{"id":"civ_exchange","label":"文明互鉴"},{"id":"tech_for_good","label":"科技向善"},{"id":"ai_ethics","label":"AI伦理"},{"id":"fairness","label":"公平正义"}],
       review: {strength:'strong', disciplines:['econ','soc']}
     },
   ]
