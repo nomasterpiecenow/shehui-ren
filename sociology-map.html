@@ -164,6 +164,7 @@
         .section-header {
             text-align: center;
             margin-bottom: 28px;
+            position: relative;
         }
         .section-num {
             font-family: var(--font-mono);
@@ -618,6 +619,16 @@
         /* 速用/完整 模式开关（v1.37） */
         .mode-switch{display:flex;gap:4px;margin:18px auto 4px;padding:4px;background:var(--bg-card);border:1px solid var(--border-light);border-radius:999px;width:fit-content;justify-content:center}
         .mode-btn{font-family:var(--font-body);font-size:13px;font-weight:600;color:var(--text-muted);background:transparent;border:none;padding:8px 18px;border-radius:999px;cursor:pointer;transition:all .2s}
+        /* 导出素材入口：社会热点页面内的图标按钮（锚定在标题区右上角，不进顶部导航） */
+        .export-icon{
+          position:absolute; top:4px; right:0;
+          display:inline-flex; align-items:center; justify-content:center;
+          width:40px; height:40px; border-radius:999px; flex-shrink:0;
+          background:var(--bg-card); border:1px solid var(--border-light);
+          color:var(--text-muted); text-decoration:none; cursor:pointer; transition:all .2s;
+        }
+        .export-icon svg{width:19px; height:19px; display:block;}
+        .export-icon:hover{color:#fff; background:var(--red); border-color:var(--red);}
         .mode-btn.active{background:var(--red);color:#fff;box-shadow:0 2px 8px rgba(214,90,48,.25)}
         /* 详情面板内单篇模式开关（不联动外部大开关） */
         .dp-title-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
@@ -817,6 +828,8 @@
             .topics-topbar .date-trigger{flex:1;width:auto;margin:0;min-width:0;white-space:nowrap}
             .topics-topbar .mode-switch{margin:0;flex-shrink:0}
             .mode-btn{flex:0 1 auto;text-align:center;padding:12px 14px}
+            /* 移动端：图标锚定在标题区右上角（与桌面一致），缩小尺寸避免挤占居中标题 */
+            .export-icon{width:36px;height:36px;top:2px;right:0}
 
             /* 页面主区：A11 新闻列表占满，A10 收起为抽屉 */
             .topics-layout { flex-direction: column; gap: 16px; }
@@ -875,7 +888,6 @@
         <a href="#" class="tab-link active" data-page="page-topics">社会热点</a>
         <a href="#" class="tab-link" data-page="page-map">知识图谱</a>
         <a href="#" class="nav-guide" onclick="openGuide();return false;">怎么用</a>
-        <a href="news-export.html" class="nav-guide" target="_blank" rel="noopener noreferrer">导出素材</a>
     </div>
     </nav>
 
@@ -965,14 +977,21 @@
   <div class="topics-main">
     <div class="section-header">
         <span class="section-num">02 / 社会热点</span>
-        <h2 class="section-title">用社科视角，把热点变成你的作文素材</h2>
-        <p class="section-subtitle">每日一条时事热点 · 社科硬核解读，直接能用的议论文素材</p>
+        <h2 class="section-title" id="heroTitle">世间热点皆素材</h2>
+        <p class="section-subtitle" id="heroSubtitle">每一个热点，都是直接能用的议论文素材</p>
+        <a href="news-export.html" class="export-icon" target="_blank" rel="noopener noreferrer" title="导出素材" aria-label="导出素材">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+            <polyline points="7 10 12 15 17 10"/>
+            <line x1="12" y1="15" x2="12" y2="3"/>
+          </svg>
+        </a>
     </div>
     <div class="topics-topbar">
       <button class="date-trigger" id="dateTrigger" type="button">日期 ▾</button>
       <div class="mode-switch" id="modeSwitch" role="group" aria-label="阅读模式">
         <button class="mode-btn" data-mode="quick" type="button" onclick="setNewsMode('quick')">速用 · 作文语段</button>
-        <button class="mode-btn" data-mode="full" type="button" onclick="setNewsMode('full')">完整 · 全解读</button>
+        <button class="mode-btn" data-mode="full" type="button" onclick="setNewsMode('full')">进阶 · 社科视角</button>
       </div>
     </div>
     <div class="topics-grid" id="topicsGrid"></div>
@@ -4867,12 +4886,25 @@ document.querySelectorAll('.tab-link').forEach(link => {
 // ===== 速用/完整 阅读模式（v1.37）=====
 let newsMode = localStorage.getItem('shehui_news_mode') || 'quick';
 let detailMode = null; // 'quick'|'full'|null；null 表示跟随 newsMode
+// 大标题文案随模式锚定（v1.40）
+const HERO_COPY = {
+    quick: { title: '世间热点皆素材', subtitle: '每一个热点，都是直接能用的议论文素材' },
+    full:  { title: '社科视角，站得更高', subtitle: '我提供视角，你自由发挥' }
+};
+function updateHeroCopy() {
+    const t = document.getElementById('heroTitle');
+    const s = document.getElementById('heroSubtitle');
+    const c = HERO_COPY[newsMode] || HERO_COPY.quick;
+    if (t) t.textContent = c.title;
+    if (s) s.textContent = c.subtitle;
+}
 function setNewsMode(mode) {
     newsMode = mode;
     try { localStorage.setItem('shehui_news_mode', mode); } catch (e) {}
     // 只同步页面顶部大开关
     const outer = document.getElementById('modeSwitch');
     if (outer) outer.querySelectorAll('.mode-btn').forEach(b => b.classList.toggle('active', b.dataset.mode === mode));
+    updateHeroCopy();
     // 重新渲染列表（速用模式卡片显示 essayQuote）
     const active = document.querySelector('.date-btn-side.active');
     if (active) renderNewsForDate(active.dataset.date);
@@ -4888,6 +4920,7 @@ function setDetailMode(mode) {
 }
 
 function renderNews() {
+    updateHeroCopy();
     const outer = document.getElementById('modeSwitch');
     if (outer) outer.querySelectorAll('.mode-btn').forEach(b => b.classList.toggle('active', b.dataset.mode === newsMode));
     const groupsEl = document.getElementById('dateNavGroups');

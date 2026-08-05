@@ -53,6 +53,28 @@
   .print-btn:hover{opacity:.9;}
   .hint{font-size:11.5px;color:var(--faint);width:100%;margin-top:-2px;}
 
+  /* ===== 日期选择条（不打印） ===== */
+  .datebar{
+    max-width:210mm; margin:14px auto 0; padding:0 4px;
+    display:flex; flex-direction:column; gap:10px;
+  }
+  .datebar-head{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;}
+  .datebar-title{font-size:13px;font-weight:700;color:var(--sub);}
+  .datebar-actions{display:inline-flex;gap:6px;}
+  .datebar-actions button{
+    border:1px solid var(--line);background:#fff;color:var(--sub);
+    font-size:12px;font-weight:600;padding:5px 11px;border-radius:999px;cursor:pointer;transition:.15s;
+  }
+  .datebar-actions button:hover{background:var(--accent-soft);color:var(--accent);border-color:#d4e2ff;}
+  .datechips{display:flex;flex-wrap:wrap;gap:8px;}
+  .datechip{
+    border:1px solid var(--line);background:#fff;color:var(--sub);
+    font-size:12.5px;font-weight:600;padding:6px 12px;border-radius:999px;cursor:pointer;
+    transition:.15s; user-select:none;
+  }
+  .datechip:hover{border-color:#d4e2ff;color:var(--accent);}
+  .datechip.active{background:var(--accent);color:#fff;border-color:var(--accent);}
+
   /* ===== 纸张 ===== */
   .doc{
     width:210mm; max-width:100%; margin:22px auto 60px; background:var(--sheet);
@@ -116,6 +138,7 @@
     @page{ size:A4; margin:12mm; }
     html,body{background:#fff;}
     .toolbar{display:none !important;}
+    .datebar{display:none !important;}
     .doc{width:auto;max-width:none;margin:0;box-shadow:none;border-radius:0;padding:0;}
     .cover{break-after:avoid;}
     .card{box-shadow:none;}
@@ -141,14 +164,26 @@
     <span class="hint">提示：在打印对话框里选「另存为 PDF」即可生成电子素材册；或直接连接打印机输出 A4，裁开随身携带朗读记忆。</span>
   </div>
 
+  <div class="datebar">
+    <div class="datebar-head">
+      <span class="datebar-title">选择日期（可多选，同一日期内不再细分）</span>
+      <div class="datebar-actions">
+        <button type="button" data-act="last7">最近 7 天</button>
+        <button type="button" data-act="all">全选</button>
+        <button type="button" data-act="clear">清除</button>
+      </div>
+    </div>
+    <div class="datechips" id="dateChips"></div>
+  </div>
+
   <div class="doc">
     <div class="cover">
       <h1>社会人 · 作文素材卡片</h1>
-      <p class="sub">近 7 天社会热点 · 带社科视角解读 · 可直接朗读记忆</p>
+      <p class="sub">所选日期社会热点 · 带社科视角解读 · 可直接朗读记忆</p>
       <p class="range" id="range"></p>
     </div>
     <div class="grid standard" id="grid"></div>
-    <div class="empty" id="empty" style="display:none">暂无可导出的新闻数据。</div>
+    <div class="empty" id="empty" style="display:none">暂无可导出的新闻数据（请至少选择一个日期）。</div>
   </div>
 
 <script src="news-data.js"></script>
@@ -159,6 +194,7 @@
   var emptyEl = document.getElementById('empty');
   var metaEl = document.getElementById('meta');
   var rangeEl = document.getElementById('range');
+  var dateChipsEl = document.getElementById('dateChips');
 
   // 数据校验：NEWS_DATA 由 news-data.js 注入（全局 var）
   if (typeof NEWS_DATA === 'undefined') {
@@ -167,32 +203,53 @@
     return;
   }
 
-  // 近 7 天（按日期降序取前 7），全量导出，不做精选
-  var dates = Object.keys(NEWS_DATA).sort().reverse().slice(0, 7);
-  var items = [];
-  dates.forEach(function(d){
-    var arr = NEWS_DATA[d] || [];
-    arr.forEach(function(it){
-      // 防御：缺字段时给兜底，避免整页崩
-      items.push({
-        _date: d,
-        title: it.title || '（无标题）',
-        source: it.source || '',
-        major: !!it.major,
-        gist: it.gist || '',
-        interpretations: Array.isArray(it.interpretations) ? it.interpretations : []
+  // 所有可用日期（降序）
+  var allDates = Object.keys(NEWS_DATA).sort().reverse();
+  // 默认选中最近 7 天（用户可自由改，不再锁死区间）
+  var selected = new Set(allDates.slice(0, 7));
+
+  // 渲染日期选择 chips
+  function renderChips(){
+    dateChipsEl.innerHTML = allDates.map(function(d){
+      var on = selected.has(d) ? ' active' : '';
+      return '<button type="button" class="datechip' + on + '" data-d="' + d + '">' + d + '</button>';
+    }).join('');
+  }
+
+  // 从选中日期收集卡片（同一日期内全量，不再细分）
+  function getItems(){
+    var items = [];
+    allDates.forEach(function(d){
+      if (!selected.has(d)) return;
+      var arr = NEWS_DATA[d] || [];
+      arr.forEach(function(it){
+        // 防御：缺字段时给兜底，避免整页崩
+        items.push({
+          _date: d,
+          title: it.title || '（无标题）',
+          source: it.source || '',
+          major: !!it.major,
+          gist: it.gist || '',
+          interpretations: Array.isArray(it.interpretations) ? it.interpretations : []
+        });
       });
     });
-  });
+    return items;
+  }
 
   // 统计与日期区间
-  var total = items.length;
-  metaEl.textContent = '近 7 天 · 共 ' + total + ' 条 · 全量导出';
-  if (dates.length) {
-    var newest = dates[0], oldest = dates[dates.length - 1];
-    rangeEl.textContent = '数据区间：' + oldest + ' ～ ' + newest + '（每日 15 条，含社会学 / 经济学 / 心理学多视角解读）';
-  } else {
-    rangeEl.textContent = '';
+  function updateMeta(){
+    var total = 0;
+    selected.forEach(function(d){ total += (NEWS_DATA[d] || []).length; });
+    metaEl.textContent = '已选 ' + selected.size + ' 天 · 共 ' + total + ' 条';
+    if (selected.size) {
+      var sel = allDates.filter(function(d){ return selected.has(d); });
+      var newest = sel[0], oldest = sel[sel.length - 1];
+      var span = (newest === oldest) ? newest : (oldest + ' ～ ' + newest);
+      rangeEl.textContent = '数据区间：' + span + '（每日 15 条，含社会学 / 经济学 / 心理学多视角解读）';
+    } else {
+      rangeEl.textContent = '';
+    }
   }
 
   function esc(s){ return String(s).replace(/[&<>]/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;'}[c]; }); }
@@ -228,13 +285,39 @@
   }
 
   function render(){
-    if (!total) { emptyEl.style.display = 'block'; grid.innerHTML = ''; return; }
+    var items = getItems();
+    if (!items.length) { emptyEl.style.display = 'block'; grid.innerHTML = ''; return; }
     emptyEl.style.display = 'none';
     // 批量拼接，减少 DOM 操作
     var html = '';
     for (var i = 0; i < items.length; i++) html += cardHTML(items[i]);
     grid.innerHTML = html;
   }
+
+  // 日期 chip 多选切换
+  dateChipsEl.addEventListener('click', function(e){
+    var btn = e.target.closest('button');
+    if (!btn) return;
+    var d = btn.getAttribute('data-d');
+    if (selected.has(d)) selected.delete(d); else selected.add(d);
+    btn.classList.toggle('active');
+    updateMeta();
+    render();
+  });
+
+  // 快捷操作：最近 7 天 / 全选 / 清除
+  var actions = document.querySelector('.datebar-actions');
+  actions.addEventListener('click', function(e){
+    var btn = e.target.closest('button');
+    if (!btn) return;
+    var act = btn.getAttribute('data-act');
+    if (act === 'last7') selected = new Set(allDates.slice(0, 7));
+    else if (act === 'all') selected = new Set(allDates);
+    else if (act === 'clear') selected = new Set();
+    renderChips();
+    updateMeta();
+    render();
+  });
 
   // 密度切换
   var seg = document.getElementById('seg');
@@ -247,6 +330,9 @@
     render();
   });
 
+  // 初始渲染
+  renderChips();
+  updateMeta();
   render();
 })();
 </script>
