@@ -683,7 +683,7 @@
     <section id="overview">
         <h1>社会人 <em>功能模块说明</em></h1>
         <p class="subtitle">帮助初学者理解社会科学理论的可视化网站 · 本文档是功能契约，所有改动需同步更新</p>
-        <span class="version-badge">v1.44 · 2026-08-06</span>
+        <span class="version-badge">v1.45 · 2026-08-06</span>
 
         <h3>产品定位</h3>
         <p><strong>用社会科学看社会</strong> —— 将高大上的理论落地到社会生活的实践中。网站包含两个页面：</p>
@@ -696,6 +696,120 @@
             <li><strong>社会热点（首页）</strong>：每日抓取新闻，用社会科学理论解读，让理论接地气</li>
             <li><strong>知识图谱</strong>：<strong>311个节点</strong>（社会学107·经济学102·心理学102；社会学含思想家33·理论21·概念35·领域18，经济/心理各思想家29·理论21·概念34·领域18），采用力导向有机布局（学科以外环颜色区分、<strong>可选时间轴 X 约束——刻度仅在有节点的年段绘制</strong>），展示社会科学三大领域理论的发展脉络与跨学科网络</li>
         </ul>
+    </section>
+
+    <!-- ============ 第一部分：后端逻辑 ============ -->
+    <section id="part-backend-banner" style="background:linear-gradient(135deg,#1f2a44,#2d3e63);color:#fff;padding:22px 26px;border-radius:12px;margin:8px 0 18px">
+      <h2 style="color:#fff;margin:0 0 6px">第一部分 · 后端逻辑（数据流与自动化）</h2>
+      <p style="margin:0;opacity:.85;font-size:13.5px;line-height:1.7">新闻是怎么抓的、怎么审的、怎么生成数据、怎么上线、怎么备份——这一部分是"看不见的引擎"。前端看到的内容，全部由这里每天自动产出。</p>
+    </section>
+
+    <section id="backend">
+      <h2>后端总架构</h2>
+      <p>整个系统由四个角色组成，各司其职：</p>
+      <table class="module-table">
+        <thead><tr><th>角色</th><th>是什么</th><th>作用</th></tr></thead>
+        <tbody>
+          <tr><td><strong>源目录</strong><br><code>sociology-map/</code></td><td>本机项目文件夹</td><td>所有代码、新闻数据、脚本的唯一真身（Source of Truth）</td></tr>
+          <tr><td><strong>部署镜像</strong><br><code>ctrip-claw/</code></td><td>源目录的副本</td><td><code>deploy-netlify.js</code> 从这里读取并发布；自动化每次入库会把 <code>news-data.js</code> 同步过来</td></tr>
+          <tr><td><strong>托管</strong><br>Netlify</td><td>云服务器</td><td>生产站点 <code>shehui-ren.com</code>（海外免备案，自动 HTTPS）；预览站 <code>xxx--shehui-ren.netlify.app</code></td></tr>
+          <tr><td><strong>跨设备备份</strong><br>Gitee</td><td>私有 Git 仓库</td><td><code>no-works-yet/shehui-ren</code>；另一台 Mac <code>git pull</code> 即拿全部源码</td></tr>
+        </tbody>
+      </table>
+      <div class="info-box tip">
+        <div class="info-box-title">🔑 凭据隔离</div>
+        <p><code>.netlify_token</code>（Netlify 令牌）、<code>.gitee_token</code>（Gitee 令牌）都放在源目录，<strong>已 gitignore，绝不进仓库</strong>。换设备或泄露时只换令牌、不碰代码。</p>
+      </div>
+
+      <h3>新闻数据流水线（C2 · 全自动，无需人工）</h3>
+      <p>每天由 WorkBuddy 自动化任务 <code>automation-1784183014346</code>（名"社会人 新闻全自动更新"）触发，一次把"抓取→审核→入库→上线"全跑完。计划每日 <strong>9:06 与 21:06</strong> 两批（见文末"调度现状"）。</p>
+
+      <div class="code-block">
+<span class="cmt">// 一条新闻从"热搜"到"你能看到"的 15 步</span>
+[1 读标准]   NEWS_REVIEW_STANDARD.md 的 S0–S9 / S2.5 / S4.5
+[2 取节点集] 从 sociology-map.html 正则提取 12 个知识节点数组(THINKERS/THEORIES/CONCEPTS/TOPICS 各三科)
+[3 抓取候选] WebSearch/WebFetch 拉 ≥4 热榜(微博/百度/知乎/头条/抖音)+官媒定向(青春/家国/思辨) → 40~60 条候选池
+[4 S0过滤]   政治/谣言/NSFW/UGC个人帖(无编辑源佐证) → 剔除
+[5 S2特大]   跨热榜归并，≥4 平台 = 特大(major+platforms)
+[6 打分]     S4强度(strong/medium/weak·weak剔) / S3学科 / S6链接合法 / <strong>S4.5社会锚点(A强/B可建构/C纯描述·C淘汰)</strong>
+[7 S1组批]   含全部A/B类特大 → 补热榜非特大至(15-Q) → S2.5主题配额Q=3填满15；去重；S5时效
+[8 S6校验]   字段齐全+url可访问+<strong>重抓主源核对事实一致</strong>+essayQuote必填(速用金句)
+[9 S9研究]   每条中英文各搜一次，挂载直接相关的前沿研究(best-effort)
+[10 入库]    用 Edit 把 'YYYY-MM-DD':[15条] 插入 news-data.js；超 7 天删最旧
+[11 同步镜像] cp news-data.js → ctrip-claw/
+[12 写日志]  news-review-log.json（chosen/rejected/summary）
+[13 自检]    node news-validate.js（含 essayQuote 硬闸；不通过不发布脏数据）
+[14 部署]    node deploy-netlify.js → 上线 shehui-ren.com
+[15 汇报]    中文列出本批 15 条 + 关联理论 + 是否特大 + 主题倾斜条数 + 三科覆盖 + 校验结果
+      </div>
+
+      <h3>审核标准（NEWS_REVIEW_STANDARD.md）</h3>
+      <p>这是选稿的"宪法"，自动化每一步都对照它执行。核心闸门：</p>
+      <table class="module-table">
+        <thead><tr><th>编号</th><th>闸门</th><th>一句话</th></tr></thead>
+        <tbody>
+          <tr><td><strong>S0</strong></td><td>合规（最高优先级）</td><td>政治敏感/谣言/NSFW/血腥一律剔除；来源分三级，UGC 个人帖排除，热议话题须有≥1编辑源佐证</td></tr>
+          <tr><td><strong>S1</strong></td><td>条数=15</td><td>每天恰好 15 条，批次内不重复同一事件</td></tr>
+          <tr><td><strong>S2</strong></td><td>特大必含</td><td>同一事件出现在≥4个热榜=特大，必须进 15 条</td></tr>
+          <tr><td><strong>S2.5</strong></td><td>主题倾斜配额</td><td>每批预留 Q=3 给"官媒白名单+青春/家国/思辨母题+正向框架"的新闻，降热度门槛但严防放水</td></tr>
+          <tr><td><strong>S3</strong></td><td>三科交叉</td><td>整体须触社会学/心理/经济三科；与 S4 冲突时强度优先</td></tr>
+          <tr><td><strong>S4</strong></td><td>关联强度</td><td>strong(核心)/medium/weak(过弱)；每条≥1 strong，weak-only 剔除</td></tr>
+          <tr><td><strong>S4.5</strong></td><td>社会锚点·可辩论性</td><td>议论文要"有人能争"：A强锚点入选，B可建构须写出人/社会角度，<strong>C纯描述(纯自然/纯数据)一律不入选</strong></td></tr>
+          <tr><td><strong>S5</strong></td><td>时效</td><td>早班取近24h、晚班取当日12:00后；7天内同事件不重复</td></tr>
+          <tr><td><strong>S6</strong></td><td>字段+事实一致</td><td>必填齐全+url有效+<strong>入库前重抓主源核对标题/数字/路径不自相矛盾</strong></td></tr>
+          <tr><td><strong>S7</strong></td><td>留存</td><td>只留最近 7 天；候选不足时降级发布但保 S0/S4/S6 底线</td></tr>
+          <tr><td><strong>S8</strong></td><td>日志</td><td>产出 news-review-log.json 供人工抽查</td></tr>
+          <tr><td><strong>S9</strong></td><td>前沿研究</td><td>best-effort 加分项，挂直接相关真实研究，不强凑</td></tr>
+        </tbody>
+      </table>
+
+      <h3>数据 Schema（NEWS_DATA / news-data.js）</h3>
+      <p>前端通过外链 <code>&lt;script src="news-data.js"&gt;</code> 读取。结构形如 <code>var NEWS_DATA = { 'YYYY-MM-DD': [15条], ... }</code>，只保留最近 7 天。</p>
+      <table class="module-table">
+        <thead><tr><th>字段</th><th>类型</th><th>说明</th></tr></thead>
+        <tbody>
+          <tr><td><code>id</code></td><td>number</td><td>当日批内序号 1–15</td></tr>
+          <tr><td><code>title</code> / <code>source</code> / <code>url</code></td><td>string</td><td>标题 / 来源 / 原文直链(须 HTTP 200)</td></tr>
+          <tr><td><code>kicker</code></td><td>string</td><td>可选小标签，如"职场·社会学/心理学"</td></tr>
+          <tr><td><code>gist</code></td><td>string</td><td>一句话立论，开篇点明社科内核</td></tr>
+          <tr><td><code>thread</code></td><td>[{t,x}]</td><td>事件脉络时间线</td></tr>
+          <tr><td><code>interpretations</code></td><td>[{q,naive,lens,lensId,body,aha,research?}]</td><td>疑问驱动解读（进阶模式素材）</td></tr>
+          <tr><td><code>theories</code></td><td>[{id,label}]</td><td>关联知识图谱节点（id 必须∈节点集）</td></tr>
+          <tr><td><code>major</code> / <code>platforms</code></td><td>bool / string[]</td><td>是否特大 / 判定平台(≥4)</td></tr>
+          <tr><td><code>essayTopics</code></td><td>[{id,label}]</td><td>作文主题标签（id∈TOPIC_LIB），速用模式用</td></tr>
+          <tr><td><code>essayQuote</code></td><td>string</td><td><strong>速用金句（议论文素材语段，100–130字，必填）</strong></td></tr>
+          <tr><td><code>research</code></td><td>{...}</td><td>可选，嵌套于 interpretation 的前沿研究</td></tr>
+        </tbody>
+      </table>
+
+      <h3>部署与上线机制（deploy-netlify.js）</h3>
+      <ul style="padding-left:20px;font-size:14px;line-height:1.9">
+        <li><strong>生产部署</strong>：<code>netlify deploy --prod</code>，读 <code>.netlify_token</code> 把源目录发布到 shehui-ren.com。</li>
+        <li><strong>额度兜底</strong>：Netlify 免费额度耗尽时生产会 403；脚本自动改走"草稿部署 + <code>POST /restore</code> 发布为生产"，照样上线（每日新闻自动化就走这条路）。</li>
+        <li><strong>预览模式</strong>：传 <code>--staging</code> 只发草稿、不动线上，把预览地址发你验收；你说"发布"后再跑不带参的转正。功能/大改才走预览，每日新闻直接上线。</li>
+        <li><strong>Gitee 自动同步</strong>：部署成功后自动 <code>git add news-data.js news-review-log.json &amp;&amp; commit &amp;&amp; push</code>，另一台 Mac 即最新。</li>
+        <li><strong>缓存刷新</strong>：改 HTML/CSS 须 bump <code>sw.js</code> 版本号（当前 <code>shehui-ren-v41</code>），否则手机 PWA 缓存旧页；<code>news-data.js</code> 走网络优先，刷新即最新。</li>
+        <li><strong>部署前幂等补标</strong>：<code>_annotate_topics.js</code> 在每次部署时为未标注新闻补 <code>essayTopics</code>，已标的严格跳过、不破坏手标。</li>
+      </ul>
+
+      <h3>校验与防御（news-validate.js）</h3>
+      <ul style="padding-left:20px;font-size:14px;line-height:1.9">
+        <li>逐条硬闸：必填字段齐全 + <strong>essayQuote 速用金句必填</strong>（缺则 FAIL，脏数据不发布）。</li>
+        <li>跑在 Node 沙箱（已补全 <code>matchMedia</code>/<code>location</code> 等浏览器 API stub），自动化步骤13 调用；不通过则保留日志并告警、不入库。</li>
+        <li><strong>根治史</strong>：2026-08-06 前 essayQuote 常漏（靠事后手补）；现已强制必填 + 硬闸，7天105条 FAIL=0。</li>
+      </ul>
+
+      <h3>调度现状（重要坑，待修）</h3>
+      <div class="info-box tip" style="border-left-color:#e0a800">
+        <div class="info-box-title">⚠️ 当前只有早班 9:06 在跑</div>
+        <p>自动化 rrule <code>FREQ=DAILY;BYHOUR=9,21;BYMINUTE=6</code> 被系统塌缩为每天单次（只跑 9:06），<strong>晚班 21:06 从未运行</strong>。若要每日两批，须拆成两个独立自动化（各单 BYHOUR）。此外自动化绑定本机进程，宿主机关机/休眠则不开。</p>
+      </div>
+    </section>
+
+    <!-- ============ 第二部分：前端逻辑 ============ -->
+    <section id="part-frontend-banner" style="background:linear-gradient(135deg,#3a2f4d,#5a4a73);color:#fff;padding:22px 26px;border-radius:12px;margin:8px 0 18px">
+      <h2 style="color:#fff;margin:0 0 6px">第二部分 · 前端逻辑（页面与交互）</h2>
+      <p style="margin:0;opacity:.85;font-size:13.5px;line-height:1.7">用户在浏览器/手机上看到的两个页面、各种开关与排版——这一部分直接决定"体验长什么样"。下面从双页面架构开始。</p>
     </section>
 
     <!-- PAGES OVERVIEW -->
@@ -1394,7 +1508,7 @@
                 <tr><td class="mod-id-cell">A12</td><td>新闻透视</td><td class="mod-page-cell">社会热点</td><td>CSS</td><td>理论分析卡片样式</td></tr>
                 <tr><td class="mod-id-cell"><a href="#A13">A13</a></td><td>响应式</td><td class="mod-page-cell">全局</td><td>CSS</td><td>移动端适配</td></tr>
                 <tr><td class="mod-id-cell"><a href="#C1">C1</a></td><td>图谱数据</td><td class="mod-page-cell">JS数据层</td><td>JS常量</td><td>思想家29/理论21/概念34/领域18（共102，231连线）</td></tr>
-                <tr><td class="mod-id-cell"><a href="#C2">C2</a></td><td>新闻数据</td><td class="mod-page-cell">JS数据层</td><td>JS文件(外置news-data.js)</td><td>全自动（抓取+AI审核+入库）；每日期15条，保留最近7天，附NEWS_REVIEW_STANDARD.md与news-review-log.json</td></tr>
+                <tr><td class="mod-id-cell"><a href="#C2">C2</a></td><td>新闻数据</td><td class="mod-page-cell">JS数据层</td><td>JS文件(外置news-data.js)</td><td>全自动（抓取+AI审核+入库）；每日期15条，保留最近7天，附NEWS_REVIEW_STANDARD.md与news-review-log.json —— <a href="#backend">完整流水线见「第一部分·后端逻辑」</a></td></tr>
                 <tr><td class="mod-id-cell"><a href="#C3">C3</a></td><td>Canvas渲染</td><td class="mod-page-cell">JS引擎</td><td>JS函数</td><td>力导向tick+绘制节点/连线/点阵/屏幕空间学科图例（pan/zoom复合变换）</td></tr>
                 <tr><td class="mod-id-cell"><a href="#C4">C4</a></td><td>图谱交互</td><td class="mod-page-cell">JS交互</td><td>JS函数</td><td>点击/悬停/拖拽平移/滚轮缩放/多选筛选/跳转</td></tr>
                 <tr><td class="mod-id-cell"><a href="#C5">C5</a></td><td>新闻系统</td><td class="mod-page-cell">JS交互</td><td>JS函数</td><td>渲染/详情/日期切换</td></tr>
@@ -1411,6 +1525,7 @@
         <table class="module-table" id="clTable">
             <thead><tr><th>日期</th><th>版本</th><th>改动内容</th><th>涉及模块</th></tr></thead>
             <tbody>
+                <tr><td>2026-08-06</td><td>v1.45</td><td><strong>[契约文档补全「后端逻辑」章节 · 全文拆为"后端/前端"两部分] 回应"契约缺日常发新闻、处理并上线的底层逻辑，不知道背后怎么抓怎么生成"：</strong>① 在概览后新增「第一部分·后端逻辑」整章，含：后端总架构(源目录/镜像/Netlify/Gitee四角色+凭据隔离)、新闻数据流水线(自动化15步全展开：读标准→取节点集→抓取候选→S0过滤→S2特大→打分→S1组批→S6校验→S9研究→入库→镜像→日志→自检→部署→汇报)、审核标准一览表(S0–S9/S2.5/S4.5核心闸门)、数据Schema表(NEWS_DATA字段全列)、部署与上线机制(deploy-netlify.js生产/额度兜底/--staging预览/Gitee自动同步/sw缓存/_annotate_topics幂等补标)、校验与防御(news-validate.js essayQuote硬闸+根治史)、调度现状(仅9:06跑、21:06被rrule塌缩未运行、绑定本机进程)。② 新增「第二部分·前端逻辑」分隔，明确全文两分结构；原有双页面架构/社会热点页/详情面板/导出页/知识图谱/模块索引等前端章节归入第二部分。③ 模块索引 C2 行加"详见后端逻辑章节"跳转提示。本版为文档结构性补全，无产品代码改动，未上线部署；源码(契约)已同步 Gitee。</td><td>契约, C2</td></tr>
                 <tr><td>2026-08-06</td><td>v1.44</td><td><strong>[根治「速用」版漏字段 · 数据生成机制] 回应"今日新闻第 8 条后无速用版"根因：</strong>① <strong>根因</strong>：新闻自动化 prompt 原仅要求 B 类新闻写 <code>essayQuote</code>（作文金句），其它新闻不写、由速用模式回退"完整"——导致每批大多条缺速用版，须事后手动补（8-01~08-05 均发生过）；且校验脚本 <code>news-validate.js</code> 从未查该字段、且因 Node 沙箱缺 <code>matchMedia</code>/<code>location</code> 等 stub 根本跑不起来，自检形同虚设。② <strong>根治（双闸）</strong>：A. 改新闻自动化 prompt——步骤8 必填清单加入 <code>essayQuote</code>、步骤10 删除"其它新闻不写"改为"每条入选新闻都必须内联 essayQuote（100–130 字议论文金句、紧扣社会/理论角度）"、步骤13 自检加 essayQuote 非空硬闸、红线新增「速用模式素材必填」；自下一运行周期起每条新闻强制带速用金句。B. 改 <code>news-validate.js</code>——逐条校验加 essayQuote 必填硬闸（缺则 FAIL、脏数据不发布），并补全 Node 沙箱 stub 使其真正可运行。③ <strong>验证</strong>：news-validate.js 现已可跑，7 天 105 条 FAIL=0/WARN=0（含 essayQuote 检查）。本变更为纯后端数据生成/校验机制，<strong>无用户端页面/UI 改动</strong>，线上页面无需重新部署；源码（news-validate.js）已同步 Gitee。<br><strong>契约同步</strong>：本周期也刷新了 <code>feature-manifest.html</code> 中社会热点页、新闻详情面板、导出页（A8-export）的实时描述与截图，使其与 v1.44 代码一致。</td><td>C2, 新闻自动化</td></tr>
                 <tr><td>2026-08-06</td><td>v1.43</td><td><strong>[导出页手机端改为整张 A4 等比缩放 · 与 Web/打印完全一致] 回应"手机端预览应与 Web/真实 A4 打印一致（之前手机紧凑只有 2 栏、与桌面 3 栏对不上）"：</strong>① <strong>废弃"手机端减列数"方案</strong>——原 v1.42 在手机端把紧凑改 2 栏、标准/宽松改 1 栏，导致手机预览与桌面、与打印对不上；现统一为 <strong>scale-to-fit</strong>：保留真实 A4 尺寸（210mm×297mm）与桌面同一套 3/2/1 列版式，仅对 <code>.page</code> 施加 <code>transform:scale(calc(100vw/210mm))</code> 让纸宽恰好等于屏宽，用户看到即"A4 纸缩小版"。② <strong>负 margin 收高 + 防溢出</strong>——<code>margin-bottom:calc(297mm*var(--fit)-297mm+22px)</code> 收掉缩放后多出的布局高度并留页间距；<code>.pages</code> 改 <code>align-items:flex-start;overflow-x:hidden</code> 杜绝横向溢出。③ <strong>修分页测量坑</strong>——分页原用 <code>getBoundingClientRect().width</code>（被 transform 缩放成窄宽，会按窄列分页、页数与桌面/打印不符）→ 改为 <code>offsetWidth</code>（忽略 transform，取真实布局宽），手机页数与桌面/打印对齐（紧凑 8 / 标准 18 / 宽松 27 页 @390px 视口）。④ service worker 缓存 <code>shehui-ren-v40</code>→<code>shehui-ren-v41</code>。无头 390×844 实测：三档列数 3/2/1、横向溢出 0、末页可达。本版为手机端展示一致性修复，发布前走预览验收。</td><td>A8, 导出, 社会热点, 移动端</td></tr>
                 <tr><td>2026-08-05</td><td>v1.42</td><td><strong>[导出页交互与排版大改 · 日历多选 + 密度重设计 + 速用进阶模式 + WPS 分页] 回应 8/5 四点反馈：</strong>① <strong>日期选择改日历组件</strong>——移除原平铺 chip 列表，新增入口「选择日期 ▾」按钮，点击展开月历弹层（按 NEWS_DATA 可用日期生成日历、月份导航、点格多选、底部 chips 反显已选并可单独取消，附「最近 7 天/全选/清除」快捷），交互更符合直觉。② <strong>密度预设重设计</strong>——原「标准/宽松」几乎无别、「紧凑」移动端无差异；现明确三级：紧凑（web 4 栏 / 手机 2 栏 / 小字）、标准（web 2 栏 / 手机 1 栏 / 中字）、宽松（web 1 栏 / 手机 1 栏大间距 / 大字），web 与手机端三者均肉眼可辨。③ <strong>新增速用/进阶模式切换</strong>——工具栏分段控件（默认与主站 localStorage <code>shehui_news_mode</code> 同步）：速用 = 新闻 + 金句（<code>essayQuote</code>），进阶 = 新闻 + 社科解读（<code>interpretations</code> 全量 lens/常以为/解读/aha/研究）；切换即时重渲染、封面文案随之变化。④ <strong>WPS 式分页预览</strong>——预览区改为一张张 A4 纸（固定 210mm 宽、阴影、间距、每页页脚「第 X / Y 页」），JS 按内容高度自动分页（卡片 <code>break-inside:avoid</code> 不跨页），屏幕所见即打印所得；打印时每 <code>.page</code> 对应一页 A4。⑤ service worker 缓存 <code>shehui-ren-v31</code>→<code>shehui-ren-v32</code>。本版为导出页整体重构，发布前走预览验收。</td><td>A8, 导出, 社会热点</td></tr>
