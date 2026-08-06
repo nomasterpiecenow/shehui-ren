@@ -22,13 +22,13 @@
     background:var(--bg); color:var(--ink);
     font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",Segoe UI,Roboto,sans-serif;
     line-height:1.65; -webkit-font-smoothing:antialiased;
-    font-size:var(--fs);
+    font-size:14px;
   }
 
   /* ===== 顶部工具条（不打印） ===== */
   .toolbar{
     position:sticky; top:0; z-index:50;
-    display:flex; align-items:center; gap:14px; flex-wrap:wrap;
+    display:flex; align-items:center; gap:12px; flex-wrap:wrap;
     background:rgba(255,255,255,.9); backdrop-filter:blur(12px);
     border-bottom:1px solid var(--line);
     padding:10px 18px;
@@ -53,50 +53,90 @@
   .print-btn:hover{opacity:.9;}
   .hint{font-size:11.5px;color:var(--faint);width:100%;margin-top:-2px;}
 
-  /* ===== 日期选择条（不打印） ===== */
+  /* ===== 日期选择（入口 + 日历弹层，不打印） ===== */
   .datebar{
     max-width:210mm; margin:14px auto 0; padding:0 4px;
-    display:flex; flex-direction:column; gap:10px;
+    display:flex; align-items:flex-start; gap:10px; flex-wrap:wrap;
   }
-  .datebar-head{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;}
-  .datebar-title{font-size:13px;font-weight:700;color:var(--sub);}
-  .datebar-actions{display:inline-flex;gap:6px;}
-  .datebar-actions button{
+  .date-wrap{position:relative;}
+  .date-trigger{
     border:1px solid var(--line);background:#fff;color:var(--sub);
-    font-size:12px;font-weight:600;padding:5px 11px;border-radius:999px;cursor:pointer;transition:.15s;
+    font-size:13px;font-weight:700;padding:9px 16px;border-radius:10px;cursor:pointer;transition:.15s;
+    display:inline-flex;align-items:center;gap:8px;
   }
-  .datebar-actions button:hover{background:var(--accent-soft);color:var(--accent);border-color:#d4e2ff;}
-  .datechips{display:flex;flex-wrap:wrap;gap:8px;}
-  .datechip{
+  .date-trigger:hover{border-color:#d4e2ff;color:var(--accent);background:var(--accent-soft);}
+  .date-pop{
+    position:absolute; top:calc(100% + 8px); left:0; z-index:60;
+    background:#fff;border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);
+    padding:14px; width:332px; max-width:92vw;
+    max-height:78vh; overflow-y:auto; -webkit-overflow-scrolling:touch;
+  }
+  .cal-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
+  .cal-title{font-size:13px;font-weight:700;color:var(--ink);}
+  .cal-nav{
+    width:30px;height:30px;border:1px solid var(--line);background:#fff;border-radius:8px;
+    cursor:pointer;font-size:16px;color:var(--sub);line-height:1;
+  }
+  .cal-nav:hover{background:var(--accent-soft);color:var(--accent);border-color:#d4e2ff;}
+  .cal-nav:disabled{opacity:.35;cursor:default;}
+  .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;}
+  .cal-dow{font-size:11px;color:var(--faint);text-align:center;padding:4px 0;font-weight:600;}
+  .cal-cell{
+    aspect-ratio:1/1;display:flex;align-items:center;justify-content:center;
+    font-size:12.5px;border-radius:8px;cursor:pointer;user-select:none;color:var(--ink);
+  }
+  .cal-cell.blank{color:transparent;cursor:default;}
+  .cal-cell.pad{color:var(--faint);background:transparent;cursor:default;}
+  .cal-cell.avail:hover{background:var(--accent-soft);color:var(--accent);}
+  .cal-cell.sel{background:var(--accent);color:#fff;font-weight:700;}
+  .cal-cell.pad.sel{background:var(--accent);color:#fff;}
+  .cal-actions{display:inline-flex;gap:6px;margin-top:12px;}
+  .cal-actions button{
     border:1px solid var(--line);background:#fff;color:var(--sub);
-    font-size:12.5px;font-weight:600;padding:6px 12px;border-radius:999px;cursor:pointer;
-    transition:.15s; user-select:none;
+    font-size:12px;font-weight:600;padding:5px 12px;border-radius:999px;cursor:pointer;transition:.15s;
   }
-  .datechip:hover{border-color:#d4e2ff;color:var(--accent);}
-  .datechip.active{background:var(--accent);color:#fff;border-color:var(--accent);}
+  .cal-actions button:hover{background:var(--accent-soft);color:var(--accent);border-color:#d4e2ff;}
+  .cal-confirm{margin-top:12px;padding-top:12px;border-top:1px solid var(--line-soft);display:flex;justify-content:flex-end;}
+  .confirm-btn{
+    border:0;background:var(--accent);color:#fff;font-size:13px;font-weight:700;
+    padding:8px 22px;border-radius:10px;cursor:pointer;transition:.15s;
+  }
+  .confirm-btn:hover{opacity:.9;}
+  .cal-empty{font-size:12px;color:var(--faint);}
 
-  /* ===== 纸张 ===== */
-  .doc{
-    width:210mm; max-width:100%; margin:22px auto 60px; background:var(--sheet);
-    box-shadow:var(--shadow); border-radius:6px; padding:14mm 13mm;
+  /* ===== 分页预览（WPS 风：每张 A4 纸） ===== */
+  .pages{
+    max-width:210mm; margin:18px auto 60px; padding:0 4px;
+    display:flex; flex-direction:column; gap:22px; align-items:center;
+    overflow-x:auto;
   }
-  .cover{
-    border-bottom:2px solid var(--ink); padding-bottom:12px; margin-bottom:18px;
+  .page{
+    width:210mm; min-height:297mm; background:var(--sheet);
+    box-shadow:var(--shadow); border-radius:6px; padding:14mm;
+    box-sizing:border-box; position:relative; flex:none;
+    display:flex; flex-direction:column;
   }
-  .cover h1{font-size:23px;margin:0 0 4px;letter-spacing:-.02em;}
-  .cover .sub{font-size:13px;color:var(--sub);margin:0;}
-  .cover .range{font-size:12px;color:var(--faint);margin-top:6px;}
+  .page-body{flex:1;}
+  .pageno{
+    text-align:center; font-size:11px; color:var(--faint);
+    padding-top:8px; margin-top:auto; border-top:1px solid var(--line-soft);
+  }
+  .page-header{padding-bottom:14px;margin-bottom:14px;border-bottom:2px solid var(--accent);}
+  .page-header h1{font-size:24px;margin:0 0 6px;letter-spacing:-.02em;color:var(--ink);}
+  .page-header .sub{font-size:13.5px;color:var(--sub);margin:0;}
+  .page-header .range{font-size:12px;color:var(--faint);margin-top:8px;}
 
-  /* ===== 卡片网格（密度预设控制列数与字号） ===== */
-  .grid{display:grid;gap:11px;}
-  .grid.compact{grid-template-columns:repeat(3,1fr);--fs:10.5px;--pad:10px;}
-  .grid.standard{grid-template-columns:repeat(2,1fr);--fs:12.5px;--pad:13px;}
-  .grid.loose{grid-template-columns:repeat(2,1fr);--fs:13.5px;--pad:15px;}
+  /* ===== 卡片网格（密度预设控制列数/字号，应用在每个 .page-body 上） ===== */
+  .page-body.grid{display:grid;gap:12px;align-content:start;}
+  .grid.compact{grid-template-columns:repeat(3,1fr);--fs:8.5px;--pad:7px;gap:6px;}
+  .grid.standard{grid-template-columns:repeat(2,1fr);--fs:12.5px;--pad:13px;gap:12px;}
+  .grid.loose{grid-template-columns:1fr;--fs:15px;--pad:20px;gap:22px;}
+  .grid.loose .card{min-height:200px;justify-content:center;}
 
   .card{
     border:1px solid var(--line); border-radius:var(--radius);
     padding:var(--pad); background:#fff; break-inside:avoid; page-break-inside:avoid;
-    display:flex; flex-direction:column; gap:7px;
+    display:flex; flex-direction:column; gap:7px; font-size:var(--fs);
   }
   .card .mhead{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:.82em;color:var(--faint);}
   .card .mhead .date{font-weight:700;color:var(--sub);}
@@ -105,24 +145,27 @@
     color:var(--major);background:var(--major-soft);border:1px solid #f6c9c9;
     border-radius:999px;padding:0 7px;font-weight:700;font-size:.82em;
   }
-  .card .mtitle{font-size:1.12em;font-weight:700;line-height:1.4;color:var(--ink);}
+  .card .mtitle{font-size:1.15em;font-weight:700;line-height:1.4;color:var(--ink);}
   .card .gist{
-    font-size:.96em;color:var(--ink);background:var(--gist);border-left:3px solid var(--gist-line);
-    border-radius:7px;padding:7px 10px;line-height:1.6;
+    font-size:.94em;color:var(--ink);background:var(--gist);border-left:3px solid var(--gist-line);
+    border-radius:7px;padding:6px 9px;line-height:1.6;
+  }
+  .card .quote{
+    font-size:1.02em;line-height:1.7;color:var(--ink);
+    border-left:3px solid var(--accent);background:var(--accent-soft);
+    padding:9px 12px;border-radius:8px;
   }
   .card .interps{display:flex;flex-direction:column;gap:8px;}
-  .card .interp{
-    border-top:1px dashed var(--line); padding-top:7px;
-  }
+  .card .interp{border-top:1px dashed var(--line); padding-top:7px;}
   .card .interp:first-child{border-top:0;padding-top:0;}
-  .card .il{display:flex;align-items:baseline;gap:7px;margin-bottom:3px;}
+  .card .il{display:flex;align-items:baseline;gap:7px;margin-bottom:3px;flex-wrap:wrap;}
   .card .lens{
     flex:none;font-size:.82em;font-weight:700;color:var(--accent);background:var(--accent-soft);
     border:1px solid #d4e2ff;border-radius:999px;padding:1px 8px;white-space:nowrap;
   }
   .card .q{font-size:1em;font-weight:600;color:var(--ink);line-height:1.45;}
   .card .naive{font-size:.86em;color:var(--sub);margin:2px 0 4px;padding-left:9px;border-left:2px solid var(--line);}
-  .card .body{font-size:.93em;color:var(--ink);line-height:1.62;}
+  .card .body{font-size:.92em;color:var(--ink);line-height:1.62;}
   .card .body b{color:var(--accent);font-weight:700;}
   .card .aha{
     font-size:.9em;font-weight:600;color:var(--aha-ink);background:var(--aha);
@@ -131,21 +174,38 @@
   .card .aha::before{content:"💡 ";font-weight:700;}
   .card .research{font-size:.8em;color:var(--faint);margin-top:4px;}
 
-  .empty{padding:40px;text-align:center;color:var(--faint);}
+  .empty-page{padding:60px 20px;text-align:center;color:var(--faint);font-size:14px;}
 
-  /* ===== 打印 ===== */
+  /* ===== 打印（每 .page 一页 A4） ===== */
   @media print{
-    @page{ size:A4; margin:12mm; }
+    @page{ size:A4; margin:14mm; }
     html,body{background:#fff;}
     .toolbar{display:none !important;}
     .datebar{display:none !important;}
-    .doc{width:auto;max-width:none;margin:0;box-shadow:none;border-radius:0;padding:0;}
-    .cover{break-after:avoid;}
-    .card{box-shadow:none;}
+    .pages{max-width:none;margin:0;padding:0;gap:0;overflow:visible;display:block;}
+    .page{width:auto;min-height:auto;box-shadow:none;border-radius:0;padding:0;break-after:page;}
+    .page:last-child{break-after:auto;}
+    .pageno{border-top:1px solid var(--line-soft);}
   }
+  /* 手机端：整张 A4 纸等比缩放到屏宽（scale-to-fit）。
+     这样列数（紧凑3/标准2/宽松1）与字号比例与 Web 端、与真实 A4 打印完全一致，
+     用户看到的就是「A4 纸缩小版」，而非另一套版式。 */
   @media screen and (max-width:760px){
-    .doc{padding:10mm 6mm;margin:12px auto 40px;}
-    .grid.compact{grid-template-columns:repeat(2,1fr);}
+    :root{ --fit: calc(100vw / 210mm); }   /* 缩放比：让 210mm 纸宽刚好等于屏宽 */
+    .toolbar{padding:10px 12px;gap:8px;flex-wrap:wrap;}
+    .toolbar .title{font-size:14px;}
+    .toolbar .hint{font-size:11px;}
+    .date-pop{width:92vw;}
+    .pages{max-width:none;padding:0;align-items:flex-start;gap:0;overflow-x:hidden;}
+    .datebar{max-width:none;padding:0 10px;}
+    .page{
+      /* 保持真实 A4 尺寸（210mm×297mm）与桌面同一套版式，仅视觉缩放 */
+      transform:scale(var(--fit));
+      transform-origin:top left;
+      /* 布局盒仍是 297mm 高，用负 margin 把缩放后多出的高度收掉，并留出 22px 页间距 */
+      margin-bottom:calc(297mm * var(--fit) - 297mm + 22px);
+    }
+    /* 不再覆写 .grid.* 列数/字号 —— 手机与 Web/打印统一为 3/2/1 列 */
   }
 </style>
 </head>
@@ -155,81 +215,105 @@
     <span class="title">素材卡片导出</span>
     <span class="meta" id="meta"></span>
     <span class="spacer"></span>
-    <div class="seg" id="seg">
-      <button data-d="compact">紧凑</button>
-      <button data-d="standard" class="active">标准</button>
-      <button data-d="loose">宽松</button>
+    <div class="seg" id="modeSeg" title="阅读模式">
+      <button type="button" data-m="quick" class="active">速用 · 金句</button>
+      <button type="button" data-m="full">进阶 · 解读</button>
     </div>
-    <button class="print-btn" onclick="window.print()">🖨 打印 / 存为 PDF</button>
-    <span class="hint">提示：在打印对话框里选「另存为 PDF」即可生成电子素材册；或直接连接打印机输出 A4，裁开随身携带朗读记忆。</span>
+    <div class="seg" id="densSeg" title="排版密度">
+      <button type="button" data-d="compact">紧凑</button>
+      <button type="button" data-d="standard" class="active">标准</button>
+      <button type="button" data-d="loose">宽松</button>
+    </div>
+    <button class="print-btn" onclick="window.print()">🖨 打印 / PDF</button>
+    <span class="hint">上方可切换「速用·金句 / 进阶·解读」与排版密度；预览按 A4 分页，可缩放或横滑查看整页；打印时选「另存为 PDF」即得素材册。</span>
   </div>
 
   <div class="datebar">
-    <div class="datebar-head">
-      <span class="datebar-title">选择日期（可多选，同一日期内不再细分）</span>
-      <div class="datebar-actions">
-        <button type="button" data-act="last7">最近 7 天</button>
-        <button type="button" data-act="all">全选</button>
-        <button type="button" data-act="clear">清除</button>
+    <div class="date-wrap">
+      <button type="button" class="date-trigger" id="dateTrigger">选择日期 ▾</button>
+      <div class="date-pop" id="datePop" hidden>
+        <div class="cal-head">
+          <button type="button" class="cal-nav" id="calPrev">‹</button>
+          <span class="cal-title" id="calTitle"></span>
+          <button type="button" class="cal-nav" id="calNext">›</button>
+        </div>
+        <div class="cal-grid" id="calGrid"></div>
+        <div class="cal-actions">
+          <button type="button" data-act="last7">最近 7 天</button>
+          <button type="button" data-act="all">全选</button>
+          <button type="button" data-act="clear">清除</button>
+        </div>
+        <div class="cal-confirm">
+          <button type="button" id="calConfirm" class="confirm-btn">确定</button>
+        </div>
       </div>
     </div>
-    <div class="datechips" id="dateChips"></div>
   </div>
 
-  <div class="doc">
-    <div class="cover">
-      <h1>社会人 · 作文素材卡片</h1>
-      <p class="sub">所选日期社会热点 · 带社科视角解读 · 可直接朗读记忆</p>
-      <p class="range" id="range"></p>
-    </div>
-    <div class="grid standard" id="grid"></div>
-    <div class="empty" id="empty" style="display:none">暂无可导出的新闻数据（请至少选择一个日期）。</div>
-  </div>
+  <div class="pages" id="pages"></div>
 
 <script src="news-data.js"></script>
 <script>
 (function(){
   "use strict";
-  var grid = document.getElementById('grid');
-  var emptyEl = document.getElementById('empty');
+  var pagesEl = document.getElementById('pages');
   var metaEl = document.getElementById('meta');
-  var rangeEl = document.getElementById('range');
-  var dateChipsEl = document.getElementById('dateChips');
+  var dateTrigger = document.getElementById('dateTrigger');
+  var datePop = document.getElementById('datePop');
+  var calGrid = document.getElementById('calGrid');
+  var calTitle = document.getElementById('calTitle');
+  var calPrev = document.getElementById('calPrev');
+  var calNext = document.getElementById('calNext');
+  var modeSeg = document.getElementById('modeSeg');
+  var densSeg = document.getElementById('densSeg');
+  var calConfirm = document.getElementById('calConfirm');
 
-  // 数据校验：NEWS_DATA 由 news-data.js 注入（全局 var）
   if (typeof NEWS_DATA === 'undefined') {
-    emptyEl.style.display = 'block';
+    pagesEl.innerHTML = '<div class="page"><div class="empty-page">未加载到新闻数据</div></div>';
     metaEl.textContent = '（未加载到新闻数据）';
     return;
   }
 
+  function pad(n){ return ('0' + n).slice(-2); }
+
   // 所有可用日期（降序）
   var allDates = Object.keys(NEWS_DATA).sort().reverse();
+  var allDatesSet = new Set(allDates);
   // 默认选中最近 7 天（用户可自由改，不再锁死区间）
   var selected = new Set(allDates.slice(0, 7));
 
-  // 渲染日期选择 chips
-  function renderChips(){
-    dateChipsEl.innerHTML = allDates.map(function(d){
-      var on = selected.has(d) ? ' active' : '';
-      return '<button type="button" class="datechip' + on + '" data-d="' + d + '">' + d + '</button>';
-    }).join('');
-  }
+  // 模式：默认与主站 localStorage 同步
+  var mode = 'quick';
+  try { var saved = localStorage.getItem('shehui_news_mode'); if (saved === 'quick' || saved === 'full') mode = saved; } catch (e) {}
+  // 密度
+  var density = 'standard';
 
-  // 从选中日期收集卡片（同一日期内全量，不再细分）
+  // 日历月份视图
+  var ymList = [];
+  var seen = {};
+  allDates.forEach(function(d){
+    var ym = d.slice(0, 7);
+    if (!seen[ym]) { seen[ym] = 1; ymList.push(ym); }
+  });
+  ymList.sort(); // 升序，最新在末尾
+  var viewIdx = ymList.length - 1;
+
+  function esc(s){ return String(s).replace(/[&<>]/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;'}[c]; }); }
+
+  // 收集选中日期的卡片（同日期内全量，不再细分）
   function getItems(){
     var items = [];
     allDates.forEach(function(d){
       if (!selected.has(d)) return;
       var arr = NEWS_DATA[d] || [];
       arr.forEach(function(it){
-        // 防御：缺字段时给兜底，避免整页崩
         items.push({
           _date: d,
           title: it.title || '（无标题）',
           source: it.source || '',
           major: !!it.major,
           gist: it.gist || '',
+          essayQuote: it.essayQuote || '',
           interpretations: Array.isArray(it.interpretations) ? it.interpretations : []
         });
       });
@@ -237,29 +321,17 @@
     return items;
   }
 
-  // 统计与日期区间
   function updateMeta(){
     var total = 0;
     selected.forEach(function(d){ total += (NEWS_DATA[d] || []).length; });
     metaEl.textContent = '已选 ' + selected.size + ' 天 · 共 ' + total + ' 条';
-    if (selected.size) {
-      var sel = allDates.filter(function(d){ return selected.has(d); });
-      var newest = sel[0], oldest = sel[sel.length - 1];
-      var span = (newest === oldest) ? newest : (oldest + ' ～ ' + newest);
-      rangeEl.textContent = '数据区间：' + span + '（每日 15 条，含社会学 / 经济学 / 心理学多视角解读）';
-    } else {
-      rangeEl.textContent = '';
-    }
   }
-
-  function esc(s){ return String(s).replace(/[&<>]/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;'}[c]; }); }
 
   function interpHTML(p){
     if (!p) return '';
     var lens = p.lens ? '<span class="lens">' + esc(p.lens) + '</span>' : '';
     var q = p.q ? '<span class="q">' + esc(p.q) + '</span>' : '';
     var naive = p.naive ? '<div class="naive">常以为：' + esc(p.naive) + '</div>' : '';
-    // body 为可信站内数据，含 <b> 等富文本，按原样渲染
     var body = p.body ? '<div class="body">' + p.body + '</div>' : '';
     var aha = p.aha ? '<div class="aha">' + esc(p.aha) + '</div>' : '';
     var research = '';
@@ -272,67 +344,245 @@
       naive + body + aha + research + '</div>';
   }
 
-  function cardHTML(it){
+  function cardHTML(it, m){
     var major = it.major ? '<span class="major">头条</span>' : '';
     var src = it.source ? '<span class="src">' + esc(it.source) + '</span>' : '';
+    var head = '<div class="mhead"><span class="date">' + esc(it._date) + '</span>' + src + major + '</div>';
+    var title = '<div class="mtitle">' + esc(it.title) + '</div>';
+    if (m === 'quick') {
+      // 速用：新闻 + 金句
+      var q = it.essayQuote ? it.essayQuote : it.gist;
+      var quote = q ? '<div class="quote">' + esc(q) + '</div>' : '';
+      return '<div class="card">' + head + title + quote + '</div>';
+    }
+    // 进阶：新闻 + 社科解读
+    var gist = it.gist ? '<div class="gist">' + esc(it.gist) + '</div>' : '';
     var interps = it.interpretations.map(interpHTML).join('');
-    return '<div class="card">' +
-      '<div class="mhead"><span class="date">' + esc(it._date) + '</span>' + src + major + '</div>' +
-      '<div class="mtitle">' + esc(it.title) + '</div>' +
-      (it.gist ? '<div class="gist">' + esc(it.gist) + '</div>' : '') +
-      (interps ? '<div class="interps">' + interps + '</div>' : '') +
-      '</div>';
+    return '<div class="card">' + head + title + gist +
+      (interps ? '<div class="interps">' + interps + '</div>' : '') + '</div>';
+  }
+
+  function makeContentPage(headerHTML){
+    var el = document.createElement('div');
+    el.className = 'page';
+    el.innerHTML = (headerHTML || '') +
+      '<div class="page-body grid ' + density + '"></div><div class="pageno"></div>';
+    return el;
+  }
+
+  // 分页：每页内容高度不超过阈值则继续放，否则换页
+  function buildPages(items, m){
+    pagesEl.innerHTML = '';
+    // 数据区间文案
+    var rangeText = '';
+    if (selected.size) {
+      var sel = allDates.filter(function(d){ return selected.has(d); });
+      var newest = sel[0], oldest = sel[sel.length - 1];
+      rangeText = (newest === oldest) ? newest : (oldest + ' ～ ' + newest);
+    }
+    if (!items.length) {
+      var ep = document.createElement('div');
+      ep.className = 'page';
+      ep.innerHTML = '<div class="empty-page">暂无可导出的新闻数据（请至少选择一个日期）。</div><div class="pageno"></div>';
+      pagesEl.appendChild(ep);
+      stampPages();
+      return;
+    }
+
+    // 首页标题区（替代原独立封面页，避免第一页大片空白）
+    var title = (m === 'quick') ? '社会人 · 作文金句素材册' : '社会人 · 社科解读素材册';
+    var sub = (m === 'quick')
+      ? '所选日期社会热点 · 速用金句 · 直接套用'
+      : '所选日期社会热点 · 多视角社科解读';
+    var headerHTML = '<div class="page-header"><h1>' + title + '</h1>' +
+      '<p class="sub">' + sub + '</p>' +
+      (rangeText ? '<p class="range">' + esc(rangeText) + '</p>' : '') + '</div>';
+
+    // 按「行」分页：网格一行可放多列，整行只占一次行高；逐卡累加会严重高估换页、且会把同行拆散
+    var PAGE_CONTENT_H = 1010; // px，约等于 A4 内容区高度（297mm - 上下 14mm 边距）
+    var HEADER_H = 70;         // 首页标题区预估高度（含间距），分页时预留
+    var page = makeContentPage(headerHTML);
+    pagesEl.appendChild(page);
+    var body = page.querySelector('.page-body');
+
+    // 1) 临时网格，按真实 DOM 把卡片归并成「行」（同 offsetTop 即同一行）
+    var frag = document.createElement('div');
+    frag.className = 'page-body grid ' + density;
+    frag.style.cssText = 'position:absolute;visibility:hidden;left:-99999px;';
+    // 用 offsetWidth 而非 getBoundingClientRect：后者会被 CSS transform:scale 影响，
+    // 手机端缩放后宽度变小会导致分页按「窄列」计算、与实际 210mm 页面不符
+    frag.style.width = body.offsetWidth + 'px';
+    items.forEach(function(it){ frag.appendChild(htmlToCard(it, m)); });
+    document.body.appendChild(frag);
+    var gap = parseFloat(getComputedStyle(frag).rowGap || getComputedStyle(frag).gap) || 12;
+
+    // 2) 预计算每行高度（取该行最高卡 + 行间距），并建立 卡序号 -> 行号 映射
+    var rowTops = [];      // 每行起始 offsetTop
+    var cardRow = [];      // cardRow[i] = 第 i 张卡的行号
+    var rows = [];         // rows[r] = 第 r 行高度
+    var kids = [].slice.call(frag.children);
+    kids.forEach(function(card, i){
+      var top = card.offsetTop;
+      var r = rowTops.length;
+      if (r === 0 || Math.abs(top - rowTops[r-1]) > 1) { rowTops.push(top); rows.push(0); r = rows.length - 1; }
+      else r = rows.length - 1;
+      cardRow[i] = r;
+      rows[r] = Math.max(rows[r], card.offsetHeight);
+    });
+    document.body.removeChild(frag);
+
+    // 3) 先把卡片按「行」分组（行内顺序保持 items 顺序），再逐行整组放入当前页；
+    //    本行放不下则整行搬到新页（同行卡一起走，绝不跨页拆分）
+    var used = HEADER_H; // 首页已含标题区，预先占去其高度
+    var rowGroups = []; // 每行: { h:行高, cards:[DOM] }
+    var curR = -1;
+    kids.forEach(function(card, i){
+      var r = cardRow[i];
+      if (r !== curR) { rowGroups.push({ h: rows[r] + gap, cards: [] }); curR = r; }
+      rowGroups[rowGroups.length - 1].cards.push(card);
+    });
+
+    rowGroups.forEach(function(rg){
+      if (used + rg.h > PAGE_CONTENT_H && body.children.length > 0) {
+        page = makeContentPage();
+        pagesEl.appendChild(page);
+        body = page.querySelector('.page-body');
+        used = 0;
+      }
+      rg.cards.forEach(function(c){ body.appendChild(c); });
+      used += rg.h;
+    });
+    stampPages();
+  }
+
+  function htmlToCard(it, m){
+    var wrap = document.createElement('div');
+    wrap.innerHTML = cardHTML(it, m);
+    return wrap.firstChild;
+  }
+
+  function stampPages(){
+    var ps = pagesEl.querySelectorAll('.page');
+    ps.forEach(function(p, i){
+      var no = p.querySelector('.pageno');
+      if (no) no.textContent = '第 ' + (i + 1) + ' / ' + ps.length + ' 页';
+    });
   }
 
   function render(){
-    var items = getItems();
-    if (!items.length) { emptyEl.style.display = 'block'; grid.innerHTML = ''; return; }
-    emptyEl.style.display = 'none';
-    // 批量拼接，减少 DOM 操作
-    var html = '';
-    for (var i = 0; i < items.length; i++) html += cardHTML(items[i]);
-    grid.innerHTML = html;
+    updateMeta();
+    buildPages(getItems(), mode);
   }
 
-  // 日期 chip 多选切换
-  dateChipsEl.addEventListener('click', function(e){
-    var btn = e.target.closest('button');
-    if (!btn) return;
-    var d = btn.getAttribute('data-d');
+  // ===== 日历组件 =====
+  function renderCalendar(){
+    var ym = ymList[viewIdx];
+    var y = +ym.slice(0, 4), mo = +ym.slice(5, 7);
+    calTitle.textContent = y + ' 年 ' + mo + ' 月';
+    calPrev.disabled = (viewIdx <= 0);
+    calNext.disabled = (viewIdx >= ymList.length - 1);
+
+    var first = new Date(y, mo - 1, 1);
+    var firstDow = (first.getDay() + 6) % 7; // 周一=0
+    var days = new Date(y, mo, 0).getDate();
+    var prevDays = new Date(y, mo - 1, 0).getDate(); // 上月总天数
+    var html = '';
+    ['一', '二', '三', '四', '五', '六', '日'].forEach(function(d){ html += '<div class="cal-dow">' + d + '</div>'; });
+
+    // 上月余白（带日期的灰色格，避免月初突兀；有新闻的仍可点）
+    var prevYM = (mo === 1) ? ((y - 1) + '-12') : (y + '-' + pad(mo - 1));
+    for (var i = 0; i < firstDow; i++) {
+      var pd = prevDays - firstDow + 1 + i;
+      var pds = prevYM + '-' + pad(pd);
+      var pAvail = allDatesSet.has(pds);
+      var pCls = 'cal-cell pad' + (pAvail ? ' avail' : '') + (selected.has(pds) ? ' sel' : '');
+      html += '<div class="' + pCls + '"' + (pAvail ? ' data-d="' + pds + '"' : '') + '>' + pd + '</div>';
+    }
+
+    // 当月日期
+    for (var d = 1; d <= days; d++) {
+      var ds = y + '-' + pad(mo) + '-' + pad(d);
+      var avail = allDatesSet.has(ds);
+      var cls = 'cal-cell ' + (avail ? ('avail' + (selected.has(ds) ? ' sel' : '')) : '');
+      html += '<div class="' + cls + '"' + (avail ? ' data-d="' + ds + '"' : '') + '>' + d + '</div>';
+    }
+
+    // 下月余白，补齐到 7 的倍数（至少补一行，让月底日期不悬空）
+    var nextYM = (mo === 12) ? ((y + 1) + '-01') : (y + '-' + pad(mo + 1));
+    var totalCells = firstDow + days;
+    var tail = (7 - (totalCells % 7)) % 7;
+    if (tail === 0) tail = 7; // 始终多补一行，视觉更稳
+    for (var j = 1; j <= tail; j++) {
+      var nds = nextYM + '-' + pad(j);
+      var nAvail = allDatesSet.has(nds);
+      var nCls = 'cal-cell pad' + (nAvail ? ' avail' : '') + (selected.has(nds) ? ' sel' : '');
+      html += '<div class="' + nCls + '"' + (nAvail ? ' data-d="' + nds + '"' : '') + '>' + j + '</div>';
+    }
+
+    calGrid.innerHTML = html;
+    dateTrigger.innerHTML = (selected.size ? '已选 ' + selected.size + ' 天' : '选择日期') + ' ▾';
+  }
+
+  // ===== 事件 =====
+  dateTrigger.addEventListener('click', function(e){
+    e.stopPropagation();
+    datePop.hidden = !datePop.hidden;
+  });
+  document.addEventListener('click', function(e){
+    if (!datePop.hidden && !e.target.closest('.date-wrap')) datePop.hidden = true;
+  });
+
+  calGrid.addEventListener('click', function(e){
+    e.stopPropagation(); // 阻止冒泡，避免 renderCalendar 重建格子后被 document 误判为点击外部
+    var cell = e.target.closest('.cal-cell.avail');
+    if (!cell) return;
+    var d = cell.getAttribute('data-d');
     if (selected.has(d)) selected.delete(d); else selected.add(d);
-    btn.classList.toggle('active');
-    updateMeta();
+    renderCalendar();
     render();
   });
 
-  // 快捷操作：最近 7 天 / 全选 / 清除
-  var actions = document.querySelector('.datebar-actions');
-  actions.addEventListener('click', function(e){
-    var btn = e.target.closest('button');
-    if (!btn) return;
+  calConfirm.addEventListener('click', function(e){
+    e.stopPropagation();
+    datePop.hidden = true;
+  });
+
+  calPrev.addEventListener('click', function(){
+    if (viewIdx > 0) { viewIdx--; renderCalendar(); }
+  });
+  calNext.addEventListener('click', function(){
+    if (viewIdx < ymList.length - 1) { viewIdx++; renderCalendar(); }
+  });
+
+  document.querySelector('.cal-actions').addEventListener('click', function(e){
+    var btn = e.target.closest('button'); if (!btn) return;
     var act = btn.getAttribute('data-act');
     if (act === 'last7') selected = new Set(allDates.slice(0, 7));
     else if (act === 'all') selected = new Set(allDates);
     else if (act === 'clear') selected = new Set();
-    renderChips();
-    updateMeta();
+    renderCalendar();
     render();
   });
 
-  // 密度切换
-  var seg = document.getElementById('seg');
-  seg.addEventListener('click', function(e){
-    var btn = e.target.closest('button');
-    if (!btn) return;
-    [].forEach.call(seg.querySelectorAll('button'), function(b){ b.classList.remove('active'); });
+  modeSeg.addEventListener('click', function(e){
+    var btn = e.target.closest('button'); if (!btn) return;
+    mode = btn.getAttribute('data-m');
+    [].forEach.call(modeSeg.querySelectorAll('button'), function(b){ b.classList.remove('active'); });
     btn.classList.add('active');
-    grid.className = 'grid ' + btn.getAttribute('data-d');
+    try { localStorage.setItem('shehui_news_mode', mode); } catch (e2) {}
     render();
   });
 
-  // 初始渲染
-  renderChips();
-  updateMeta();
+  densSeg.addEventListener('click', function(e){
+    var btn = e.target.closest('button'); if (!btn) return;
+    density = btn.getAttribute('data-d');
+    [].forEach.call(densSeg.querySelectorAll('button'), function(b){ b.classList.remove('active'); });
+    btn.classList.add('active');
+    render();
+  });
+
+  // 初始
+  renderCalendar();
   render();
 })();
 </script>
