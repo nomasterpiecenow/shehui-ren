@@ -46,9 +46,29 @@ const sandbox = {
   setTimeout: () => 0, clearTimeout: () => 0,
   requestAnimationFrame: () => 0, cancelAnimationFrame: () => 0,
   document: { getElementById: () => elStub(), querySelector: () => elStub(), querySelectorAll: () => [], createElement: () => elStub(), body: elStub(), addEventListener: () => {} },
+  matchMedia: () => ({ matches: false, media: '', onchange: null, addEventListener() {}, removeEventListener() {}, addListener() {}, removeListener() {}, dispatchEvent() { return false; } }),
+  localStorage: { getItem() { return null; }, setItem() {}, removeItem() {}, clear() {} },
+  IntersectionObserver: class { observe() {} unobserve() {} disconnect() {} },
+  getComputedStyle: () => ({ getPropertyValue: () => '', display: 'block' }),
+  location: { href: 'https://shehui-ren.com/', origin: 'https://shehui-ren.com', protocol: 'https:', host: 'shehui-ren.com', hostname: 'shehui-ren.com', pathname: '/', search: '', hash: '', assign() {}, replace() {}, reload() {} },
+  navigator: { userAgent: 'node', language: 'zh-CN', platform: 'node', onLine: true },
+  history: { pushState() {}, replaceState() {}, back() {}, forward() {}, go() {} },
+  fetch: () => Promise.resolve({ ok: true, status: 200, json: () => Promise.resolve({}), text: () => Promise.resolve('') }),
+  XMLHttpRequest: function () { return { open() {}, send() {}, setRequestHeader() {}, addEventListener() {}, status: 200, responseText: '' }; },
+  customElements: { define() {}, get() {} },
 };
 sandbox.window = sandbox;
 sandbox.window.addEventListener = () => {};
+sandbox.window.matchMedia = sandbox.matchMedia;
+sandbox.window.localStorage = sandbox.localStorage;
+sandbox.window.IntersectionObserver = sandbox.IntersectionObserver;
+sandbox.window.getComputedStyle = sandbox.getComputedStyle;
+sandbox.window.location = sandbox.location;
+sandbox.window.navigator = sandbox.navigator;
+sandbox.window.history = sandbox.history;
+sandbox.window.fetch = sandbox.fetch;
+sandbox.window.XMLHttpRequest = sandbox.XMLHttpRequest;
+sandbox.window.customElements = sandbox.customElements;
 sandbox.globalThis = sandbox;
 
 const harness = `
@@ -122,6 +142,8 @@ dates.forEach(date => {
   arr.forEach((it, i) => {
     const tag = date + '#' + (it.id ?? i);
     REQUIRED.forEach(f => ok(it[f] !== undefined && it[f] !== null && it[f] !== '', tag + ': 缺字段 ' + f));
+    // 速用模式素材（essayQuote）必填：每条新闻都应带议论文金句，否则速用模式无内容、只能回退完整版
+    ok(it.essayQuote && typeof it.essayQuote === 'string' && it.essayQuote.trim().length > 0, tag + ': 缺 essayQuote(速用金句)');
     // url 形如 http(s)
     ok(typeof it.url === 'string' && /^https?:\/\//.test(it.url.trim()), tag + ': url 非法 -> ' + it.url);
     // S0 来源分层(软告警)：疑似 UGC 个人源，提示人工复核是否为可核验编辑源
