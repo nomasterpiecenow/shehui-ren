@@ -1,28 +1,29 @@
 {
   "meta": {
-    "date": "2026-08-05",
+    "date": "2026-08-06",
     "slot": "morning",
-    "generatedAt": "2026-08-05T01:35:33.714+08:00",
+    "generatedAt": "2026-08-06T01:26:43.041Z",
     "count": 15,
-    "majorCount": 4,
+    "majorCount": 1,
     "disciplinesCovered": [
       "econ",
       "psy",
       "soc"
     ],
-    "researchCount": 4,
+    "researchCount": 1,
     "validation": "PASS"
   },
   "chosen": [
     {
       "id": 1,
-      "title": "超强台风“白海豚”加强至16级逼近华东，第14号台风“鲸鱼”生成，8月台风活跃期开启",
+      "title": "三台风共舞！“白海豚”锁定9至10日登陆浙闽、“灿鸿”生成、“鲸鱼”登陆菲律宾后减弱",
       "major": true,
       "platforms": [
         "百度热搜",
-        "微博（央视新闻）",
+        "微博热搜",
         "知乎热榜",
-        "抖音热搜"
+        "抖音热搜",
+        "今日头条"
       ],
       "disciplines": [
         "soc"
@@ -35,167 +36,82 @@
     },
     {
       "id": 2,
-      "title": "泰航拒载22名中国乘客、安保做“拉眼角”歧视手势，泰国机场致歉并惩处涉事人员",
-      "major": true,
+      "title": "137名返乡大学生走进安徽灵璧“和美乡村直播间”，化身“青春主播”宣讲政策、服务乡亲",
+      "major": false,
       "platforms": [
-        "抖音热搜",
-        "百度热搜",
-        "微博热搜",
-        "今日头条"
+        "中国青年报",
+        "微博"
       ],
       "disciplines": [
         "soc"
       ],
       "strongest": "strong",
       "theories": [
-        "othering",
-        "globalization"
+        "youth",
+        "media"
       ]
     },
     {
       "id": 3,
-      "title": "全国高温持续：今夏首个50℃+国家级气象站出现，8月多地阶段性高温热浪风险高",
-      "major": true,
+      "title": "暑期志愿服务蔚然成风，青年力量点亮基层社会",
+      "major": false,
       "platforms": [
-        "百度热搜",
-        "微博",
-        "知乎热榜",
-        "抖音热搜"
+        "新华社",
+        "微博"
       ],
       "disciplines": [
         "soc"
       ],
       "strongest": "strong",
       "theories": [
-        "risk_society",
-        "health"
-      ]
-    },
-    {
-      "id": 4,
-      "title": "“竹知了”反噬华为：批量投诉下架触发史翠珊效应，几毛钱玩具销量暴涨成全网顶流",
-      "major": true,
-      "platforms": [
-        "微博热搜",
-        "百度热搜",
-        "抖音热搜",
-        "今日头条"
-      ],
-      "disciplines": [
-        "soc",
-        "psy"
-      ],
-      "strongest": "strong",
-      "theories": [
-        "media",
-        "attention_economy",
-        "psy_social_influence"
-      ]
-    },
-    {
-      "id": 5,
-      "title": "信用卡三年“消失”1.2亿张：从跑马圈地到精耕细作，年轻人转向花呗们",
-      "major": false,
-      "platforms": [],
-      "disciplines": [
-        "econ"
-      ],
-      "strongest": "strong",
-      "theories": [
-        "econ_behavioral",
-        "econ_finance"
-      ]
-    },
-    {
-      "id": 6,
-      "title": "超60城调整优化公积金政策：额度上调、提取拓宽到装修物业费，灵活就业者也可缴",
-      "major": false,
-      "platforms": [],
-      "disciplines": [
-        "econ",
-        "soc"
-      ],
-      "strongest": "strong",
-      "theories": [
-        "econ_welfare",
+        "youth",
         "social_capital"
       ]
     },
     {
-      "id": 7,
-      "title": "“中午有午休吗”被回怼百字小作文，求职者问休息反遭招聘方破防引热议",
+      "id": 4,
+      "title": "我国首部《反网络暴力法》公开征求意见，明确平台责任、最高可罚1000万元",
       "major": false,
-      "platforms": [],
-      "disciplines": [
-        "soc"
+      "platforms": [
+        "微博热搜",
+        "百度热搜",
+        "央视新闻"
       ],
-      "strongest": "strong",
-      "theories": [
-        "work",
-        "law"
-      ]
-    },
-    {
-      "id": 8,
-      "title": "买错机票7分钟退票被扣2022元，长龙航空称两小时内购正确行程可全额退",
-      "major": false,
-      "platforms": [],
-      "disciplines": [
-        "econ"
-      ],
-      "strongest": "strong",
-      "theories": [
-        "econ_info_asym",
-        "econ_behavioral"
-      ]
-    },
-    {
-      "id": 9,
-      "title": "四大行5年期大额存单全面“返场”：最高利率1.6%，距集体下架不到一年",
-      "major": false,
-      "platforms": [],
-      "disciplines": [
-        "econ"
-      ],
-      "strongest": "strong",
-      "theories": [
-        "econ_monetary_policy",
-        "econ_macro"
-      ]
-    },
-    {
-      "id": 10,
-      "title": "扛钢管的单亲妈妈在出租屋收到女儿北大录取短信：“三无人员”的小小成就",
-      "major": false,
-      "platforms": [],
-      "disciplines": [
-        "soc"
-      ],
-      "strongest": "strong",
-      "theories": [
-        "education",
-        "stratification"
-      ]
-    },
-    {
-      "id": 11,
-      "title": "男子用恋爱留存私密视频勒索前女友50余次，获刑一年三个月",
-      "major": false,
-      "platforms": [],
       "disciplines": [
         "soc"
       ],
       "strongest": "strong",
       "theories": [
         "law",
-        "deviance"
+        "othering"
       ]
     },
     {
-      "id": 12,
-      "title": "录取通知书闹乌龙：“本科”印成“专科”、“身份证”写成“身证份”，两高校回应",
+      "id": 5,
+      "title": "冰红茶不香了？康师傅涨价丢市场，无糖茶崛起改写饮料版图",
       "major": false,
-      "platforms": [],
+      "platforms": [
+        "微博",
+        "网易"
+      ],
+      "disciplines": [
+        "econ"
+      ],
+      "strongest": "strong",
+      "theories": [
+        "econ_behavioral",
+        "econ_supply_demand"
+      ]
+    },
+    {
+      "id": 6,
+      "title": "同济大学取消“终身聘任”，全员纳入周期考核引热议",
+      "major": false,
+      "platforms": [
+        "知乎热榜",
+        "微博",
+        "新浪财经"
+      ],
       "disciplines": [
         "soc"
       ],
@@ -206,46 +122,170 @@
       ]
     },
     {
-      "id": 13,
-      "title": "新人把高铁当婚车：贵州姑娘乘高铁远嫁四川发喜糖，安徽新人“1.8亿婚车”甜翻全网",
+      "id": 7,
+      "title": "存款利率全面进入“1字头”，钱该放哪成全民纠结",
       "major": false,
-      "platforms": [],
+      "platforms": [
+        "腾讯新闻",
+        "微博"
+      ],
       "disciplines": [
-        "soc"
+        "econ"
       ],
       "strongest": "strong",
       "theories": [
-        "family",
-        "attention_economy"
+        "econ_monetary_policy",
+        "econ_macro"
       ]
     },
     {
-      "id": 14,
-      "title": "患癌妻子申请销毁丈夫婚外胚胎遭拒，上海卫健委：无销毁职责建议走司法",
+      "id": 8,
+      "title": "河南印发带薪休假新政：领导干部带头休，推动全员应休尽休",
       "major": false,
-      "platforms": [],
+      "platforms": [
+        "人民网",
+        "微博",
+        "今日头条"
+      ],
       "disciplines": [
         "soc"
       ],
       "strongest": "strong",
       "theories": [
-        "family",
+        "work",
         "law"
       ]
     },
     {
-      "id": 15,
-      "title": "姚洋称“智商低于150搞不好数学”引争议：天赋与努力的教育思辨",
+      "id": 9,
+      "title": "精神科医生“十级美颜”证件照火出圈，医院改回无美颜照片",
       "major": false,
-      "platforms": [],
+      "platforms": [
+        "微博热搜",
+        "网易",
+        "抖音"
+      ],
       "disciplines": [
         "psy",
         "soc"
       ],
       "strongest": "strong",
       "theories": [
-        "psy_growth_mindset",
-        "education"
+        "psy_stereotype",
+        "goffman"
+      ]
+    },
+    {
+      "id": 10,
+      "title": "长鑫拒绝苹果压价：报价不低于三星、海力士，国产DRAM有了议价底气",
+      "major": false,
+      "platforms": [
+        "界面新闻",
+        "微博",
+        "今日头条"
+      ],
+      "disciplines": [
+        "econ",
+        "soc"
+      ],
+      "strongest": "strong",
+      "theories": [
+        "econ_supply_demand",
+        "technology"
+      ]
+    },
+    {
+      "id": 11,
+      "title": "中国AI大模型连续14周霸榜全球，开源模型重写产业逻辑",
+      "major": false,
+      "platforms": [
+        "中国网",
+        "微博",
+        "知乎"
+      ],
+      "disciplines": [
+        "econ",
+        "soc"
+      ],
+      "strongest": "strong",
+      "theories": [
+        "technology",
+        "econ_growth"
+      ]
+    },
+    {
+      "id": 12,
+      "title": "DeepSeek一天消耗8万亿Token，Agent爆发引发“程序员焦虑”",
+      "major": false,
+      "platforms": [
+        "爱范儿",
+        "微博",
+        "知乎"
+      ],
+      "disciplines": [
+        "econ",
+        "soc"
+      ],
+      "strongest": "strong",
+      "theories": [
+        "econ_labor",
+        "technology"
+      ]
+    },
+    {
+      "id": 13,
+      "title": "银鹭抽奖码被提前核销，男子维权获赔1万却被备注“敲诈”",
+      "major": false,
+      "platforms": [
+        "扬子晚报",
+        "微博",
+        "今日头条"
+      ],
+      "disciplines": [
+        "econ",
+        "soc"
+      ],
+      "strongest": "strong",
+      "theories": [
+        "econ_moral_hazard",
+        "law"
+      ]
+    },
+    {
+      "id": 14,
+      "title": "建行恩施分行试行午休1.5小时冲上热搜，银行“反内卷”从价格烧到作息",
+      "major": false,
+      "platforms": [
+        "微博热搜",
+        "每日经济新闻",
+        "小红书"
+      ],
+      "disciplines": [
+        "econ",
+        "soc"
+      ],
+      "strongest": "strong",
+      "theories": [
+        "work",
+        "econ_labor"
+      ]
+    },
+    {
+      "id": 15,
+      "title": "“十五五”开局之年：以先进制造业为骨干，加快构建现代化产业体系",
+      "major": false,
+      "platforms": [
+        "新华社",
+        "腾讯新闻"
+      ],
+      "disciplines": [
+        "econ",
+        "soc"
+      ],
+      "strongest": "strong",
+      "theories": [
+        "econ_macro",
+        "institutionalism"
       ]
     }
   ],
@@ -263,15 +303,19 @@
       "reason": "S0 排除：UGC 个人源，无≥1 个编辑源佐证，不取"
     },
     {
-      "title": "台风\"红霞\"后续（7/24–26 已连续覆盖3天）",
-      "reason": "S5 去重：同事件7天内已达连续覆盖上限，取新角度需间隔"
-    },
-    {
       "title": "网传某地灾情（仅短视频流传）",
       "reason": "S0 排除：无官方/编辑源二级核实，疑似无源灾情"
     },
     {
-      "title": "某弱关联消费话题（仅单点链接）",
+      "title": "台风\"红霞\"后续（7/24–26 已连续覆盖3天）",
+      "reason": "S5 去重：同事件7天内已达连续覆盖上限"
+    },
+    {
+      "title": "台风\"白海豚/鲸鱼\"普通跟进（无新进展）",
+      "reason": "S5 去重：08-05 已以双台风为 major 入库；08-06 仅保留\"三台风共舞+灿鸿生成+锁定登陆\"新进展角度"
+    },
+    {
+      "title": "纯弱关联消费话题（仅单点链接）",
       "reason": "S4 未达标：仅 weak 链接、无 strong 理论锚定，剔除"
     }
   ]
