@@ -3,8 +3,8 @@
 单文件 HTML + Canvas 力导向知识图谱，三学科（社会学 / 经济学 / 心理学）
 + 每日新闻页。正式站 https://shehui-ren.com （Netlify 托管）。
 
-当前版本 **v1.36**（素材卡片一键导出（免费功能）· 学科圆点 · 移动端适配）。
-对应 service worker 缓存版本 `shehui-ren-v19`。
+当前版本 **v1.49**（素材分类反向检索页 · 速用模式 · 作文主题受控词表 · 移动端适配）。
+对应 service worker 缓存版本 `shehui-ren-v42`。
 
 图谱规模：**311 节点 / 3 组连线表**（`CONCEPT_LINKS` / `THINKER_LINKS` / `EXTRA_CONCEPT_LINKS`）。
 节点分四类 `cat ∈ {thinker, theory, concept, topic}`，三学科 `disc ∈ {soc, econ, psy}`。

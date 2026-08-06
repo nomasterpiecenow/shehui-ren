@@ -886,6 +886,7 @@
     <div class="nav-logo"><span class="dot"></span>社会人</div>
     <div class="nav-links">
         <a href="#" class="tab-link active" data-page="page-topics">社会热点</a>
+        <a href="#" class="tab-link" data-page="page-classify">素材分类</a>
         <a href="#" class="tab-link" data-page="page-map">知识图谱</a>
         <a href="#" class="nav-guide" onclick="openGuide();return false;">怎么用</a>
     </div>
@@ -976,7 +977,7 @@
   </aside>
   <div class="topics-main">
     <div class="section-header">
-        <span class="section-num">02 / 社会热点</span>
+        <span class="section-num">01 / 社会热点</span>
         <h2 class="section-title" id="heroTitle">世间热点皆素材</h2>
         <p class="section-subtitle" id="heroSubtitle">每一个热点，都是直接能用的议论文素材</p>
         <a href="news-export.html" class="export-icon" target="_blank" rel="noopener noreferrer" title="导出素材" aria-label="导出素材">
@@ -997,15 +998,70 @@
     <div class="topics-grid" id="topicsGrid"></div>
   </div>
 </section>
+</div><!-- /page-topics -->
 <div class="date-backdrop" id="dateBackdrop"></div>
 <div class="detail-panel" id="newsPanel">
     <div class="dp-header" id="newsPanelHeader"></div>
     <div class="dp-body" id="newsPanelBody"></div>
 </div>
-</div><!-- /page-topics -->
 
 
+<div id="page-classify" class="page">
+<section class="section classify-section">
+  <div class="section-header">
+    <span class="section-num">02 / 素材分类</span>
+    <h2 class="section-title">按作文主题找素材</h2>
+    <p class="section-subtitle">选主题，反向检索所有相关时事素材</p>
+  </div>
+  <div class="classify-filter" id="classifyFilter">
+    <button class="cf-toggle" id="cfToggle" type="button"><span class="cf-label">按主题筛选</span><span class="cf-caret">▾</span></button>
+    <div class="cf-body" id="cfBody"></div>
+    <div class="cf-tray" id="cfTray"></div>
+  </div>
+  <div class="classify-grid" id="classifyGrid"></div>
+  <div class="classify-empty" id="classifyEmpty" hidden>没有匹配的素材，换个主题试试</div>
+</section>
+<style>
+#page-classify{min-height:100vh;background:var(--bg);padding-top:56px}
+#page-classify .section{max-width:1200px;margin:0 auto;padding:36px 24px}
+.classify-filter{background:var(--bg-card);border:1px solid var(--border-light);border-radius:var(--radius);padding:12px 16px;margin:24px 0 8px;box-shadow:0 2px 10px rgba(45,48,75,0.05)}
+.cf-toggle{width:100%;display:flex;justify-content:space-between;align-items:center;background:linear-gradient(180deg,#fff 0%,var(--bg-card) 100%);border:1px solid var(--border-light);border-radius:calc(var(--radius) - 4px);padding:13px 16px;font-size:14px;font-weight:600;color:var(--text);cursor:pointer;font-family:var(--font-body);transition:border-color .15s,box-shadow .15s}
+.cf-toggle:hover{border-color:var(--red);box-shadow:0 2px 8px rgba(200,75,58,0.12)}
+.cf-toggle .cf-caret{color:var(--text-muted);font-size:12px;transition:transform .2s}
+.classify-filter.open .cf-toggle .cf-caret{transform:rotate(180deg)}
+.cf-body{display:none;padding:16px 0 4px;margin-top:12px;border-top:1px solid var(--border-light)}
+.classify-filter.open .cf-body{display:block}
+.ct-group{margin-bottom:16px}
+.ct-group:last-child{margin-bottom:4px}
+.ct-gh{display:flex;align-items:center;gap:7px;font-size:12px;color:var(--text-muted);margin-bottom:9px;font-weight:600;letter-spacing:.02em}
+.ct-gh::before{content:'';width:3px;height:13px;border-radius:2px;background:var(--red)}
+.ct-row{display:flex;flex-wrap:wrap;gap:8px}
+.ct-chip{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border:1px solid var(--border);border-radius:999px;font-size:12.5px;cursor:pointer;color:var(--text);background:var(--bg-card);transition:all .15s;user-select:none}
+.ct-chip:hover{border-color:var(--red);color:var(--red);transform:translateY(-1px)}
+.ct-chip .ct-n{font-size:11px;color:var(--text-muted);background:var(--bg);border-radius:999px;padding:2px 7px;min-width:20px;text-align:center}
+.ct-chip.on{background:var(--red);border-color:var(--red);color:#fff;box-shadow:0 2px 8px rgba(200,75,58,0.25)}
+.ct-chip.on .ct-n{color:rgba(255,255,255,.92);background:rgba(255,255,255,.2)}
+.cf-tray{display:flex;flex-wrap:wrap;align-items:center;gap:8px;padding-top:14px;margin-top:8px;border-top:1px dashed var(--border-light)}
+.ct-tray-empty{font-size:12px;color:var(--text-muted)}
+.ct-count{font-size:11px;font-weight:600;color:var(--text-muted);background:var(--bg);border:1px solid var(--border-light);border-radius:999px;padding:5px 11px}
+.ct-x{display:inline-flex;align-items:center;gap:5px;padding:6px 7px 6px 13px;border-radius:999px;background:var(--red-soft);border:1px solid var(--red);color:var(--red);cursor:pointer;font-size:12.5px;line-height:1;transition:all .15s}
+.ct-x:hover{background:var(--red);color:#fff}
+.ct-x .ct-x-close{display:inline-flex;align-items:center;justify-content:center;width:16px;height:16px;border-radius:50%;background:rgba(200,75,58,.16);font-size:13px;line-height:1;transition:all .15s}
+.ct-x:hover .ct-x-close{background:rgba(255,255,255,.35)}
+.ct-clear{margin-left:auto;font-size:11px;color:var(--text-muted);cursor:pointer;padding:5px 12px;border-radius:999px;border:1px solid var(--border-light);background:var(--bg);transition:all .15s}
+.ct-clear:hover{color:var(--red);border-color:var(--red)}
+.classify-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:20px;margin-top:24px}
+.classify-empty{text-align:center;padding:40px;color:var(--text-muted)}
+#page-classify .topic-card{background:var(--bg-card);border:1px solid var(--border-light);border-radius:var(--radius);padding:24px;cursor:pointer;transition:all .3s;position:relative;overflow:hidden}
+#page-classify .topic-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--red);transform:scaleX(0);transform-origin:left;transition:transform .4s}
+#page-classify .topic-card:hover::before{transform:scaleX(1)}
+#page-classify .topic-card:hover{box-shadow:var(--shadow-lg);border-color:var(--border);transform:translateY(-2px)}
+@media (max-width:768px){ #page-classify .classify-grid{grid-template-columns:1fr} #page-classify .section{padding:28px 16px} }
+</style>
+</div><!-- /page-classify -->
 
+
+<!-- ── NEWS DATA (auto-updated twice daily by scheduled task; see NEWS_REVIEW_STANDARD.md) ── -->
 <!-- ── NEWS DATA (auto-updated twice daily by scheduled task; see NEWS_REVIEW_STANDARD.md) ── -->
 <script src="news-data.js"></script>
 <!-- ── ESSAY TOPIC LIBRARY (受控词表：作文主题标签库 shehui-topics-v1) ── -->
@@ -4814,6 +4870,7 @@ function switchPage(pageId) {
     if (animFrame) { cancelAnimationFrame(animFrame); animFrame = null; } // [Phase 2] stop map loop when leaving
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
     document.querySelectorAll('.tab-link').forEach(t => t.classList.remove('active'));
+    if (pageId === 'page-classify') ensureClassify();
     document.getElementById(pageId).classList.add('active');
     document.querySelector(`[data-page="${pageId}"]`).classList.add('active');
     if (pageId === 'page-map') {
@@ -5010,9 +5067,146 @@ function renderNewsForDate(date) {
     }).join('');
 }
 
+// ===== 素材分类 · 反向检索（v1.49）=====
+let classifyBuilt = false;
+let classifySel = new Set();
+let classifyAll = [];
+let classifyFiltered = [];
+let classifyOffset = 0;
+const CLASSIFY_PAGE = 15;
+
+function buildClassifyData() {
+  const dates = Object.keys(NEWS_DATA).sort((a, b) => b.localeCompare(a));
+  classifyAll = [];
+  dates.forEach(d => (NEWS_DATA[d] || []).forEach(it => classifyAll.push({ item: it, date: d })));
+}
+function classifyTopicCounts() {
+  const counts = {};
+  classifyAll.forEach(({ item }) => (item.essayTopics || []).forEach(t => {
+    const id = typeof t === 'string' ? t : t.id;
+    counts[id] = (counts[id] || 0) + 1;
+  }));
+  return counts;
+}
+function renderClassifyFilter() {
+  const body = document.getElementById('cfBody');
+  const counts = classifyTopicCounts();
+  const dims = {};
+  const dimOrder = [];
+  Object.values(TOPIC_LIB.topics).forEach(t => {
+    (dims[t.dim] = dims[t.dim] || []).push(t);
+    if (!dimOrder.includes(t.dim)) dimOrder.push(t.dim);
+  });
+  body.innerHTML = dimOrder.map(dim => {
+    const subs = dims[dim].map(t => {
+      const n = counts[t.id] || 0;
+      const on = classifySel.has(t.id) ? ' on' : '';
+      return `<span class="ct-chip${on}" data-id="${t.id}">${t.label}<span class="ct-n">${n}</span></span>`;
+    }).join('');
+    return `<div class="ct-group"><div class="ct-gh">${dim}</div><div class="ct-row">${subs}</div></div>`;
+  }).join('');
+  body.querySelectorAll('.ct-chip').forEach(ch => ch.addEventListener('click', () => {
+    const id = ch.dataset.id;
+    if (classifySel.has(id)) classifySel.delete(id); else classifySel.add(id);
+    ch.classList.toggle('on');
+    renderClassifyTray();
+    resetClassifyResults();
+  }));
+}
+function renderClassifyTray() {
+  const tray = document.getElementById('cfTray');
+  if (classifySel.size === 0) { tray.innerHTML = '<span class="ct-tray-empty">未选择 · 展示全部素材</span>'; return; }
+  tray.innerHTML = '<span class="ct-count">已选 ' + classifySel.size + '</span>'
+    + Array.from(classifySel).map(id => {
+      const t = TOPIC_LIB.topics[id];
+      return `<span class="ct-x" data-id="${id}">${t ? t.label : id}<span class="ct-x-close">×</span></span>`;
+    }).join('')
+    + '<span class="ct-clear" id="ctClear">清除全部</span>';
+  tray.querySelectorAll('.ct-x').forEach(x => x.addEventListener('click', () => {
+    const id = x.dataset.id; classifySel.delete(id);
+    const chip = document.querySelector(`.ct-chip[data-id="${id}"]`);
+    if (chip) chip.classList.remove('on');
+    renderClassifyTray(); resetClassifyResults();
+  }));
+  const clr = document.getElementById('ctClear');
+  if (clr) clr.addEventListener('click', () => {
+    classifySel.clear();
+    document.querySelectorAll('.ct-chip.on').forEach(c => c.classList.remove('on'));
+    renderClassifyTray(); resetClassifyResults();
+  });
+}
+function applyClassifyFilter() {
+  if (classifySel.size === 0) { classifyFiltered = classifyAll; return; }
+  classifyFiltered = classifyAll.filter(({ item }) =>
+    (item.essayTopics || []).some(t => classifySel.has(typeof t === 'string' ? t : t.id)));
+}
+function resetClassifyResults() {
+  applyClassifyFilter();
+  classifyOffset = 0;
+  document.getElementById('classifyGrid').innerHTML = '';
+  document.getElementById('classifyEmpty').hidden = classifyFiltered.length !== 0;
+  renderClassifyBatch();
+}
+function classifyCardHTML(rec, i) {
+  const { item, date } = rec;
+  const rank = i + 1;
+  const leadLine = item.essayQuote || item.gist;
+  const topicChips = (item.essayTopics || []).slice(0, 3).map(t =>
+    `<button class="essay-topic-chip" onclick="event.stopPropagation();openClassifyNews(${item.id})" title="适用作文主题：${t.label}">${t.label}</button>`
+  ).join('');
+  const bottom = topicChips ? `<div class="topic-tags essay-topics-row">${topicChips}</div>` : '';
+  return `<div class="topic-card fade-in visible" onclick="openClassifyNews(${item.id})">
+    <div class="topic-card-header">
+      <span class="topic-rank ${rank<=3?'top3':''}">${String(rank).padStart(2,'0')}</span>
+      <div class="topic-title">${item.title}</div>
+    </div>
+    ${leadLine ? `<div class="topic-gist">${leadLine}</div>` : ''}
+    <div class="topic-meta"><span>${item.source}</span><span class="dot"></span><span>${date}</span></div>
+    ${bottom}
+  </div>`;
+}
+function renderClassifyBatch() {
+  const grid = document.getElementById('classifyGrid');
+  const slice = classifyFiltered.slice(classifyOffset, classifyOffset + CLASSIFY_PAGE);
+  if (slice.length === 0) return;
+  grid.insertAdjacentHTML('beforeend', slice.map((rec, i) => classifyCardHTML(rec, classifyOffset + i)).join(''));
+  classifyOffset += slice.length;
+  document.getElementById('classifyEmpty').hidden = classifyFiltered.length !== 0;
+}
+function ensureClassify() {
+  if (!classifyBuilt) {
+    buildClassifyData();
+    renderClassifyFilter();
+    renderClassifyTray();
+    resetClassifyResults();
+    document.getElementById('cfToggle').addEventListener('click', () => {
+      const f = document.getElementById('classifyFilter');
+      const open = f.classList.toggle('open');
+      f.querySelector('.cf-label').textContent = open ? '收起筛选' : '按主题筛选';
+    });
+    classifyBuilt = true;
+  }
+  window.scrollTo(0, 0);
+}
+function openClassifyNews(id) { showNewsDetail(id); }
+
+window.addEventListener('scroll', () => {
+  const page = document.getElementById('page-classify');
+  if (!page || !page.classList.contains('active')) return;
+  if (classifyOffset >= classifyFiltered.length) return;
+  if ((window.innerHeight + window.scrollY) >= (document.body.offsetHeight - 600)) renderClassifyBatch();
+});
+
 function showNewsDetail(id, resetMode = true) {
-    const activeDate = document.querySelector('.date-btn-side.active')?.dataset.date || Object.keys(NEWS_DATA).sort((a,b)=>b.localeCompare(a))[0];
-    const item = (NEWS_DATA[activeDate] || []).find(n => n.id === id);
+    let activeDate = document.querySelector('.date-btn-side.active')?.dataset.date;
+    let item;
+    if (activeDate && (NEWS_DATA[activeDate] || []).some(n => n.id === id)) {
+      item = (NEWS_DATA[activeDate] || []).find(n => n.id === id);
+    } else {
+      for (const d of Object.keys(NEWS_DATA).sort((a,b)=>b.localeCompare(a))) {
+        if ((NEWS_DATA[d] || []).some(n => n.id === id)) { activeDate = d; item = (NEWS_DATA[d] || []).find(n => n.id === id); break; }
+      }
+    }
     if (!item) return;
     currentNewsItem = item;   // 记下当前新闻，供节点详情卡「返回新闻」重开
     // 仅"从卡片点开新面板"时，单篇模式默认跟随外部大开关；
