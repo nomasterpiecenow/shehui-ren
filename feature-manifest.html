@@ -714,80 +714,18 @@
     </section>
 
     <!-- PAGE 1: SOCIAL HOTSPOTS -->
-    <section id="page-hotspots">
+        <section id="page-hotspots">
         <h2>页面一：社会热点（首页）</h2>
-        <p>打开网站后首先看到社会热点页面。左侧是日期导航边栏，右侧是新闻卡片网格。点击卡片从右侧滑出详情面板。</p>
+        <p>打开网站后首先看到社会热点页面。页面默认进入<strong>速用模式</strong>，顶部 Hero 区会根据模式动态切换文案：速用模式显示「世间热点皆素材」/「每一个热点，都是直接能用的议论文素材」，进阶模式显示「社科视角，站得更高」/「我提供视角，你自由发挥」。标题区右上角提供<strong>导出素材</strong>图标入口（点击打开 <code>news-export.html</code>）。页面主体左侧为按年月折叠的日期导航边栏，右侧为新闻卡片网格；点击卡片从右侧滑出 440px 详情面板。</p>
 
         <div class="screenshot">
-            <div class="screenshot-label"> 社会热点页面 — 整体布局</div>
-            <div class="page-mockup" style="height:520px;">
-                <div class="mock-nav">
-                    <div class="mock-nav-logo"><span class="dot"></span>社会人</div>
-                    <div class="mock-nav-links">
-                        <div class="mock-nav-link active">社会热点</div>
-                        <div class="mock-nav-link">知识图谱</div>
-                    </div>
-                </div>
-                <div class="hotpage-layout">
-                    <div class="hotpage-sidebar">
-                        <div class="hotpage-sidebar-title">📅 选择日期</div>
-                        <div class="hotpage-date active">2026-07-15</div>
-                        <div class="hotpage-date">2026-07-14</div>
-                        <div class="hotpage-date">2026-07-12</div>
-                    </div>
-                    <div class="hotpage-main">
-                        <div class="hotpage-header">
-                            <h2>用社会学看新闻</h2>
-                            <p>每日更新 · 点击卡片查看社会学视角解读</p>
-                        </div>
-                        <div class="hotpage-grid">
-                            <div class="hotpage-card">
-                                <div class="hotpage-card-rank">01</div>
-                                <div class="hotpage-card-title">青年就业压力增大：考公考研成为新趋势</div>
-                                <div class="hotpage-card-meta">社会 · 2026-07-15</div>
-                                <div class="hotpage-card-tags">
-                                    <span class="hotpage-tag">教育社会学</span>
-                                    <span class="hotpage-tag">反思性</span>
-                                    <span class="hotpage-tag">社会分层</span>
-                                </div>
-                            </div>
-                            <div class="hotpage-card">
-                                <div class="hotpage-card-rank">02</div>
-                                <div class="hotpage-card-title">AI绘画版权之争：机器创作归谁所有</div>
-                                <div class="hotpage-card-meta">科技 · 2026-07-15</div>
-                                <div class="hotpage-card-tags">
-                                    <span class="hotpage-tag">后结构主义</span>
-                                    <span class="hotpage-tag">资本形式</span>
-                                </div>
-                            </div>
-                            <div class="hotpage-card">
-                                <div class="hotpage-card-rank">03</div>
-                                <div class="hotpage-card-title">外卖骑手困在系统里</div>
-                                <div class="hotpage-card-meta">社会 · 2026-07-15</div>
-                                <div class="hotpage-card-tags">
-                                    <span class="hotpage-tag">理性化</span>
-                                    <span class="hotpage-tag">冲突理论</span>
-                                    <span class="hotpage-tag">数字社会学</span>
-                                </div>
-                            </div>
-                            <div class="hotpage-card" style="opacity:0.5">
-                                <div class="hotpage-card-rank" style="color:var(--text-muted)">04</div>
-                                <div class="hotpage-card-title">学区房新政...</div>
-                                <div class="hotpage-card-meta">教育 · 2026-07-15</div>
-                                <div class="hotpage-card-tags"><span class="hotpage-tag">教育社会学</span></div>
-                            </div>
-                            <div class="hotpage-card" style="opacity:0.3">
-                                <div class="hotpage-card-rank" style="color:var(--text-muted)">...</div>
-                                <div class="hotpage-card-title">更多新闻</div>
-                            </div>
-                            <div class="hotpage-card" style="opacity:0.3">
-                                <div class="hotpage-card-rank" style="color:var(--text-muted)">...</div>
-                                <div class="hotpage-card-title">更多新闻</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <div class="screenshot-label">📸 社会热点页面 — 速用模式（默认）</div>
+            <img src="contract-shots/hotspots-quick.png" alt="社会热点页面速用模式" style="max-width:100%;height:auto;display:block;margin:0 auto;">
+        </div>
+
+        <div class="screenshot">
+            <div class="screenshot-label">📸 社会热点页面 — 进阶模式</div>
+            <img src="contract-shots/hotspots-full.png" alt="社会热点页面进阶模式" style="max-width:100%;height:auto;display:block;margin:0 auto;">
         </div>
     </section>
 
@@ -819,110 +757,90 @@
     </section>
 
     <!-- A11: News Cards -->
-    <section id="A11">
+        <section id="A11">
         <h2>[A11] 新闻卡片网格</h2>
         <div class="meta">
             <span class="meta-location">📍 社会热点页面 · 右侧主区域</span>
             <span class="meta-type">HTML + CSS + JS (C5)</span>
         </div>
-        <p>每个日期显示 <strong>15条不重复</strong> 的新闻，以3列网格排列（3列×5行）。每张卡片包含：序号（前3名红色高亮）、新闻标题、来源标签、日期、关联理论标签。</p>
+        <p>每个日期显示 <strong>15 条不重复</strong> 的新闻，以 3 列网格排列（3 列 × 5 行）。每张卡片固定包含：序号（前 3 名红色高亮）、新闻标题、来源 + 日期元信息。卡片下半部分随<strong>顶部阅读模式开关</strong>变化：</p>
+        <ul style="padding-left:20px;font-size:13px;line-height:2;margin:12px 0;">
+            <li><strong>速用模式</strong>：正文显示 <code>essayQuote</code>（可直接引用的作文金句，2 行截断），底部显示最多 3 个<strong>作文主题标签</strong>（琥珀色药丸，如「青年责任」「快与慢」），帮助用户快速定位适用作文母题。</li>
+            <li><strong>进阶模式</strong>：正文恢复为 <code>gist</code>（一句话立论），底部显示最多 6 个<strong>社科知识节点标签</strong>（青色药丸），点击可跳转知识图谱聚焦对应节点；超出时显示 <code>+N</code> 按钮展开详情。</li>
+        </ul>
 
         <div class="screenshot">
-            <div class="screenshot-label">📸 A11 新闻卡片 — 单张卡片结构</div>
-            <div style="padding:20px;">
-                <div style="width:280px;background:var(--bg-card);border:1px solid var(--border-light);border-radius:10px;padding:16px;box-shadow:0 4px 16px rgba(45,48,75,0.08);">
-                    <div style="display:flex;align-items:flex-start;gap:10px;margin-bottom:10px;">
-                        <span style="font-family:var(--font-display);font-size:20px;font-weight:700;color:var(--red);line-height:1;">01</span>
-                        <div style="font-family:var(--font-display);font-size:13px;font-weight:600;line-height:1.4;">青年就业压力增大：考公考研成为新趋势</div>
-                    </div>
-                    <div style="font-size:10px;color:var(--text-muted);margin-bottom:10px;">社会 · 2026-07-15</div>
-                    <div style="display:flex;flex-wrap:wrap;gap:4px;">
-                        <span style="font-size:9px;padding:2px 7px;border-radius:8px;border:1px solid var(--border);background:var(--teal-soft);color:var(--teal);">教育社会学</span>
-                        <span style="font-size:9px;padding:2px 7px;border-radius:8px;border:1px solid var(--border);background:var(--teal-soft);color:var(--teal);">反思性</span>
-                        <span style="font-size:9px;padding:2px 7px;border-radius:8px;border:1px solid var(--border);background:var(--teal-soft);color:var(--teal);">社会分层</span>
-                    </div>
-                </div>
-            </div>
+            <div class="screenshot-label">📸 A11 新闻卡片 — 速用模式（作文金句 + 作文主题标签）</div>
+            <img src="contract-shots/hotspots-quick.png" alt="新闻卡片速用模式" style="max-width:100%;height:auto;display:block;margin:0 auto;">
+        </div>
+
+        <div class="screenshot">
+            <div class="screenshot-label">📸 A11 新闻卡片 — 进阶模式（一句话立论 + 社科节点标签）</div>
+            <img src="contract-shots/hotspots-full.png" alt="新闻卡片进阶模式" style="max-width:100%;height:auto;display:block;margin:0 auto;">
         </div>
 
         <div class="info-box tip">
             <div class="info-box-title">📊 数据统计</div>
-            <p>当前共 <strong>105条</strong> 不重复新闻，分 7 个日期（每日期 15 条）。涵盖社会、科技、教育、财经、文化、城市、政策等领域。</p>
+            <p>当前共 <strong>105 条</strong> 不重复新闻，分 7 个日期（每日 15 条）。默认模式为速用（首次访问），localStorage 会记住用户上次选择。</p>
         </div>
     </section>
 
     <!-- A8: News Detail Panel -->
-    <section id="A8-hot">
+        <section id="A8-hot">
         <h2>[A8] 新闻详情面板</h2>
         <div class="meta">
-            <span class="meta-location">📍 两页面通用 · 右侧滑出覆盖层</span>
+            <span class="meta-location">📍 社会热点页面 · 右侧滑出覆盖层</span>
             <span class="meta-type">HTML + CSS + JS</span>
         </div>
-        <p>点击新闻卡片后从右侧滑出（宽440px），显示完整的新闻解读。面板内容分4个区块：</p>
+        <p>点击新闻卡片后从右侧滑出（宽 440px）的详情面板。面板顶部有一个<strong>独立的「速用 / 完整」小开关</strong>，仅控制当前这一篇文章的显示方式，不影响顶部全局开关。首次打开时默认跟随顶部全局模式；用户临时切换后，关闭再开才会恢复全局默认值。</p>
+        <p>根据当前模式，面板内容分为两套：</p>
         <ol style="padding-left:20px;font-size:13px;line-height:2;margin:12px 0;">
-            <li><strong>💡 一句话立论</strong> — <code>gist</code>：开篇用一句大白话点明这条新闻背后的社会科学内核（替代旧版"背景"长段）。</li>
-            <li><strong>🧵 事件脉络</strong> — <code>thread</code>：把"背景-发展-结果"串成有序时间线（每步含时间点 <code>t</code> + 说明 <code>x</code>），让读者一秒看清来龙去脉。</li>
-            <li><strong>🔍 社科视角解读</strong> — 以<strong>读者真问题</strong>驱动的 <code>interpretations</code> 数组（取代旧版 perspectives），每条解读分：
-                <ul style="padding-left:20px;margin-top:4px;">
-                    <li>❓ <strong>真问题 q</strong>（你真正会问的疑问，如"为什么大家突然不说话了？"）</li>
-                    <li>🚫 <strong>常识误判 naive</strong>（"常以为…"的直觉误区）</li>
-                    <li>🔎 <strong>透镜 badge</strong>：用「理论名」解读的标签（<code>lens</code> / <code>lensId</code> ∈ 节点集）</li>
-                    <li>📚 <strong>学术解读 body</strong>（含 <code>&lt;b&gt;理论名&lt;/b&gt;</code> 高亮，引用理论家）</li>
-                    <li>💡 <strong>顿悟 aha</strong>：以"所以…"收尾的恍然大悟</li>
-                    <li>📄 <strong>前沿研究（内嵌，可选）</strong> — 若某解读有直接相关的前沿国内外研究，该解读内直接内嵌研究卡（标题/外链/年份·期刊·作者/一句白话解读），并附其<strong>上游知识节点</strong>的「溯源 → B」按钮（<code>focusNode(B)</code> 跳知识图谱）+ 一句 B 的知识解读。研究由自动化按 <a href="#C2">C2</a> 审核标准 <strong>S9</strong> 每日 best-effort 挂载，须与对应解读/新闻直接相关，无研究时该解读不渲染此块。<strong>不新增图谱节点</strong>。</li>
-                </ul>
-            </li>
-            <li><strong>关联理论按钮（⤢）</strong> — 点击弹出<strong>局部网络弹窗</strong>：以该理论为中心、1跳关联节点按圆周排布的网状子图（Canvas 渲染，连线同款渐变流动）；弹窗内可悬停高亮、点击任意节点查看富化详情；底部「在知识图谱中展开 →」可一键跳转主图并定位选中该节点。
-                <ul style="padding-left:20px;margin-top:6px;">
-                    <li>🧩 <strong>概念中文映射</strong>：详情中的核心概念/关联理论优先显示中文名，未匹配节点时经 <code>CONCEPT_LABELS</code> 映射表兜底（如 <code>liquid_modernity</code>→液态现代性），不再出现裸英文 id。</li>
-                    <li>📐 <strong>Canvas 自适应缩放</strong>：<code>drawModal</code> 按当前画布尺寸自动计算缩放系数，保证所有节点（含半径+标签）100% 落在画布内可点击；<code>resizeTmCanvas</code> 在弹出动画结束后补测，并接 <code>ResizeObserver</code> 响应窗口/响应式变化。</li>
-                    <li>🎯 <strong>打开即选中</strong>：弹窗打开时自动选中你点击的关联理论节点（中心节点），右侧详情区<strong>直接渲染该理论的完整释义</strong>（思想家：著作+思想+关联理论；理论：一句话理解+深入解读+代表人物+核心概念；概念：解释+生活例子），无需再点一次；点击图中其他节点可即时切换查看。</li>
-                    <li>🎨 <strong>详情样式对齐 A14</strong>：弹窗内节点详情的 <code>.tp-*</code> 样式已<strong>全局化</strong>，与 <a href="#A14">[A14] 知识节点详情卡片</a> 完全一致（类别药丸、著作/思想 chips、一句话理解高亮块、生活例子块、展开按钮等），两者共用同一套样式源，保证视觉统一。<br><span style="color:var(--text-muted);font-size:12px;">注：此前"按钮对齐 A11 青色药丸"的决定被此统一取代——弹窗内小按钮现采用 A14 的中性描边风（hover 转红），不再单独使用 A11 青色。</span></li>
-                    <li>📏 <strong>分栏稳定</strong>：弹窗左右分栏加 <code>min-width:0</code>，flex 比例固定 1.2:1，内容少时右侧详情不会被左侧图区挤压消失。</li>
-                </ul>
-            </li>
+            <li><strong>速用模式</strong>：① 一句话新闻事实 <code>gist</code>；② <strong>作文素材卡</strong>（<code>essayQuote</code>，可直接引用）；③ <strong>适用作文主题</strong>区块（列出本条命中主题、所属维度、标签定义，琥珀色药丸，不关联知识图谱）。</li>
+            <li><strong>进阶模式</strong>：完整 4 区块——一句话立论 <code>gist</code>、事件脉络 <code>thread</code>、以读者真问题驱动的 <code>interpretations</code>（真问题 / 常识误判 / 透镜 / 学术解读 / 顿悟 / 可选前沿研究）、以及关联理论按钮（含局部网络弹窗与图谱跳转）。</li>
         </ol>
 
         <div class="screenshot">
-            <div class="screenshot-label">📸 A8 新闻详情面板 — 完整结构</div>
-            <div style="padding:20px;">
-                <div style="width:340px;background:var(--bg-card);border:1px solid var(--border-light);border-radius:10px;overflow:hidden;box-shadow:0 4px 20px rgba(45,48,75,0.1);">
-                    <div style="padding:16px;border-bottom:1px solid var(--border-light);position:relative;">
-                        <div style="position:absolute;top:12px;right:12px;width:24px;height:24px;border:1px solid var(--border);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--text-light);">✕</div>
-                        <div style="font-family:var(--font-mono);font-size:9px;padding:3px 8px;border-radius:10px;background:var(--red-soft);color:var(--red);display:inline-block;margin-bottom:8px;">社会热点</div>
-                        <div style="font-family:var(--font-display);font-size:16px;font-weight:600;margin-bottom:4px;">外卖骑手困在系统里</div>
-                        <div style="font-family:var(--font-mono);font-size:10px;color:var(--text-muted);">社会 · 2026-07-15</div>
-                    </div>
-                    <div style="padding:14px 16px;">
-                        <div style="margin-bottom:12px;">
-                            <div style="font-size:9px;font-weight:600;letter-spacing:0.06em;color:var(--text-muted);text-transform:uppercase;margin-bottom:6px;padding-bottom:4px;border-bottom:1px solid var(--border-light);">📋 背景</div>
-                            <div style="font-size:11px;line-height:1.6;color:var(--text);">平台经济崛起，外卖骑手成为新型劳动者，但权益保障缺失。</div>
-                        </div>
-                        <div style="margin-bottom:12px;">
-                            <div style="font-size:9px;font-weight:600;letter-spacing:0.06em;color:var(--text-muted);text-transform:uppercase;margin-bottom:6px;padding-bottom:4px;border-bottom:1px solid var(--border-light);"> 事件</div>
-                            <div style="font-size:11px;line-height:1.6;color:var(--text);">骑手因算法压缩配送时间频繁超时...</div>
-                        </div>
-                        <div style="margin-bottom:12px;">
-                            <div style="font-size:9px;font-weight:600;letter-spacing:0.06em;color:var(--text-muted);text-transform:uppercase;margin-bottom:6px;padding-bottom:4px;border-bottom:1px solid var(--border-light);">🔍 社会学视角解读</div>
-                            <div style="padding:8px 10px;background:var(--bg);border-radius:6px;margin-bottom:6px;border-left:3px solid var(--red);">
-                                <div style="font-size:10px;font-weight:600;color:var(--red);margin-bottom:3px;">1. 理性化</div>
-                                <div style="font-size:9px;font-weight:600;color:var(--red);margin:4px 0 2px;">💡 通俗理解</div>
-                                <div style="font-size:10px;color:var(--text);line-height:1.5;">韦伯预言的理性化铁笼...</div>
-                                <div style="font-size:9px;font-weight:600;color:var(--teal);margin:4px 0 2px;">📚 学术视角</div>
-                                <div style="font-size:10px;color:var(--text-light);line-height:1.5;">工具理性主导下...</div>
-                            </div>
-                        </div>
-                        <div>
-                            <div style="font-size:9px;font-weight:600;letter-spacing:0.06em;color:var(--text-muted);text-transform:uppercase;margin-bottom:6px;">关联理论</div>
-                            <div style="display:flex;gap:4px;flex-wrap:wrap;">
-                                <span style="font-size:9px;padding:3px 8px;border-radius:12px;border:1px solid var(--border);color:var(--text-light);">理性化</span>
-                                <span style="font-size:9px;padding:3px 8px;border-radius:12px;border:1px solid var(--border);color:var(--text-light);">冲突理论</span>
-                                <span style="font-size:9px;padding:3px 8px;border-radius:12px;border:1px solid var(--border);color:var(--text-light);">数字社会学</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <div class="screenshot-label">📸 A8 新闻详情面板 — 速用模式</div>
+            <img src="contract-shots/detail-quick.png" alt="新闻详情面板速用模式" style="max-width:100%;height:auto;display:block;margin:0 auto;">
+        </div>
+
+        <div class="screenshot">
+            <div class="screenshot-label">📸 A8 新闻详情面板 — 进阶模式</div>
+            <img src="contract-shots/detail-full.png" alt="新闻详情面板进阶模式" style="max-width:100%;height:auto;display:block;margin:0 auto;">
+        </div>
+    </section>
+    <section id="A8-export">
+        <h2>[A8-export] 素材卡片导出页</h2>
+        <div class="meta">
+            <span class="meta-location">📍 独立页面 · news-export.html</span>
+            <span class="meta-type">HTML + CSS + JS</span>
+        </div>
+        <p>点击社会热点页标题区右上角的导出图标，或在浏览器直接打开 <code>news-export.html</code>，进入素材导出页。页面用于把选中的多日期新闻按 A4 纸排版预览，并可一键打印 / 另存为 PDF。</p>
+
+        <h3>顶部工具条（屏幕预览用，不进入打印）</h3>
+        <ul style="padding-left:20px;font-size:13px;line-height:2;margin:12px 0;">
+            <li><strong>返回</strong>：回社会热点页。</li>
+            <li><strong>已选 N 天 · 共 M 条</strong>：实时统计当前选中日期范围与新闻总数。</li>
+            <li><strong>阅读模式切换</strong>：「速用 · 金句」导出 <code>essayQuote</code>（可直接背诵/引用）；「进阶 · 解读」导出完整 <code>interpretations</code>（含真问题、学术解读等）。</li>
+            <li><strong>排版密度</strong>：紧凑（3 列 / 小字）、标准（2 列 / 中字）、宽松（1 列 / 大字）。三档在 Web 与手机上保持一致列数。</li>
+            <li><strong>打印 / PDF</strong>：调用浏览器原生 <code>window.print()</code>，配合 <code>@media print</code> 把每一 <code>.page</code> 作为一页 A4 输出。</li>
+        </ul>
+
+        <h3>日期选择</h3>
+        <p>点击「选择日期 ▾」展开月历弹层。日历仅 <code>NEWS_DATA</code> 中有新闻的日期可选（灰色为无新闻），支持多选；底部提供「最近 7 天 / 全选 / 清除」快捷操作，点击「确定」后关闭弹层并重新渲染预览。默认预选最近 7 天。</p>
+
+        <h3>WPS 式 A4 分页预览</h3>
+        <p>预览区以一张张 210mm × 297mm 的白纸呈现，JS 按内容高度自动分页，每张卡片 <code>break-inside:avoid</code> 不跨页；每页底部带「第 X / Y 页」页脚。</p>
+        <p><strong>手机端适配：</strong>不再像早期版本那样"减列数"，而是对整张 A4 纸施加 <code>transform:scale(calc(100vw / 210mm))</code>，把纸宽恰好缩到屏宽，列数仍为 3/2/1 与 Web / 真实打印完全一致；<code>.pages</code> 限制横向溢出，页面可竖向滚动浏览。</p>
+
+        <div class="screenshot">
+            <div class="screenshot-label">📸 导出页 — 桌面端（速用 · 金句 / 标准密度）</div>
+            <img src="contract-shots/export-desktop.png" alt="导出页桌面端" style="max-width:100%;height:auto;display:block;margin:0 auto;">
+        </div>
+
+        <div class="screenshot">
+            <div class="screenshot-label">📸 导出页 — 手机端（整张 A4 等比缩放，列数与桌面一致）</div>
+            <img src="contract-shots/export-mobile.png" alt="导出页手机端" style="max-width:100%;height:auto;display:block;margin:0 auto;">
         </div>
     </section>
 
@@ -1493,7 +1411,7 @@
         <table class="module-table" id="clTable">
             <thead><tr><th>日期</th><th>版本</th><th>改动内容</th><th>涉及模块</th></tr></thead>
             <tbody>
-                <tr><td>2026-08-06</td><td>v1.44</td><td><strong>[根治「速用」版漏字段 · 数据生成机制] 回应"今日新闻第 8 条后无速用版"根因：</strong>① <strong>根因</strong>：新闻自动化 prompt 原仅要求 B 类新闻写 <code>essayQuote</code>（作文金句），其它新闻不写、由速用模式回退"完整"——导致每批大多条缺速用版，须事后手动补（8-01~08-05 均发生过）；且校验脚本 <code>news-validate.js</code> 从未查该字段、且因 Node 沙箱缺 <code>matchMedia</code>/<code>location</code> 等 stub 根本跑不起来，自检形同虚设。② <strong>根治（双闸）</strong>：A. 改新闻自动化 prompt——步骤8 必填清单加入 <code>essayQuote</code>、步骤10 删除"其它新闻不写"改为"每条入选新闻都必须内联 essayQuote（100–130 字议论文金句、紧扣社会/理论角度）"、步骤13 自检加 essayQuote 非空硬闸、红线新增「速用模式素材必填」；自下一运行周期起每条新闻强制带速用金句。B. 改 <code>news-validate.js</code>——逐条校验加 essayQuote 必填硬闸（缺则 FAIL、脏数据不发布），并补全 Node 沙箱 stub 使其真正可运行。③ <strong>验证</strong>：news-validate.js 现已可跑，7 天 105 条 FAIL=0/WARN=0（含 essayQuote 检查）。本变更为纯后端数据生成/校验机制，<strong>无用户端页面/UI 改动</strong>，线上页面无需重新部署；源码（news-validate.js）已同步 Gitee。</td><td>C2, 新闻自动化</td></tr>
+                <tr><td>2026-08-06</td><td>v1.44</td><td><strong>[根治「速用」版漏字段 · 数据生成机制] 回应"今日新闻第 8 条后无速用版"根因：</strong>① <strong>根因</strong>：新闻自动化 prompt 原仅要求 B 类新闻写 <code>essayQuote</code>（作文金句），其它新闻不写、由速用模式回退"完整"——导致每批大多条缺速用版，须事后手动补（8-01~08-05 均发生过）；且校验脚本 <code>news-validate.js</code> 从未查该字段、且因 Node 沙箱缺 <code>matchMedia</code>/<code>location</code> 等 stub 根本跑不起来，自检形同虚设。② <strong>根治（双闸）</strong>：A. 改新闻自动化 prompt——步骤8 必填清单加入 <code>essayQuote</code>、步骤10 删除"其它新闻不写"改为"每条入选新闻都必须内联 essayQuote（100–130 字议论文金句、紧扣社会/理论角度）"、步骤13 自检加 essayQuote 非空硬闸、红线新增「速用模式素材必填」；自下一运行周期起每条新闻强制带速用金句。B. 改 <code>news-validate.js</code>——逐条校验加 essayQuote 必填硬闸（缺则 FAIL、脏数据不发布），并补全 Node 沙箱 stub 使其真正可运行。③ <strong>验证</strong>：news-validate.js 现已可跑，7 天 105 条 FAIL=0/WARN=0（含 essayQuote 检查）。本变更为纯后端数据生成/校验机制，<strong>无用户端页面/UI 改动</strong>，线上页面无需重新部署；源码（news-validate.js）已同步 Gitee。<br><strong>契约同步</strong>：本周期也刷新了 <code>feature-manifest.html</code> 中社会热点页、新闻详情面板、导出页（A8-export）的实时描述与截图，使其与 v1.44 代码一致。</td><td>C2, 新闻自动化</td></tr>
                 <tr><td>2026-08-06</td><td>v1.43</td><td><strong>[导出页手机端改为整张 A4 等比缩放 · 与 Web/打印完全一致] 回应"手机端预览应与 Web/真实 A4 打印一致（之前手机紧凑只有 2 栏、与桌面 3 栏对不上）"：</strong>① <strong>废弃"手机端减列数"方案</strong>——原 v1.42 在手机端把紧凑改 2 栏、标准/宽松改 1 栏，导致手机预览与桌面、与打印对不上；现统一为 <strong>scale-to-fit</strong>：保留真实 A4 尺寸（210mm×297mm）与桌面同一套 3/2/1 列版式，仅对 <code>.page</code> 施加 <code>transform:scale(calc(100vw/210mm))</code> 让纸宽恰好等于屏宽，用户看到即"A4 纸缩小版"。② <strong>负 margin 收高 + 防溢出</strong>——<code>margin-bottom:calc(297mm*var(--fit)-297mm+22px)</code> 收掉缩放后多出的布局高度并留页间距；<code>.pages</code> 改 <code>align-items:flex-start;overflow-x:hidden</code> 杜绝横向溢出。③ <strong>修分页测量坑</strong>——分页原用 <code>getBoundingClientRect().width</code>（被 transform 缩放成窄宽，会按窄列分页、页数与桌面/打印不符）→ 改为 <code>offsetWidth</code>（忽略 transform，取真实布局宽），手机页数与桌面/打印对齐（紧凑 8 / 标准 18 / 宽松 27 页 @390px 视口）。④ service worker 缓存 <code>shehui-ren-v40</code>→<code>shehui-ren-v41</code>。无头 390×844 实测：三档列数 3/2/1、横向溢出 0、末页可达。本版为手机端展示一致性修复，发布前走预览验收。</td><td>A8, 导出, 社会热点, 移动端</td></tr>
                 <tr><td>2026-08-05</td><td>v1.42</td><td><strong>[导出页交互与排版大改 · 日历多选 + 密度重设计 + 速用进阶模式 + WPS 分页] 回应 8/5 四点反馈：</strong>① <strong>日期选择改日历组件</strong>——移除原平铺 chip 列表，新增入口「选择日期 ▾」按钮，点击展开月历弹层（按 NEWS_DATA 可用日期生成日历、月份导航、点格多选、底部 chips 反显已选并可单独取消，附「最近 7 天/全选/清除」快捷），交互更符合直觉。② <strong>密度预设重设计</strong>——原「标准/宽松」几乎无别、「紧凑」移动端无差异；现明确三级：紧凑（web 4 栏 / 手机 2 栏 / 小字）、标准（web 2 栏 / 手机 1 栏 / 中字）、宽松（web 1 栏 / 手机 1 栏大间距 / 大字），web 与手机端三者均肉眼可辨。③ <strong>新增速用/进阶模式切换</strong>——工具栏分段控件（默认与主站 localStorage <code>shehui_news_mode</code> 同步）：速用 = 新闻 + 金句（<code>essayQuote</code>），进阶 = 新闻 + 社科解读（<code>interpretations</code> 全量 lens/常以为/解读/aha/研究）；切换即时重渲染、封面文案随之变化。④ <strong>WPS 式分页预览</strong>——预览区改为一张张 A4 纸（固定 210mm 宽、阴影、间距、每页页脚「第 X / Y 页」），JS 按内容高度自动分页（卡片 <code>break-inside:avoid</code> 不跨页），屏幕所见即打印所得；打印时每 <code>.page</code> 对应一页 A4。⑤ service worker 缓存 <code>shehui-ren-v31</code>→<code>shehui-ren-v32</code>。本版为导出页整体重构，发布前走预览验收。</td><td>A8, 导出, 社会热点</td></tr>
                 <tr><td>2026-08-05</td><td>v1.41</td><td><strong>[导出素材功能回归 · 按钮移入社会热点页 + 日期自选多选] 回应"导出入口不该在顶部导航（它只导出社会热点），应做在页面内、以图标呈现、且打破锁死 7 天的限制"：</strong>① <strong>按钮移出顶部导航</strong>——删除 nav 里的「导出素材」链接；在社会热点页标题区右上角新增图标按钮 `.export-icon`（下载箭头 SVG、圆形胶囊、默认灰、hover 变品牌红填充白图标，与模式开关视觉同源），桌面端绝对定位于该行右上角（不影响模式开关居中），移动端随日期胶囊+模式开关同行排布（flex 静态子项）。② <strong>点击进入导出页</strong>——`news-export.html` 逻辑重构：原先<strong>锁死最近 7 天</strong>（`Object.keys(NEWS_DATA).sort().reverse().slice(0,7)`），改为<strong>页面内日期多选</strong>——新增 `.datebar` 日期选择条（不放进打印），列出全部可用日期的 chip，点击即切换选中（默认仍预选最近 7 天，但可自由增删）；附「最近 7 天 / 全选 / 清除」三个快捷操作；同一日期内不再细分（仍全量含该日 15 条）。③ <strong>导出内容随选择实时更新</strong>——`getItems()` 仅收集选中日期的新闻，顶部 meta 显示"已选 N 天 · 共 M 条"，封面区间显示选中日期跨度；未选任何日期显示空态提示。④ service worker 把 <code>news-export.html</code> 加入 SHELL 预缓存（离线可用）。本版为布局/交互优化，线上 shehui-ren.com 导出页结构更强（不再受 7 天限制）；发布前走预览验收。</td><td>A8, 导出, 社会热点, 移动端</td></tr>
