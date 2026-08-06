@@ -695,7 +695,7 @@
     <section id="overview">
         <h1>社会人 <em>功能模块说明</em></h1>
         <p class="subtitle">帮助初学者理解社会科学理论的可视化网站 · 本文档是功能契约，所有改动需同步更新</p>
-        <span class="version-badge">v1.47 · 2026-08-06</span>
+        <span class="version-badge">v1.48 · 2026-08-06</span>
 
         <h3>产品定位</h3>
         <p><strong>用社会科学看社会</strong> —— 将高大上的理论落地到社会生活的实践中。网站包含两个页面：</p>
@@ -788,15 +788,15 @@
         <li><strong>关联是语义的</strong>：大模型读每条新闻候选，判断它和哪些社科节点相关、相关多强（<code>strong</code> 核心 / <code>medium</code> 显著 / <code>weak</code> 仅蹭热度），输出 <code>theories[]</code> 与 <code>interpretations[].lensId</code>。这一步是语义理解，不是"标题含某词就打某标签"。</li>
         <li><strong>规则兜底校验</strong>：步骤[8]（S6）硬闸——<code>id</code> 必须 ∈ 受控词表、<code>label</code> 必须等于词表中的节点名、每条≥1 个 strong 链接、weak-only 直接剔除；不通过打回重生成。</li>
       </ul>
-      <h3>② 主题节点（essayTopics）—— 两层：生成时语义挑 + 部署前规则派生</h3>
+      <h3>② 主题节点（essayTopics）—— 全部新闻由 AI 语义直写</h3>
       <ul style="padding-left:20px;font-size:14px;line-height:1.9">
         <li><strong>词表也是固定的</strong>：<code>topic-lib.js</code> 的 <code>TOPIC_LIB.topics</code>，每条含 <code>id / label / dim</code>，dim 分多个母题维度（青春成长·青年担当、家国情怀·时代使命、思辨辩证、文化自信·传统创新、科技与人文、道德修养·价值选择、社会现实·人类关怀 等）。</li>
-        <li><strong>定向主题（S2.5 配额 Q=3）—— 大模型语义判断</strong>：步骤[3]定向抓官媒"青春/家国/思辨"报道，步骤[6]由大模型判断该新闻命中哪个母题维度、挑具体主题词；满足 G1(官媒白名单)+G2(命中母题维度)+G3(正向框架) 的新闻在步骤[7]被选为 themePick（每批≤3 条），<code>essayTopics</code> 在生成时直接内联写入。</li>
-        <li><strong>其余新闻的 essayTopics —— 固定规则脚本派生</strong>：部署前 <code>_annotate_topics.js</code>（幂等补标）读取每条新闻已分配的 <code>theories[]</code> 与 <code>lensId</code>，按内置 <code>NODE_TO_TOPIC</code> 映射表（社科节点→主题，固定规则）把命中的主题挑出来；映射表没覆盖的再用主题自身的 <code>keywords</code> 关键词兜底；节点命中优先于关键词，每条最多 4 个。<strong>已含 essayTopics 的块严格跳过、绝不改写</strong>。</li>
+        <li><strong>全部新闻都由 AI 语义直写（方案C）</strong>：自 2026-08-06 起，<strong>每条入选新闻</strong>（含热榜非特大与特大）都由大模型基于新闻语义，从 <code>TOPIC_LIB</code> 全词表（9 个母题维度）直接挑选 1–4 个 <code>essayTopics</code> 写入，维度不限；不再区分"重要/非重要新闻"，也不再有任何固定映射表或部署前补标脚本。</li>
+        <li><strong>S2.5 主题倾斜配额（Q=3）仍保留</strong>：官媒白名单(G1)+青春/家国/思辨母题(G2)+正向框架(G3) 齐备的新闻在步骤[7]被选为 <code>themePick</code>（每批≤3 条，仅决定"配额名额"与日志标记），但 <code>essayTopics</code> 本身已覆盖全部新闻、由 AI 统一直写，<code>themePick</code> 不再独占该字段。</li>
       </ul>
       <div class="info-box tip">
         <div class="info-box-title">一句话总结</div>
-        <p><strong>社科节点</strong> = "大模型读新闻语义挑 + 固定词表校验"；<strong>主题节点</strong> = "Q=3 定向条由大模型语义挑，其余由 <code>_annotate_topics.js</code> 按『社科节点→主题』固定映射表规则派生"。两条线最终都落在<b>固定的受控词表</b>上，保证前端标签永远合法、可跳转。</p>
+        <p><strong>社科节点</strong> = "大模型读新闻语义挑 + 固定词表校验"；<strong>主题节点</strong> = "全部新闻由大模型基于语义从 <code>TOPIC_LIB</code> 受控词表直写 1–4 个（维度不限）"。两条线最终都落在<b>固定的受控词表</b>上，保证前端标签永远合法、可跳转；区别是<b>主题节点不再有"固定映射/规则派生"一层</b>——彻底改为语义直写，根除"节点级绑定过度泛化导致错贴主题"的问题。</p>
       </div>
     </section>
 
@@ -829,7 +829,7 @@
         <li><strong>预览模式</strong>：传 <code>--staging</code> 只发草稿、不动线上，把预览地址发你验收；你说"发布"后再跑不带参的转正。功能/大改才走预览，每日新闻直接上线。</li>
         <li><strong>Gitee 自动同步</strong>：部署成功后自动 <code>git add news-data.js news-review-log.json &amp;&amp; commit &amp;&amp; push</code>，另一台 Mac 即最新。</li>
         <li><strong>缓存刷新</strong>：改 HTML/CSS 须 bump <code>sw.js</code> 版本号（当前 <code>shehui-ren-v41</code>），否则手机 PWA 缓存旧页；<code>news-data.js</code> 走网络优先，刷新即最新。</li>
-        <li><strong>部署前幂等补标</strong>：<code>_annotate_topics.js</code> 在每次部署时为未标注新闻补 <code>essayTopics</code>，已标的严格跳过、不破坏手标。</li>
+        <li><strong>作文主题直写（方案C）</strong>：<code>essayTopics</code> 由新闻自动化在入库时由 AI 语义直写（全新闻），部署脚本不再做任何补标；<code>_annotate_topics.js</code> 已退役删除。</li>
       </ul>
     </section>
 
@@ -1555,7 +1555,7 @@
                 <tr><td class="mod-id-cell"><a href="#B1">B1</a></td><td>后端总架构</td><td class="mod-page-cell">后端逻辑</td><td>架构</td><td>四角色（源目录/镜像/托管/备份）+ 凭据隔离</td></tr>
                 <tr><td class="mod-id-cell"><a href="#B2">B2</a></td><td>新闻数据流水线</td><td class="mod-page-cell">后端逻辑</td><td>自动化</td><td>抓取→审核→入库→上线 15 步全自动</td></tr>
                 <tr><td class="mod-id-cell"><a href="#B3">B3</a></td><td>审核标准</td><td class="mod-page-cell">后端逻辑</td><td>规范</td><td>S0–S9 / S2.5 / S4.5 选稿闸门</td></tr>
-                <tr><td class="mod-id-cell"><a href="#B4">B4</a></td><td>节点关联机制</td><td class="mod-page-cell">后端逻辑</td><td>规则+语义</td><td>新闻↔社科节点(语义)/主题节点(语义+规则派生)</td></tr>
+                <tr><td class="mod-id-cell"><a href="#B4">B4</a></td><td>节点关联机制</td><td class="mod-page-cell">后端逻辑</td><td>规则+语义</td><td>新闻↔社科节点(语义)/主题节点(AI语义直写·全新闻)</td></tr>
                 <tr><td class="mod-id-cell"><a href="#B5">B5</a></td><td>数据 Schema</td><td class="mod-page-cell">后端逻辑</td><td>数据</td><td>NEWS_DATA 字段定义</td></tr>
                 <tr><td class="mod-id-cell"><a href="#B6">B6</a></td><td>部署上线</td><td class="mod-page-cell">后端逻辑</td><td>脚本</td><td>deploy-netlify.js 生产/兜底/预览/Gitee</td></tr>
                 <tr><td class="mod-id-cell"><a href="#B7">B7</a></td><td>校验防御</td><td class="mod-page-cell">后端逻辑</td><td>脚本</td><td>news-validate.js 硬闸(essayQuote必填)</td></tr>
@@ -1578,6 +1578,7 @@
         <table class="module-table" id="clTable">
             <thead><tr><th>日期</th><th>版本</th><th>改动内容</th><th>涉及模块</th></tr></thead>
             <tbody>
+                <tr><td>2026-08-06</td><td>v1.48</td><td><strong>[作文主题机制重构 · 方案C：删除固定映射，全新闻 AI 语义直写] 回应"今日饮料新闻被错贴青春奋斗/时代使命，且社科节点映射过度泛化"：</strong>① <strong>删除固定映射</strong>——退役并删除 <code>_annotate_topics.js</code>（含 <code>NODE_TO_TOPIC</code> 社科节点→主题映射表与关键词兜底派生逻辑），同时移除两个 deploy-netlify.js（sociology-map / ctrip-claw）里的 <code>runAnnotation()</code> 部署前补标调用。② <strong>全新闻 AI 直写</strong>——改新闻自动化 prompt：每条入选新闻（含热榜非特大与特大）都由 AI 基于新闻语义从 <code>TOPIC_LIB</code> 全词表（9 维度）直挑 1–4 个 <code>essayTopics</code>，不再区分"重要/非重要新闻"，也不再有任何规则派生；S2.5 配额(Q=3)仅决定 themePick 名额与日志标记，不再独占 essayTopics。③ <strong>校验硬闸</strong>——<code>news-validate.js</code> 新增 essayTopics 必填（id∈TOPIC_LIB、label 一致）硬闸，缺或非法即 FAIL、脏数据不发布。④ <strong>文档同步</strong>——<code>NEWS_REVIEW_STANDARD.md</code> 与 <code>feature-manifest.html</code> [B4]/[B6]/模块索引 同步更新为"AI 语义直写"。验证：news-validate.js 7 天 105 条 FAIL=0/WARN=0（历史 105 条 essayTopics 均合法）。本变更为纯后端数据生成/校验机制，<strong>无用户端页面/UI 改动</strong>，自下一个自动化运行周期起生效；源码(含契约)已同步 Gitee。</td><td>B4, C2, news-validate, 新闻自动化</td></tr>
                 <tr><td>2026-08-06</td><td>v1.47</td><td><strong>[契约文档 · 导航栏补全] 用户指出左侧导航栏未同步本次新增内容：</strong>① 补入整段「第一部分·后端逻辑」的 B1–B8 八个跳转项（此前后端章节已写入正文、却漏进导航）；② 补入之前加的「素材卡片导出页 A8-export」跳转项（亦漏）；③ 将「双页面架构 #pages」从概览组移入「第二部分·前端逻辑」组，并在导航顶部显式加「第一部分·后端逻辑 / 第二部分·前端逻辑」两个分组标题，使侧边栏与正文的两部分 banner 结构完全一致；④ 校验：33 个导航链接全部能在正文命中对应 section id，无死链、结构平衡。本版为纯导航修订，无正文内容/代码改动；徽标同步 bump v1.47。未部署线上、源码(契约)已同步 Gitee。</td><td>契约, 导航栏, B1–B8, A8-export</td></tr>
                 <tr><td>2026-08-06</td><td>v1.46</td><td><strong>[契约文档 · 后端逻辑编号化(B1–B8) + 补「节点关联机制」章节] 回应两点：</strong>① 后端逻辑此前整段无编号，与前端 A1–A14、通用 C1–C7 不一致 → 将「第一部分·后端逻辑」拆为规范的 B1–B8：B1 后端总架构 / B2 新闻数据流水线(15步) / B3 审核标准(S0–S9) / B4 节点关联机制 / B5 数据Schema / B6 部署上线 / B7 校验防御 / B8 调度现状；模块索引总表补 B1–B8 八行，全文形成 A(前端模块)/B(后端逻辑)/C(通用代码架构) 统一三字母编号体系。② 新增 [B4] 节点关联机制，正面回答"新闻怎么关联社科节点/主题节点、是语义还是规则"：社科节点(theories/lensId) = 固定受控词表(从 sociology-map.html 提取 12 节点数组) + 大模型语义判断关联与强度 + S6 规则校验(id∈词表/label一致/≥1 strong)；主题节点(essayTopics) = 两层——S2.5 的 Q=3 定向条由大模型语义挑具体母题词，其余由 _annotate_topics.js 按 NODE_TO_TOPIC 固定映射表 + keywords 兜底派生(幂等、≤4)、词表来自 topic-lib.js(TOPIC_LIB)。结论：固定受控词表 + 大模型语义 + 规则校验三层叠加。顺手修掉 C2 索引行指向已删除的 #backend 死链(改为 #B2)，模块数描述改为三类总览。本版为文档结构性修订，无产品代码改动，未上线部署；源码(契约)已同步 Gitee。</td><td>契约, B1–B8, C2</td></tr>
                 <tr><td>2026-08-06</td><td>v1.45</td><td><strong>[契约文档补全「后端逻辑」章节 · 全文拆为"后端/前端"两部分] 回应"契约缺日常发新闻、处理并上线的底层逻辑，不知道背后怎么抓怎么生成"：</strong>① 在概览后新增「第一部分·后端逻辑」整章，含：后端总架构(源目录/镜像/Netlify/Gitee四角色+凭据隔离)、新闻数据流水线(自动化15步全展开：读标准→取节点集→抓取候选→S0过滤→S2特大→打分→S1组批→S6校验→S9研究→入库→镜像→日志→自检→部署→汇报)、审核标准一览表(S0–S9/S2.5/S4.5核心闸门)、数据Schema表(NEWS_DATA字段全列)、部署与上线机制(deploy-netlify.js生产/额度兜底/--staging预览/Gitee自动同步/sw缓存/_annotate_topics幂等补标)、校验与防御(news-validate.js essayQuote硬闸+根治史)、调度现状(仅9:06跑、21:06被rrule塌缩未运行、绑定本机进程)。② 新增「第二部分·前端逻辑」分隔，明确全文两分结构；原有双页面架构/社会热点页/详情面板/导出页/知识图谱/模块索引等前端章节归入第二部分。③ 模块索引 C2 行加"详见后端逻辑章节"跳转提示。本版为文档结构性补全，无产品代码改动，未上线部署；源码(契约)已同步 Gitee。</td><td>契约, C2</td></tr>

@@ -54,26 +54,8 @@ function syncGitee() {
   run(['remote', 'set-url', 'origin', GITEE_REMOTE_CLEAN]);
 }
 
-// ---------- 部署前自动补标：为未标注新闻加作文主题（幂等） ----------
-// 每日新闻自动化步骤10 用 Edit 插入新批次新闻（不含 essayTopics），此处补标，
-// 保证线上社会热点（最新一天）也有作文主题标签。_annotate_topics.js 幂等：
-// 已标注的块严格跳过、绝不改写历史/手标标签；每日重跑只补新增。失败仅告警，不阻断部署。
-function runAnnotation() {
-  const annotateScript = path.join(ROOT, '_annotate_topics.js');
-  if (!fs.existsSync(annotateScript)) {
-    console.warn('[annotate] 未找到 _annotate_topics.js，跳过自动补标');
-    return;
-  }
-  console.log('[annotate] 部署前自动补标作文主题（幂等）…');
-  const r = spawnSync(process.execPath, [annotateScript], {
-    cwd: ROOT, encoding: 'utf8', windowsHide: true,
-  });
-  if (r.error || r.status !== 0) {
-    console.warn('[annotate] 补标失败（不影响部署，明日重试）:', (r.stderr || r.error || '').toString().slice(0, 400));
-  } else {
-    console.log('[annotate] 补标结果: ' + (r.stdout || '').trim());
-  }
-}
+// 2026-08-06 起：作文主题(essayTopics) 改由新闻自动化在入库时由 AI 语义直写（覆盖全部新闻），
+// 不再依赖固定映射表或部署前补标脚本；_annotate_topics.js 已退役删除。
 
 // 令牌优先级：环境变量 NETLIFY_AUTH_TOKEN > 仓库根 .netlify_token 文件
 let token = process.env.NETLIFY_AUTH_TOKEN;
@@ -136,8 +118,7 @@ if (!NETLIFY_BIN) {
 
 const CLI_ENV = Object.assign({}, process.env, { NETLIFY_AUTH_TOKEN: token });
 
-// ---------- 部署前：幂等补标作文主题（每次部署都跑，已标的跳过） ----------
-runAnnotation();
+// 作文主题(essayTopics) 由 AI 在入库时直写，部署前无需补标
 
 // ---------- 预览模式（--staging）：只发草稿，不转正，等用户验收 ----------
 // 用途：功能/大改先发预览，把预览地址发给用户，用户说"发布"后再用不带 --staging 的命令上线。

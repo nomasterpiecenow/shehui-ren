@@ -13,6 +13,13 @@ const DIR = __dirname;
 const html = fs.readFileSync(path.join(DIR, 'sociology-map.html'), 'utf8');
 const newsCode = fs.readFileSync(path.join(DIR, 'news-data.js'), 'utf8');
 
+// 作文主题受控词表（方案C：全新闻由 AI 语义直写，校验其合法性）
+const topicLibSrc = fs.readFileSync(path.join(DIR, 'topic-lib.js'), 'utf8');
+const topicLibCtx = {};
+vm.runInNewContext(topicLibSrc, topicLibCtx);
+const TOPIC_LIB = topicLibCtx.TOPIC_LIB;
+const TOPIC_IDS = new Set(Object.keys(TOPIC_LIB.topics));
+
 // 主 HTML 内联脚本（news-data.js 已外链，其 <script src> 内容为空，不影响）
 const htmlScripts = [...html.matchAll(/<script[^>]*>([\s\S]*?)<\/script>/g)].map(m => m[1]).join('\n');
 
@@ -144,6 +151,13 @@ dates.forEach(date => {
     REQUIRED.forEach(f => ok(it[f] !== undefined && it[f] !== null && it[f] !== '', tag + ': 缺字段 ' + f));
     // 速用模式素材（essayQuote）必填：每条新闻都应带议论文金句，否则速用模式无内容、只能回退完整版
     ok(it.essayQuote && typeof it.essayQuote === 'string' && it.essayQuote.trim().length > 0, tag + ': 缺 essayQuote(速用金句)');
+    // essayTopics 必填（方案C：全部新闻由 AI 语义直写，不再依赖固定映射/补标脚本）
+    ok(Array.isArray(it.essayTopics) && it.essayTopics.length >= 1, tag + ': 缺 essayTopics(作文主题,AI直写必填)');
+    (it.essayTopics || []).forEach((t, ti) => {
+      const tt = tag + '.essayTopics[' + ti + ']';
+      ok(t && TOPIC_IDS.has(t.id), tt + ': id 不在 TOPIC_LIB -> ' + (t && t.id));
+      if (t && TOPIC_IDS.has(t.id)) ok(t.label === TOPIC_LIB.topics[t.id].label, tt + ': label 与 TOPIC_LIB 不一致');
+    });
     // url 形如 http(s)
     ok(typeof it.url === 'string' && /^https?:\/\//.test(it.url.trim()), tag + ': url 非法 -> ' + it.url);
     // S0 来源分层(软告警)：疑似 UGC 个人源，提示人工复核是否为可核验编辑源
