@@ -784,7 +784,7 @@
       <p>每条新闻都要挂两类"节点标签"：<strong>社科节点</strong>（<code>theories[]</code> / <code>interpretations[].lensId</code>，指向知识图谱里的理论、概念、思想家）和<strong>主题节点</strong>（<code>essayTopics[]</code>，指向作文母题词表）。用户问得对——这两类到底怎么来的？答案是 <strong>「固定受控词表 + 大模型语义理解 + 规则校验」三层叠加</strong>：既不是纯关键词硬匹配，也不是大模型自由发挥。</p>
       <h3>① 社科节点（theories / lensId）—— 大模型语义理解为主</h3>
       <ul style="padding-left:20px;font-size:14px;line-height:1.9">
-        <li><strong>词表是固定的</strong>：自动化步骤[2]从 <code>sociology-map.html</code> 用正则提取 12 个节点数组（THINKERS / THEORIES / CONCEPTS / TOPICS 各三科 soc / econ / psy），汇总成 <code>{ id → name }</code> 受控词表。这是"封闭集合"，新闻只能从这里挑，不能凭空造。</li>
+        <li><strong>词表是固定的</strong>：12 个节点数组（THINKERS / THEORIES / CONCEPTS / TOPICS 各三科 soc / econ / psy）汇总成 <code>{ id → name }</code> 受控词表，新闻只能从这里挑、不能凭空造。<strong>成本优化（2026-08-07）</strong>：自动化不再每次读 386KB 的 <code>sociology-map.html</code>，改为先跑 <code>extract-nodes.js</code>（本地免费）预抽取为约 15KB 的 <code>node-index.json</code>，步骤[2]只读这个小文件；自检步骤[13]也不再重读 350KB 的 <code>news-data.js</code>，改读 <code>news-validate.js</code> 的短输出。这是"封闭集合"，新闻只能从这里挑，不能凭空造。</li>
         <li><strong>关联是语义的</strong>：大模型读每条新闻候选，判断它和哪些社科节点相关、相关多强（<code>strong</code> 核心 / <code>medium</code> 显著 / <code>weak</code> 仅蹭热度），输出 <code>theories[]</code> 与 <code>interpretations[].lensId</code>。这一步是语义理解，不是"标题含某词就打某标签"。</li>
         <li><strong>规则兜底校验</strong>：步骤[8]（S6）硬闸——<code>id</code> 必须 ∈ 受控词表、<code>label</code> 必须等于词表中的节点名、每条≥1 个 strong 链接、weak-only 直接剔除；不通过打回重生成。</li>
       </ul>
