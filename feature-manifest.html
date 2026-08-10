@@ -649,6 +649,7 @@
     <a href="#B6" class="sidebar-link"><span class="mod-id">B6</span>部署与上线</a>
     <a href="#B7" class="sidebar-link"><span class="mod-id">B7</span>校验与防御</a>
     <a href="#B8" class="sidebar-link"><span class="mod-id">B8</span>调度现状</a>
+    <a href="#B9" class="sidebar-link"><span class="mod-id">B9</span>付费下载链路</a>
 
     <div class="sidebar-section">第二部分 · 前端逻辑</div>
     <a href="#pages" class="sidebar-link">双页面架构</a>
@@ -695,7 +696,7 @@
     <section id="overview">
         <h1>社会人 <em>功能模块说明</em></h1>
         <p class="subtitle">帮助初学者理解社会科学理论的可视化网站 · 本文档是功能契约，所有改动需同步更新</p>
-        <span class="version-badge">v1.49 · 2026-08-06</span>
+        <span class="version-badge">v1.50 · 2026-08-10</span>
 
         <h3>产品定位</h3>
         <p><strong>用社会科学看社会</strong> —— 将高大上的理论落地到社会生活的实践中。网站包含两个页面：</p>
@@ -847,6 +848,32 @@
       <div class="info-box tip" style="border-left-color:#e0a800">
         <div class="info-box-title">⚠️ 当前只有早班 9:06 在跑</div>
         <p>自动化 rrule <code>FREQ=DAILY;BYHOUR=9,21;BYMINUTE=6</code> 被系统塌缩为每天单次（只跑 9:06），<strong>晚班 21:06 从未运行</strong>。若要每日两批，须拆成两个独立自动化（各单 BYHOUR）。此外自动化绑定本机进程，宿主机关机/休眠则不开。</p>
+      </div>
+    </section>
+
+    <section id="B9">
+      <h2>[B9] 付费下载 PDF 链路（方向B：服务端生成 + 自动支付门禁）</h2>
+      <p>回应"手机打印会把 A4 排版拦腰折断、且需可带走/可付费"：废弃浏览器原生打印方案，改为<strong>服务端用 pdf-lib 生成真实 A4 PDF</strong>，所有设备拿到同一份文件、中文正常、自动分页、绝不在卡片中间截断。下载前经<strong>权益令牌(HMAC-SHA256)门禁</strong>，未付费返回 403。</p>
+      <div class="code-block">
+<span class="cmt">// 全链路（Netlify Functions，api/ 下每个 *.js 即一个函数）</span>
+news-export.html 点击「下载 PDF（付费）」
+  → <span class="fn">create-order</span>   POST  生成订单（mock / 微信 / 支付宝）
+  → <span class="fn">pay-confirm</span>   GET   （仅 mock）模拟支付成功 → 签发 HMAC 令牌 token
+  → <span class="fn">download</span>      GET ?token  校验令牌 → pdf-builder 生成 PDF → 返回 application/pdf
+  → <span class="fn">pay-webhook</span>   POST  （真实支付）异步通知占位，标记已付
+      </div>
+      <ul>
+        <li><strong>权益令牌</strong>：<code>_common.js</code> 的 <code>signToken/verifyToken</code> 用 <code>PAYWALL_SECRET</code> 做 HMAC-SHA256，载荷 <code>{paid, plan, iat, exp}</code>；下载时只验签名+有效期，<strong>不查库</strong>，可水平扩展。<code>exp</code> 过期（默认 365 天）或 <code>paid</code> 为假即拒。</li>
+        <li><strong>PDF 生成</strong>：<code>pdf-builder.js</code> 用 pdf-lib 嵌入黑体（<code>subset:true</code>）、按 A4(595.28×841.89pt) 排版，支持 速用(金句)/进阶(解读) 两模式 × 紧凑(3栏)/标准(2栏)/宽松(1栏) 三密度，卡片 <code>break-inside:avoid</code> 不跨页。</li>
+        <li><strong>字体加载（稳健性关键）</strong>：<code>_common.js</code> 的 <code>loadFontBytes()</code> 优先读本地 <code>assets/fonts/simhei.ttf</code>（dev），生产函数包不含字体时回退 <code>fetch('https://shehui-ren.com/assets/fonts/simhei.ttf')</code>（仓库静态资源，随站点发布），<strong>无需把 9.7MB 字体打进函数包、也不会"字体缺失"</strong>。自定义域名用环境变量 <code>PDF_FONT_URL</code> 覆盖。</li>
+        <li><strong>部署</strong>：<code>netlify.toml</code> 设 <code>functions.directory = "api"</code>，Netlify 按 <code>api/package.json</code> 自动装 <code>pdf-lib</code>+<code>@pdf-lib/fontkit</code>（无需提交 <code>api/node_modules</code>）。函数随站点一同发布。</li>
+        <li><strong>当前状态</strong>：默认 <code>PAYMENT_PROVIDER=mock</code>，<code>paywall-dev.js</code> 本地即可跑通全链路（订单→模拟支付→令牌→PDF→无令牌403）；真实微信/支付宝 Native 支付的下单与异步通知为占位，填商户号+密钥后即生效（详见 <code>PAYMENT_INTEGRATION.md</code>）。</li>
+        <li><strong>前端</strong>：<code>news-export.html</code> 顶部「下载 PDF（付费）」按钮默认上锁，点击弹支付窗（mock 显示「模拟支付成功」、真实显示收款码），付费成功后将令牌存 localStorage 并触发下载；原有「打印」按钮仍免费可用。</li>
+        <li><strong>缓存</strong>：因改动 <code>news-export.html</code>，service worker 缓存 <code>shehui-ren-v46</code>→<code>shehui-ren-v47</code>。</li>
+      </ul>
+      <div class="info-box tip" style="border-left-color:#3a8c8c">
+        <div class="info-box-title">本地联调命令</div>
+        <p><code>node paywall-dev.js</code> 起服务 → 浏览器开 <code>http://localhost:8787/news-export.html</code>；<code>node .test-flow.js</code> 跑全链路断言；<code>node .debug-pdf.js</code> 单测 PDF 生成。</p>
       </div>
     </section>
 
@@ -1560,6 +1587,7 @@
                 <tr><td class="mod-id-cell"><a href="#B6">B6</a></td><td>部署上线</td><td class="mod-page-cell">后端逻辑</td><td>脚本</td><td>deploy-netlify.js 生产/兜底/预览/Gitee</td></tr>
                 <tr><td class="mod-id-cell"><a href="#B7">B7</a></td><td>校验防御</td><td class="mod-page-cell">后端逻辑</td><td>脚本</td><td>news-validate.js 硬闸(essayQuote必填)</td></tr>
                 <tr><td class="mod-id-cell"><a href="#B8">B8</a></td><td>调度现状</td><td class="mod-page-cell">后端逻辑</td><td>运维</td><td>当前仅 9:06 跑；21:06 被塌缩</td></tr>
+                <tr><td class="mod-id-cell"><a href="#B9">B9</a></td><td>付费下载链路</td><td class="mod-page-cell">后端逻辑</td><td>Netlify Functions</td><td>服务端 pdf-lib 生成 A4 PDF + HMAC 令牌门禁（create-order/pay-confirm/pay-webhook/download）；mock 可联调，真实支付待商户号</td></tr>
                 <tr><td class="mod-id-cell"><a href="#C1">C1</a></td><td>图谱数据</td><td class="mod-page-cell">JS数据层</td><td>JS常量</td><td>思想家29/理论21/概念34/领域18（共102，231连线）</td></tr>
                 <tr><td class="mod-id-cell"><a href="#C2">C2</a></td><td>新闻数据</td><td class="mod-page-cell">JS数据层</td><td>JS文件(外置news-data.js)</td><td>全自动（抓取+AI审核+入库）；每日期15条，保留最近7天，附NEWS_REVIEW_STANDARD.md与news-review-log.json —— <a href="#B2">完整流水线见 [B2]</a></td></tr>
                 <tr><td class="mod-id-cell"><a href="#C3">C3</a></td><td>Canvas渲染</td><td class="mod-page-cell">JS引擎</td><td>JS函数</td><td>力导向tick+绘制节点/连线/点阵/屏幕空间学科图例（pan/zoom复合变换）</td></tr>
@@ -1578,6 +1606,7 @@
         <table class="module-table" id="clTable">
             <thead><tr><th>日期</th><th>版本</th><th>改动内容</th><th>涉及模块</th></tr></thead>
             <tbody>
+                <tr><td>2026-08-10</td><td>v1.50</td><td><strong>[付费下载 PDF 链路上线 · 方向B：服务端生成 + 自动支付门禁] 回应"手机打印把 A4 拦腰折断、素材需可带走可付费"：</strong>① <strong>废弃浏览器原生打印方案</strong>，改服务端用 pdf-lib 生成真实 A4 PDF——所有设备同一份文件、中文正常、自动分页、绝不在卡片中间截断。② <strong>支付门禁</strong>——新增 [B9] 链路：<code>create-order</code>(下单) → <code>pay-confirm</code>(mock 模拟支付成功→签发 HMAC 令牌) / <code>pay-webhook</code>(真实支付异步通知占位) → <code>download</code>(校验令牌→生成 PDF 返回，无令牌即 403)；令牌为 HMAC-SHA256，载荷 {paid,plan,iat,exp}，下载只验签名+有效期、不查库。③ <strong>字体稳健</strong>——<code>_common.js</code> 的 <code>loadFontBytes()</code> 本地读 <code>assets/fonts/simhei.ttf</code>，生产回退站点静态资源 <code>https://shehui-ren.com/assets/fonts/simhei.ttf</code>，<strong>不把 9.7MB 字体打进函数包也不会缺失</strong>；新增 <code>netlify.toml</code> 设 <code>functions.directory=api</code>，Netlify 按 <code>api/package.json</code> 自动装 pdf-lib+@pdf-lib/fontkit。④ <strong>前端</strong>——<code>news-export.html</code> 顶部「下载 PDF（付费）」按钮上锁、点击弹支付窗（mock 显示"模拟支付成功"、真实显示收款码），付费成功存令牌并下载；原「打印」仍免费。⑤ <strong>本地联调</strong>——<code>paywall-dev.js</code> 模拟 Functions+静态托管，<code>.test-flow.js</code> 断言全链路、<code>.debug-pdf.js</code> 单测 PDF。⑥ <strong>部署就绪</strong>——当前 <code>PAYMENT_PROVIDER=mock</code> 可本地跑通；真实微信/支付宝 Native 支付的下单与通知为占位，填商户号+密钥即生效（详见新增 <code>PAYMENT_INTEGRATION.md</code>）。⑦ service worker 缓存 <code>shehui-ren-v46</code>→<code>shehui-ren-v47</code>（news-export.html 改动）。本版走预览验收后发布；源码(契约)已同步 Gitee。</td><td>B9, 付费, 商业, 导出, 移动端, 部署</td></tr>
                 <tr><td>2026-08-06</td><td>v1.49</td><td><strong>[素材分类页（反向检索）上线 · 第三 Tab] 回应"用作文主题标签反查新闻"的核心诉求（受控词表 TOPIC_LIB 已具备，此前仅数据层、无用户端检索 UI）：</strong>① 新增站点第三导航 Tab「素材分类」（与「社会热点」「知识图谱」并列）。② 可整体收起的完整手风琴筛选区——展开即见 9 大维度 × 34 子标签全部可点，每个子标签带实时命中计数徽标（反向索引可视化）；跨维度多选，已选以「已选 N：标签 ×」条常驻、可单独移除；收起后只剩已选条、结果区独占整屏。③ 结果区复用速用模式卡片（标题 + 作文金句 essayQuote + 适用主题 chip），与「社会热点」视觉统一；默认展示全部近期素材，选中主题后按并集(OR)实时过滤。④ 自然下滑无限加载——每批 15 条，滑近底部自动续加载下一批（与首页节奏一致），移动端比翻页自然。⑤ 详情面板 showNewsDetail 增加跨日期全局回退查找，使分类页卡片可正确打开对应新闻。⑥ MVP 不含导出（导出形态待真实使用数据再定，避免过早做购物车式选择）。⑦ service worker 缓存 shehui-ren-v41→shehui-ren-v44。本版走预览验收后发布；验收反馈迭代：a) 筛选器视觉打磨——"已选"回显由「纯文本+杂排芯片」改为等高统一芯片+计数徽标+「清除全部」按钮、分组标题加红色强调条、开关按钮加悬停态与箭头翻转；b) 导航 Tab 调序——「素材分类」移至第二位（社会热点 → 素材分类 → 知识图谱）；c) 修复手机端素材分类页顶部被吸进顶栏的间距问题（#page-classify .section 顶部内边距被 ID 特异性压成 0，补回桌面 36px / 移动 28px，与社会热点页一致）。d) Tab 大编号修正——「社会热点」装饰性编号由 02 改 01、「素材分类」由 03 改 02，使编号与导航 Tab 实际位序对齐（知识图谱页本无 section-num，保持不变）。e) 修复素材分类页新闻卡片「点不开」——根因详情面板 #newsPanel 原位于 #page-topics 内部，切到「素材分类」页时父级 .page 变 display:none 连带隐藏了 position:fixed 的面板，点击虽执行 showNewsDetail 但面板不可见；将 #newsPanel 与 #dateBackdrop 移出 #page-topics 成为全局元素后，分类页卡片点击可正常滑出详情面板（showNewsDetail 原有跨日期回退逻辑不变）。</td><td>素材分类, 反向检索, 社会热点, 移动端, 导航</td></tr>
                 <tr><td>2026-08-06</td><td>v1.48</td><td><strong>[作文主题机制重构 · 方案C：删除固定映射，全新闻 AI 语义直写] 回应"今日饮料新闻被错贴青春奋斗/时代使命，且社科节点映射过度泛化"：</strong>① <strong>删除固定映射</strong>——退役并删除 <code>_annotate_topics.js</code>（含 <code>NODE_TO_TOPIC</code> 社科节点→主题映射表与关键词兜底派生逻辑），同时移除两个 deploy-netlify.js（sociology-map / ctrip-claw）里的 <code>runAnnotation()</code> 部署前补标调用。② <strong>全新闻 AI 直写</strong>——改新闻自动化 prompt：每条入选新闻（含热榜非特大与特大）都由 AI 基于新闻语义从 <code>TOPIC_LIB</code> 全词表（9 维度）直挑 1–4 个 <code>essayTopics</code>，不再区分"重要/非重要新闻"，也不再有任何规则派生；S2.5 配额(Q=3)仅决定 themePick 名额与日志标记，不再独占 essayTopics。③ <strong>校验硬闸</strong>——<code>news-validate.js</code> 新增 essayTopics 必填（id∈TOPIC_LIB、label 一致）硬闸，缺或非法即 FAIL、脏数据不发布。④ <strong>文档同步</strong>——<code>NEWS_REVIEW_STANDARD.md</code> 与 <code>feature-manifest.html</code> [B4]/[B6]/模块索引 同步更新为"AI 语义直写"。验证：news-validate.js 7 天 105 条 FAIL=0/WARN=0（历史 105 条 essayTopics 均合法）。本变更为纯后端数据生成/校验机制，<strong>无用户端页面/UI 改动</strong>，自下一个自动化运行周期起生效；源码(含契约)已同步 Gitee。</td><td>B4, C2, news-validate, 新闻自动化</td></tr>
                 <tr><td>2026-08-06</td><td>v1.47</td><td><strong>[契约文档 · 导航栏补全] 用户指出左侧导航栏未同步本次新增内容：</strong>① 补入整段「第一部分·后端逻辑」的 B1–B8 八个跳转项（此前后端章节已写入正文、却漏进导航）；② 补入之前加的「素材卡片导出页 A8-export」跳转项（亦漏）；③ 将「双页面架构 #pages」从概览组移入「第二部分·前端逻辑」组，并在导航顶部显式加「第一部分·后端逻辑 / 第二部分·前端逻辑」两个分组标题，使侧边栏与正文的两部分 banner 结构完全一致；④ 校验：33 个导航链接全部能在正文命中对应 section id，无死链、结构平衡。本版为纯导航修订，无正文内容/代码改动；徽标同步 bump v1.47。未部署线上、源码(契约)已同步 Gitee。</td><td>契约, 导航栏, B1–B8, A8-export</td></tr>

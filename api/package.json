@@ -1,0 +1,10 @@
+{
+  "name": "shehui-ren-paywall",
+  "version": "1.0.0",
+  "description": "社会人 · 付费下载 PDF 链路（Netlify Functions）",
+  "private": true,
+  "dependencies": {
+    "@pdf-lib/fontkit": "^1.1.1",
+    "pdf-lib": "^1.17.1"
+  }
+}

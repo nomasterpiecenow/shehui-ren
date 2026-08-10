@@ -3,8 +3,8 @@
 单文件 HTML + Canvas 力导向知识图谱，三学科（社会学 / 经济学 / 心理学）
 + 每日新闻页。正式站 https://shehui-ren.com （Netlify 托管）。
 
-当前版本 **v1.49**（素材分类反向检索页 · 速用模式 · 作文主题受控词表 · 移动端适配）。
-对应 service worker 缓存版本 `shehui-ren-v42`。
+当前版本 **v1.50**（付费下载 PDF 链路 · 服务端生成真实 A4 PDF + 自动支付门禁 · 素材分类反向检索页）。
+对应 service worker 缓存版本 `shehui-ren-v47`。
 
 图谱规模：**311 节点 / 3 组连线表**（`CONCEPT_LINKS` / `THINKER_LINKS` / `EXTRA_CONCEPT_LINKS`）。
 节点分四类 `cat ∈ {thinker, theory, concept, topic}`，三学科 `disc ∈ {soc, econ, psy}`。
@@ -22,6 +22,12 @@
 | `manifest.webmanifest` / `*.svg` / `robots.txt` / `sitemap.xml` / `_redirects` | PWA 与站点元数据 |
 | `NEWS_REVIEW_STANDARD.md` / `news-validate.js` / `news-review-log.json` | 新闻审核规范与校验脚本 |
 | `deploy-netlify.js` | **跨设备通用版**部署脚本（自动探测 node / netlify-cli，详见下方） |
+| `netlify.toml` | Netlify 配置：站点根即仓库、`functions.directory = "api"`，Functions 自动生效 |
+| `api/*.js` | **付费下载 PDF 链路**（Netlify Functions）：`create-order`/`pay-confirm`/`pay-webhook`/`download` + 共享 `_common.js` + `pdf-builder.js` + `package.json` |
+| `assets/fonts/simhei.ttf` | 中文黑体（9.7MB），函数字体回退源，随站点静态发布 |
+| `news-export.html` | 素材导出页：A4 预览 + 「打印（免费）」+「下载 PDF（付费）」按钮 |
+| `paywall-dev.js` | 本地联调 runner（模拟 Functions + 静态托管），`node paywall-dev.js` 起服务 |
+| `PAYMENT_INTEGRATION.md` | 付费链路接入与部署指南（真实微信/支付宝商户号填入点 + 生产必改项） |
 | `sync.js` / `sync.command` / `sync.bat` | **开工前同步检查**：确认已连 Gitee 且是最新状态，双击即跑 |
 | `_check_refs.js` / `_validate_v11.js` / `_node_map.json` 等 `_` 前缀脚本 | 节点/数据维护工具（非必需，留作备用） |
 
@@ -120,10 +126,28 @@ Netlify 免费额度耗尽时，生产部署（`deploy --prod`）会返回 **403
 
 ---
 
+## 付费下载 PDF（服务端生成 + 自动支付门禁）
+
+素材可「带走」是核心付费点。v1.50 起废弃浏览器原生打印（手机端会把 A4 排版拦腰折断），
+改为**服务端用 `pdf-lib` 生成真实 A4 PDF**，所有设备拿到同一份文件。
+
+- **链路**：`news-export.html` 点「下载 PDF（付费）」→ `create-order`（下单）→ 支付成功 →
+  `pay-confirm`（mock 模拟支付，签发 HMAC 令牌）/ `pay-webhook`（真实支付异步通知占位）→
+  `download`（校验令牌 → 生成 PDF 返回；无令牌即 403）。详情见 `PAYMENT_INTEGRATION.md`。
+- **本地联调**：`node paywall-dev.js` 起服务，浏览器开 `http://localhost:8787/news-export.html`；
+  默认 `PAYMENT_PROVIDER=mock`，点「模拟支付成功」即可跑通全链路。`.test-flow.js` 跑断言、`.debug-pdf.js` 单测 PDF。
+- **字体**：`api/_common.js` 的 `loadFontBytes()` 读 `assets/fonts/simhei.ttf`，生产回退站点静态资源，
+  **不把 9.7MB 字体打进函数包也不会缺失**。
+- **真实收款**：当前为 mock 占位；接微信/支付宝 Native 支付只需填商户号 + 密钥到 Netlify 环境变量
+  （`WX_MCH_ID` / `ALIPAY_APP_ID` 等），补全 `create-order.js` / `pay-webhook.js` 的下单与通知调用即可，详见 `PAYMENT_INTEGRATION.md`。
+
+---
+
 ## 版本历史（摘要，完整见 `feature-manifest.html`）
 
 | 版本 | 日期 | 要点 |
 |------|------|------|
+| v1.50 | 2026-08-10 | 付费下载 PDF 链路上线（方向B）：服务端 pdf-lib 生成真实 A4 PDF + HMAC 令牌自动支付门禁；新增 netlify.toml / api/ Functions / assets/fonts 黑体 / PAYMENT_INTEGRATION.md；sw 缓存 v46→v47 |
 | v1.36 | 2026-08-03 | 新增「素材卡片一键导出」（news-export.html，近7天全量105条，浏览器原生打印 A4/PDF，免费） |
 | v1.30–v1.35 | 2026-08-03 | 知识图谱节点学科圆点、移动端学科筛选/时间轴/间距适配（详见 feature-manifest.html） |
 | v1.29 | 2026-07-31 | 默认只勾核心概念 / 取消节点静态抖动 / 链接颜色加深 |

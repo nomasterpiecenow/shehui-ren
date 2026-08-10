@@ -1,0 +1,15 @@
+# Netlify 配置 —— 社会人站点
+# 站点根目录即仓库根（sociology-map/），Functions 放在 api/ 目录。
+
+[build]
+  publish = "."
+  # 锁定 Node 版本（>=18 即可，fetch 全局可用；用 20 LTS 稳妥）
+  environment = { NODE_VERSION = "20" }
+
+[functions]
+  # 付费下载 PDF 链路的函数目录：create-order / pay-confirm / pay-webhook / download
+  directory = "api"
+  # 函数依赖由 api/package.json 声明，Netlify 部署时自动 npm install（无需提交 api/node_modules）。
+  # 中文字体 simhei.ttf 不进函数包：api/_common.js 的 loadFontBytes() 在本地 dev 读 assets/fonts/simhei.ttf，
+  # 生产环境回退到 https://shehui-ren.com/assets/fonts/simhei.ttf（仓库内的静态资源，始终随站点发布），
+  # 因此生产不会"字体缺失"，无需 included_files。如需自定义域名，设环境变量 PDF_FONT_URL 覆盖。

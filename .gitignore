@@ -29,3 +29,6 @@ deploy-netlify.js
 pending-news.json
 news-review-log.json
 _node_map*.json
+
+# 强制纳入：api/_common.js 是付费下载链路的核心共享模块（非临时脚本），需随仓库部署
+!api/_common.js

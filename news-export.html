@@ -207,6 +207,24 @@
     }
     /* 不再覆写 .grid.* 列数/字号 —— 手机与 Web/打印统一为 3/2/1 列 */
   }
+
+  /* ===== 付费下载按钮 + 弹窗 ===== */
+  .dl-btn{background:linear-gradient(135deg,#C7332E,#E0563F);border:0;}
+  .dl-btn:hover{opacity:.93;}
+  .pay-mask{position:fixed;inset:0;background:rgba(20,22,40,.55);display:flex;align-items:center;justify-content:center;z-index:60;padding:16px;}
+  .pay-modal{position:relative;background:#fff;border-radius:16px;max-width:380px;width:100%;padding:26px 24px 22px;box-shadow:0 18px 50px rgba(0,0,0,.25);text-align:center;}
+  .pay-close{position:absolute;top:10px;right:14px;border:0;background:none;font-size:26px;line-height:1;color:#9aa;cursor:pointer;}
+  .pay-modal h2{margin:0 0 10px;font-size:19px;color:var(--ink,#1a1a2e);}
+  .pay-price{font-size:34px;font-weight:800;color:#C7332E;margin:6px 0 2px;}
+  .pay-price .pay-per{font-size:14px;font-weight:500;color:#9aa;margin-left:4px;}
+  .pay-desc{font-size:13px;color:#555;line-height:1.6;margin:8px 0 16px;}
+  .pay-qr{min-height:0;margin:6px 0 14px;display:flex;flex-direction:column;align-items:center;gap:8px;}
+  .pay-qr img{max-width:200px;width:200px;height:200px;border:1px solid #eee;border-radius:10px;}
+  .pay-qr .qr-text{font-size:12px;color:#777;word-break:break-all;background:#f6f7f9;border-radius:8px;padding:8px 10px;width:100%;box-sizing:border-box;}
+  .pay-buy{width:100%;border:0;background:#C7332E;color:#fff;font-size:16px;font-weight:700;padding:13px;border-radius:12px;cursor:pointer;transition:.15s;}
+  .pay-buy:hover{opacity:.92;}
+  .pay-buy:disabled{opacity:.6;cursor:default;}
+  .pay-note{font-size:12px;color:#888;margin:12px 0 0;line-height:1.5;}
 </style>
 </head>
 <body>
@@ -225,7 +243,8 @@
       <button type="button" data-d="loose">宽松</button>
     </div>
     <button class="print-btn" onclick="window.print()">🖨 打印 / PDF</button>
-    <span class="hint">上方可切换「速用·金句 / 进阶·解读」与排版密度；预览按 A4 分页，可缩放或横滑查看整页；打印时选「另存为 PDF」即得素材册。</span>
+    <button class="print-btn dl-btn" id="downloadBtn" type="button">⬇ 下载 PDF（付费）</button>
+    <span class="hint">上方可切换「速用·金句 / 进阶·解读」与排版密度；预览按 A4 分页，可缩放或横滑查看整页；<b>下载 PDF</b>为付费功能（服务端生成、各设备一致、不被截断），<b>打印</b>仍可免费使用。</span>
   </div>
 
   <div class="datebar">
@@ -251,6 +270,19 @@
   </div>
 
   <div class="pages" id="pages"></div>
+
+  <!-- ===== 付费下载弹窗 ===== -->
+  <div class="pay-mask" id="payMask" hidden>
+    <div class="pay-modal">
+      <button class="pay-close" id="payClose" type="button" aria-label="关闭">×</button>
+      <h2 id="payTitle">解锁「下载素材 PDF」</h2>
+      <div class="pay-price"><span id="payPrice">￥9.9</span><span class="pay-per">/ 年</span></div>
+      <p class="pay-desc">购买后可在任意设备下载高清 A4 素材册 PDF——服务端统一生成，<b>绝不被手机打印截断</b>，且支持按主题/日期自选。</p>
+      <div class="pay-qr" id="payQr"></div>
+      <button class="pay-buy" id="payBuy" type="button">生成收款码</button>
+      <p class="pay-note" id="payNote"></p>
+    </div>
+  </div>
 
 <script src="news-data.js"></script>
 <script>
@@ -584,6 +616,85 @@
   // 初始
   renderCalendar();
   render();
+
+  // ===================== 付费下载链路 =====================
+  var TOKEN_KEY = 'shehui_pdf_token';
+  var downloadBtn = document.getElementById('downloadBtn');
+  var payMask = document.getElementById('payMask');
+  var payClose = document.getElementById('payClose');
+  var payBuy = document.getElementById('payBuy');
+  var payQr = document.getElementById('payQr');
+  var payNote = document.getElementById('payNote');
+  var payPrice = document.getElementById('payPrice');
+  var payBusy = false;
+
+  function getToken(){ try { return localStorage.getItem(TOKEN_KEY); } catch(e){ return null; } }
+  function setToken(t){ try { localStorage.setItem(TOKEN_KEY, t); } catch(e){} }
+  function fmtDates(){ return Array.from(selected).sort().join(','); }
+
+  function openPay(){ payMask.hidden = false; payNote.textContent = ''; payQr.innerHTML = ''; payBuy.disabled = false; payBuy.textContent = '生成收款码…'; createOrder(); }
+  function closePay(){ payMask.hidden = true; }
+
+  function createOrder(){
+    payBuy.disabled = true;
+    fetch('/.netlify/functions/create-order', {
+      method:'POST', headers:{'content-type':'application/json'},
+      body: JSON.stringify({ plan:'pro', dates: Array.from(selected) })
+    }).then(function(r){ return r.json(); }).then(function(d){
+      if (d.error) { payNote.textContent = d.error; payBuy.disabled = true; payBuy.textContent = '生成收款码'; return; }
+      if (d.priceYuan != null) payPrice.textContent = '￥' + d.priceYuan;
+      if (d.mode === 'mock') {
+        payNote.textContent = d.note || '';
+        payQr.innerHTML = '<div class="qr-text">' + esc(d.qrText || d.orderId) + '</div>';
+        payBuy.disabled = false; payBuy.textContent = '模拟支付成功（测试）';
+        payBuy.onclick = function(){ confirmMock(d.confirmUrl); };
+      } else {
+        payNote.textContent = '请使用微信/支付宝扫码支付；支付成功后系统将自动开通下载权限。';
+        var code = d.codeUrl || d.qrText || '';
+        if (code) payQr.innerHTML = '<div class="qr-text">' + esc(code) + '</div>';
+        payBuy.textContent = '已支付？刷新权限'; payBuy.disabled = false;
+        payBuy.onclick = function(){ closePay(); doDownload(); };
+      }
+    }).catch(function(e){ payNote.textContent = '下单失败：' + e.message; payBuy.disabled = false; payBuy.textContent = '重试'; payBuy.onclick = createOrder; });
+  }
+
+  function confirmMock(confirmUrl){
+    payBuy.disabled = true; payBuy.textContent = '处理中…';
+    fetch(confirmUrl, { method:'GET' }).then(function(r){ return r.json(); }).then(function(d){
+      if (!d.ok || !d.token) { payNote.textContent = d.error || '支付确认失败'; payBuy.disabled = false; payBuy.textContent = '重试'; payBuy.onclick = function(){ confirmMock(confirmUrl); }; return; }
+      setToken(d.token); closePay(); doDownload();
+    }).catch(function(e){ payNote.textContent = '确认失败：' + e.message; payBuy.disabled = false; payBuy.textContent = '重试'; payBuy.onclick = function(){ confirmMock(confirmUrl); }; });
+  }
+
+  function doDownload(){
+    var token = getToken();
+    if (!token) { openPay(); return; }
+    if (payBusy) return; payBusy = true;
+    var old = downloadBtn.textContent;
+    downloadBtn.textContent = '生成中…'; downloadBtn.disabled = true;
+    var url = '/.netlify/functions/download?token=' + encodeURIComponent(token)
+      + '&mode=' + encodeURIComponent(mode)
+      + '&density=' + encodeURIComponent(density)
+      + '&dates=' + encodeURIComponent(fmtDates());
+    fetch(url).then(function(r){
+      if (r.status === 403) { setToken(null); throw new Error('权限已失效，请重新购买'); }
+      if (!r.ok) throw new Error('下载失败（' + r.status + '）');
+      return r.blob();
+    }).then(function(blob){
+      var a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'shehui-ren-' + mode + '-' + density + '.pdf';
+      document.body.appendChild(a); a.click(); a.remove();
+      setTimeout(function(){ URL.revokeObjectURL(a.href); }, 1000);
+    }).catch(function(e){
+      if (String(e.message).indexOf('权限') >= 0) { payNote.textContent = ''; openPay(); }
+      else alert(e.message);
+    }).finally(function(){ downloadBtn.textContent = old; downloadBtn.disabled = false; payBusy = false; });
+  }
+
+  downloadBtn.addEventListener('click', doDownload);
+  payClose.addEventListener('click', closePay);
+  payMask.addEventListener('click', function(e){ if (e.target === payMask) closePay(); });
 })();
 </script>
 </body>
