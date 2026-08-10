@@ -21,7 +21,7 @@ exports.handler = async (event) => {
   if (cfg.provider === 'mock') {
     const orderId = createMockOrder(plan);
     // 模拟支付确认地址（前端"模拟支付"按钮会请求它）
-    const confirmUrl = '/.netlify/functions/pay-confirm?orderId=' + encodeURIComponent(orderId);
+    const confirmUrl = '/.netlify/functions/pay-confirm?orderId=' + encodeURIComponent(orderId) + '&plan=' + encodeURIComponent(plan);
     return {
       statusCode: 200,
       headers: { 'content-type': 'application/json', 'access-control-allow-origin': origin || '*' },

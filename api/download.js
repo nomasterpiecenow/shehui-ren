@@ -18,7 +18,7 @@ exports.handler = async (event) => {
   const dates = q.dates ? q.dates.split(',').map(s => s.trim()).filter(Boolean) : [];
 
   let news;
-  try { news = selectNews(dates); }
+  try { news = await selectNews(dates); }
   catch (e) { return { statusCode: 500, headers: { 'content-type': 'application/json' }, body: JSON.stringify({ error: '读取新闻数据失败：' + e.message }) }; }
 
   const rangeText = dates.length ? ('日期：' + dates.join('、')) : '最近更新';

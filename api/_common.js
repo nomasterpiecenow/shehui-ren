@@ -43,8 +43,9 @@ function getConfig() {
 
 // ---------- 新闻数据加载 ----------
 // news-data.js 形如 `var NEWS_DATA = {...};`，用 vm 在隔离上下文求值后取出对象。
-function loadNewsData() {
-  const src = fs.readFileSync(NEWS_DATA_PATH, 'utf8');
+// 关键：Netlify Functions 是无状态隔离容器，运行在 /var 下，访问不到站点根目录文件，
+// 因此线上改为从站点静态资源 HTTP 拉取并解析（自动随每日新闻更新）。
+function parseNewsData(src) {
   const m = src.match(/var\s+NEWS_DATA\s*=\s*([\s\S]*?);\s*(NEWS_DATA\[|module\.exports|$)/);
   if (!m) throw new Error('NEWS_DATA 未匹配');
   const vm = require('vm');
@@ -53,10 +54,21 @@ function loadNewsData() {
   vm.runInContext('var NEWS_DATA = ' + m[1] + ';', sandbox);
   return sandbox.NEWS_DATA;
 }
+async function loadNewsData() {
+  // 本地开发 / 自带数据副本：直接读文件
+  if (fs.existsSync(NEWS_DATA_PATH)) {
+    return parseNewsData(fs.readFileSync(NEWS_DATA_PATH, 'utf8'));
+  }
+  // 线上 Serverless：从站点静态资源拉取并解析（自动随每日新闻更新）
+  const url = process.env.NEWS_DATA_URL || 'https://shehui-ren.com/news-data.js';
+  const res = await fetch(url);
+  if (!res.ok) throw new Error('拉取新闻数据失败 HTTP ' + res.status + ' @ ' + url);
+  return parseNewsData(await res.text());
+}
 
 // 取指定日期列表（或最近 N 天）的新闻数组，按日期倒序。
-function selectNews(dates) {
-  const data = loadNewsData();
+async function selectNews(dates) {
+  const data = await loadNewsData();
   const keys = Object.keys(data).sort().reverse(); // 最新在前
   let pick = keys;
   if (dates && dates.length) pick = keys.filter(k => dates.includes(k));
