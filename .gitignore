@@ -7,6 +7,9 @@
 # Gitee 推送令牌：切勿提交！另一台设备放自己的 .gitee_token
 .gitee_token
 
+# 本地环境变量/密钥（含大模型 API key，切勿提交！云端改用 GitHub Secret）
+.env
+
 # 临时调试目录
 .check_tmp/
 
@@ -25,10 +28,13 @@ _*.js
 sync.js
 sync.bat
 sync.command
-deploy-netlify.js
 pending-news.json
-news-review-log.json
 _node_map*.json
 
-# 强制纳入：api/_common.js 是付费下载链路的核心共享模块（非临时脚本），需随仓库部署
+# 强制纳入（随仓库部署，不可忽略）：
+# - deploy-netlify.js 是云端 GitHub Actions 部署入口
+# - news-review-log.json 是每日新闻生成日志
+# - api/_common.js 是付费下载链路核心模块
+!deploy-netlify.js
+!news-review-log.json
 !api/_common.js
