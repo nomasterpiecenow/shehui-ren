@@ -173,12 +173,16 @@ console.warn('[deploy] 生产部署失败（退出码 ' + prod.status + '），�
 // ---------- 兜底：草稿部署 ----------
 const draft = spawnSync(
   NODE,
-  [NETLIFY_BIN, 'deploy', '--dir=' + SITE_DIR, '--site=' + SITE_ID, '--json'],
+  [NETLIFY_BIN, 'deploy', '--dir=' + SITE_DIR, '--site=' + SITE_ID, '--json', '--debug'],
   { env: CLI_ENV, encoding: 'utf8', windowsHide: true }
 );
 
 if (draft.error || draft.status !== 0) {
-  console.error('[deploy] 草稿部署也失败:', (draft.stderr || draft.error || '').toString().slice(0, 800));
+  console.error('[deploy] 草稿部署也失败（完整输出）:');
+  console.error((draft.stderr || '').toString());
+  console.error('--- stdout ---');
+  console.error((draft.stdout || '').toString().slice(0, 2000));
+  if (draft.error) console.error('error:', draft.error);
   process.exit(1);
 }
 
