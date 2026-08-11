@@ -46,10 +46,12 @@ jobs:
             git push
           fi
 
-      - name: 镜像到 Gitee（可选，另一台设备 git pull 用）
-        if: ${{ secrets.GITEE_TOKEN }}
+      - name: 镜像到 Gitee（可选，未配置 GITEE_TOKEN 则跳过）
+        env:
+          GITEE_TOKEN: ${{ secrets.GITEE_TOKEN }}
         run: |
-          git remote add gitee https://no-works-yet:${{ secrets.GITEE_TOKEN }}@gitee.com/no-works-yet/shehui-ren.git
+          if [ -z "$GITEE_TOKEN" ]; then echo "未配置 GITEE_TOKEN，跳过镜像"; exit 0; fi
+          git remote add gitee https://no-works-yet:${GITEE_TOKEN}@gitee.com/no-works-yet/shehui-ren.git
           git push gitee HEAD:master
 
       - name: 部署到 Netlify
