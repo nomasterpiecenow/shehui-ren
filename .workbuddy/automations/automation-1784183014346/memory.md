@@ -173,3 +173,34 @@
 - 校验: `node news-validate.js` 通过，FAIL=0（4 个 WARN 均为更早旧日期 soc-only，非本批）
 - 同步: news-data.js + news-review-log.json 已 cp 至 D:/Users/wtianyi/ctrip-claw/
 - 日期数: 7（07-22/21/20/16/15/14/12），未超 7，无需修剪
+
+## 2026-08-08 (morning, ~09:25)
+- 批次日期: 2026-08-08（morning 槽，近24h）；候选池约 50 条（微博/百度/知乎/抖音/头条 + 央媒/部委编辑源）
+- 入库: 15 条（3 特大 + 12 非特大），日期键插入 NEWS_DATA 首位；删除最旧 2026-08-01，日期数保持 7（08-08~08-02）
+- 特大(3, 均≥4平台): #1 BESIII证实胶球(science,5平台,research)、#2 北京优化住房限购(urban/econ_welfare/stratification,5平台)、#3 东航提前14天免费退改(econ_behavioral/law,4平台)
+- 非特大(12): 藏蓝青春段宇(youth/socialization,themePick)、全民健身日健康中国(health/socialization,themePick)、上饶男童扶梯被救(social_capital/socialization)、承欢膝下古语刷屏(family/socialization/psy_attachment)、幼儿园关停潮2.14万所(stratification/family/education)、雷州特教招聘违规(institutionalism/law/stratification)、智能网联汽车强制国标(technology/law/rationalization_concept)、中百之家坑老直播(deviance/health/psy_cognitive_bias)、网信办个人信息保护规定(law/technology/digital)、宜宾高县4.9级地震(risk_society/urban)、用电负荷15.57亿千瓦(environment/econ_growth)、前7月进出口30万亿(econ_macro/globalization,themePick)
+- 学科覆盖: soc 15 / econ 4 / psy 2，三科全覆盖；节点 id 全部∈311节点集
+- S9 前沿研究: 1 条（#1 BESIII → Glueball domination in X(2370) established by the BESIII experiment, arXiv:2607.20366, fromNode=science），嵌 interpretation.research，url 真实、fromNode∈311节点集
+- S2.5 青春家国主题配额 3 条(#4 藏蓝青春、#5 全民健身日、#15 进出口30万亿)标记 themePick
+- 质检: `node news-validate.js` → **FAIL=0 WARN=0**（7日期各15条，311节点）；全量非中文字符扫描无偶然外文混入
+- S5 去重: 台风"白海豚"已于 08-05/06/07 连发三天达上限 → 08-08 不续发（列入 rejected）
+- S0 剔除/未纳入: 国际政治(特朗普/伊朗)、娱乐八卦、纯UGC个人帖、网传无源灾情、纯弱关联单点候选
+- 同步: news-data.js + news-review-log.json 已 cp 至 D:/Users/wtianyi/ctrip-claw/
+- 部署: **Netlify 失败** —— `node deploy-netlify.js` 生产+草稿均报 `Unauthorized: could not retrieve project`；经 API 直连核验 `.netlify_token`(nfp_...，40字节) 返回 HTTP 401 Access Denied，**令牌已失效/过期**，需用户登录 Netlify 重新生成 Personal Access Token 写入 ctrip-claw/.netlify_token 后方可恢复生产发布
+- 兜底: 因 Netlify 不可达，改走 **Gitee 同步**（`git add news-data.js news-review-log.json` → commit "news: auto-sync 2026-08-08" → push master，退出码 0），Mac 端 `git pull` 即获本批新闻；远程 URL 已重置
+- 红线: 未改 sociology-map.html/deploy-netlify.js/.netlify_token；临时脚本(_mk_0808/_fix_quote/_inspect_0808/_mk_log_0808) 跑完已删
+
+## 2026-08-11 (morning, ~09:45)
+- 批次日期: 2026-08-11（morning 槽，近24h）；候选池约 50 条（微博/百度/知乎/抖音/头条 + 央媒/部委编辑源）
+- 入库: 15 条（3 特大 + 12 非特大），日期键插入 NEWS_DATA 首位；删除最旧 2026-08-02，日期数保持 7（08-11~08-03）
+- 特大(3, 均≥4平台): #1 存款降息加息两极分化(econ_monetary_policy/econ_macro/econ_new_keynesian,5平台)、#2 钟睒睒呼吁限制平台权力(econ_monopoly/digital/technology,5平台)、#3 白海豚过境上海宝山转移2.3万人+社区互助(risk_society/social_capital/socialization,5平台,新进展角度续发)
+- 非特大(12): 高职分数线超本科(education/stratification/cultural_capital,themePick)、江西村自建免费泳池(institutionalism/socialization/social_capital)、就业职业伤害保障(econ_labor/precariat/econ_welfare,themePick)、出生证7分钟改革(institutionalism/digital/rationalization_theory)、自建房新规禁下乡买宅基地(econ_institution/urban/institutionalism)、驾培垄断整治(econ_monopoly/law/econ_institution)、视频号AI带货标注(technology/law/digital)、AI识菇中毒(technology/health/digital)、贪凉吃冷饮女童肺阴影(health/socialization/family)、哥伦比亚7.5级强震(risk_society/social_solidarity/health)、美团服务消费节一老一小(econ_institution/digital/social_capital)、国家标准338项(science/institutionalism/econ_public_finance,themePick)
+- 学科覆盖: soc / econ / psy 三科全覆盖（每条均含多视角解读）
+- S9 前沿研究: 1 条（#3 白海豚/社区互助 → Aldrich & Meyer 2015 "Social Capital and Community Resilience" American Behavioral Scientist 59(2):254-269 DOI 10.1177/0002764214550299 fromNode=social_capital），嵌 interpretation.research，url 真实(DOI)、fromNode∈311节点集
+- S2.5 青春家国主题配额 3 条(#4 高职超本科线、#6 就业保障、#15 国家标准)标记 themePick
+- 质检: 自写校验（字段/url/theory/lensId/research.fromNode/essayTopics/essayQuote长度100-160）全过 → FAIL=0；节点 id 全部∈311节点集；essayQuote 全部 100+ 字（站点既有标准 118-150，本批 102-114）
+- 重要修复: 上次（中断）会话曾因 Edit 串扰损坏 08-08 块、误删 08-02、且重建时把 08-06/08-04/08-03 的 essayQuote 清空；本次用「本地 08-11 块 + 镜像忠实块（08-08~08-03）」重新 eval+重组修复：修正 #6 theory social_policy→econ_welfare、#11 lensId/theory info_cocoon→media/digital（info_cocoon 仅保留为 essayTopic），补齐 08-06/08-04/08-03 的 essayQuote（来自镜像），并将 15 条 essayQuote 扩写至 100+ 字应试金句
+- S0 剔除/未纳入: 国际政治(特朗普/伊朗)、娱乐八卦、纯UGC个人帖、网传无源灾情、白海豚旧角度(08-05/06/07已连发三天，本次仅新进展角度续发)
+- 同步: news-data.js + news-review-log.json 已 cp 至 D:/Users/wtianyi/ctrip-claw/
+- 部署: deploy-netlify.js 生产+草稿均报 Unauthorized/401（.netlify_token 自 08-08 起持续失效）→ 未发布到 shehui-ren.com；兜底走 **Gitee 同步**（git commit news-data.js news-review-log.json → push master），Mac 端 git pull 即获本批新闻
+- 红线: 未改 sociology-map.html/deploy-netlify.js/.netlify_token；临时脚本(_inspect/_rebuild/_patch/_quote/_report/_mklog_0811) 跑完已删
