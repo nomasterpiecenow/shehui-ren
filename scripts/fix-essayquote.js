@@ -1,6 +1,6 @@
 /* scripts/fix-essayquote.js — 一次性修复：只重生成指定日期的 essayQuote
  * 保留该日新闻的全部其他字段（title/gist/thread/interpretations/theories/essayTopics…），
- * 仅按规范（100–130 字议论文素材语段）重写 essayQuote。
+ * 仅按规范（160–220 字高考议论文论证段，五步结构）重写 essayQuote。
  * 用法：node scripts/fix-essayquote.js [YYYY-MM-DD] [baseFile]
  *   默认日期 = 2026-08-12；baseFile 默认 news-live-tmp.js（线上抓取），缺失则回退 news-data.js
  */
@@ -30,9 +30,14 @@ function systemPrompt() {
   return `你是一位高考议论文素材编辑。我将给你若干条热点新闻（含 id、标题、导语 gist、关联理论视角），请只为每条重写「essayQuote」字段。
 
 # 要求
-- 输出一段 **100–130 字（汉字计）** 的议论文素材语段：成段、有论证、可直接引用作为作文素材。
-- 紧扣该新闻真实社科内核：先点明现象背后的结构性矛盾或人/社会角度（例如「极端天气常态化下，谁在为气候风险买单」），再展开一两句有依据的议论。
-- 严禁写成一句格言式鸡汤短句、严禁纯抒情口号、严禁简单重复标题。
+- 输出一段 **200–260 字（汉字计）** 的「高考议论文标准论证段」，可直接作为高考议论文的一个完整论证段落使用，必须遵守「五步结构」：
+  ① 观点句：用一句话亮明本段分论点（紧扣新闻社科内核，如「极端天气常态化下，气候风险正在悄然重塑社会的分配逻辑」）；
+  ② 阐释句：解释该观点与论题的关联；
+  ③ 材料句：引入本条新闻事实作为论据；
+  ④ 分析句（最关键）：务必对材料做因果/假设/对比分析，点明「为何如此」「说明什么」，严禁只罗列现象；
+  ⑤ 结论句：回扣观点并适度升华。
+- 语言规范流畅、论证有力、有文采但不浮夸，可当作文素材直接引用。
+- 严禁写成一句格言式鸡汤短句、严禁纯抒情口号、严禁说明文段落、严禁简单重复标题。
 - 只输出 JSON，不要任何解释：{"items":[{"id":<原id>,"essayQuote":"..."}]}`;
 }
 
@@ -78,13 +83,13 @@ async function main() {
       console.warn(`[fix] 第 ${attempt + 1} 次解析失败: ${lastErr}`);
       continue;
     }
-    // 长度校验
+    // 长度校验（规范：160–220 字高考论证段，余量 120–260）
     const bad = got.filter((g) => {
       const n = countChars(g.essayQuote);
-      return n < 80 || n > 160;
+      return n < 120 || n > 260;
     });
     if (bad.length) {
-      lastErr = `以下 id 字数不在 80–160： ${bad.map((g) => g.id + '(' + countChars(g.essayQuote) + ')').join(', ')}`;
+      lastErr = `以下 id 字数不在 120–260： ${bad.map((g) => g.id + '(' + countChars(g.essayQuote) + ')').join(', ')}`;
       console.warn(`[fix] 第 ${attempt + 1} 次长度不达标: ${lastErr}`);
       continue;
     }
