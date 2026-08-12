@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>社会人 · DeepSeek 成本支出文档</title>
+<script src="cost-data.js"></script>
+<style>
+  :root { --bg:#f6f7f9; --card:#fff; --line:#e5e7eb; --ink:#1f2937; --sub:#6b7280; --accent:#2563eb; --ok:#059669; --warn:#d97706; }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--bg); color:var(--ink); font:14px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif; }
+  .wrap { max-width:1080px; margin:0 auto; padding:20px 18px 60px; }
+  h1 { font-size:21px; margin:0 0 4px; }
+  .sub { color:var(--sub); font-size:13px; margin-bottom:16px; }
+  a { color:var(--accent); text-decoration:none; }
+  .cards { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin:14px 0 22px; }
+  .kpi { background:var(--card); border:1px solid var(--line); border-radius:10px; padding:12px 14px; }
+  .kpi .v { font-size:20px; font-weight:700; }
+  .kpi .l { color:var(--sub); font-size:12px; margin-top:2px; }
+  section { background:var(--card); border:1px solid var(--line); border-radius:10px; padding:14px 16px; margin-bottom:14px; }
+  section h2 { font-size:15px; margin:0 0 10px; padding-bottom:6px; border-bottom:1px solid var(--line); }
+  table { width:100%; border-collapse:collapse; font-size:13px; }
+  th,td { text-align:right; padding:7px 8px; border-bottom:1px solid var(--line); white-space:nowrap; }
+  th:first-child, td:first-child { text-align:left; }
+  thead th { color:var(--sub); font-weight:600; background:#fafafa; position:sticky; top:0; }
+  tbody tr:hover { background:#f9fbff; }
+  tfoot td { font-weight:700; border-top:2px solid var(--line); }
+  .hint { color:var(--sub); font-size:12.5px; margin:8px 0 0; }
+  .formula { background:#fafafa; border:1px dashed var(--line); border-radius:8px; padding:10px 12px; font-size:13px; }
+  code { background:#eef2ff; color:#3730a3; padding:1px 5px; border-radius:4px; font-size:12.5px; }
+  .pill { display:inline-block; font-size:11px; padding:1px 7px; border-radius:999px; background:#e0f2fe; color:#0369a1; }
+  .pill.manual { background:#fef3c7; color:#92400e; }
+  ul { margin:6px 0; padding-left:20px; } li { margin:3px 0; }
+  .empty { color:var(--sub); text-align:center; padding:24px 0; }
+  @media (max-width:720px){ .cards{ grid-template-columns:repeat(2,1fr);} }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>社会人 · DeepSeek 成本支出文档</h1>
+  <div class="sub">模型 <code>deepseek-v4-flash</code> · 每日新闻流水线（北京时间 02:00 平峰）· 关联契约：<a href="feature-manifest.html">feature-manifest.html</a></div>
+
+  <div class="cards" id="kpis"></div>
+
+  <section>
+    <h2>一、每日成本账单表</h2>
+    <div id="daily"></div>
+    <p class="hint">说明：每日流水线跑 1 次（生成 15 条新闻）；<span class="pill manual">manual-fix</span> 为人工触发修复（如重生成 essayQuote），同样消耗额度，计入实际调用当天。</p>
+  </section>
+
+  <section>
+    <h2>二、周 / 月 / 年账单</h2>
+    <div id="periods"></div>
+  </section>
+
+  <section>
+    <h2>三、钱花在哪</h2>
+    <ul>
+      <li><b>花在 DeepSeek API（deepseek-v4-flash，直连官方 api.deepseek.com）</b>，用于两件事：
+        <ul>
+          <li><b>每日新闻生成</b>：把当天候选热点改写成 15 张结构化卡片（含标题/导语/社科视角/高考议论文语段），这是固定每日开销。</li>
+          <li><b>偶发手动修复</b>：如用 <code>fix-essayquote.js</code> 重生成某天语段——非每日发生，按次计费。</li>
+        </ul>
+      </li>
+      <li>除此之外本站点<b>无其他付费 API 调用</b>（部署用 Netlify 免费额度，新闻抓取走免费源）。</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>四、单价口径（官方现行价，2026-08）</h2>
+    <div class="formula">
+      单次请求成本（元）= （缓存命中tokens × <b>0.02</b> +（输入tokens − 缓存命中tokens）× <b>1.00</b> + 输出tokens × <b>2.00</b>）÷ 1,000,000<br/>
+      单位：<b>元 / 百万 tokens</b>。来源：DeepSeek 官方定价页（api-docs.deepseek.com），V4-Flash 现行价。
+    </div>
+    <table style="margin-top:10px">
+      <thead><tr><th>计费项</th><th>单价（元 / 百万 tokens）</th><th>备注</th></tr></thead>
+      <tbody>
+        <tr><td>输入 · 缓存命中</td><td>0.02</td><td>系统提示等前缀命中缓存</td></tr>
+        <tr><td>输入 · 缓存未命中</td><td>1.00</td><td>当日新内容</td></tr>
+        <tr><td>输出</td><td>2.00</td><td>模型生成的卡片文本</td></tr>
+        <tr><td>峰谷倍率</td><td>×2.00</td><td>仅工作日 9–12 / 14–18 高峰；流水线 02:00 平峰<b>不乘</b></td></tr>
+      </tbody>
+    </table>
+    <p class="hint">⚠️ DeepSeek 于 2026-08-06 公告"计划大幅上调 API 定价"。若官方落地新价，只需改 <code>scripts/cost.js</code> 的 <code>PRICING</code> 常量一处，历史用量数据保留、可按新价重算。</p>
+  </section>
+
+  <section>
+    <h2>五、调用次数算式</h2>
+    <ul>
+      <li>15 条新闻 ÷ <code>BATCH=5</code> = <b>3 批</b>；每批调 API <b>1 次</b>（校验失败重试最多 +1 次）→ 每日流水线调用 <b>3 ~ 6 次</b>。</li>
+      <li>每次调用 = 1 个完整请求（系统提示 + 候选新闻 JSON 作输入，返回 15 条结构化卡片作输出）。</li>
+      <li>手动修复脚本 <code>fix-essayquote.js</code>：每次跑 = <b>1 次</b>调用（15 条一起重生成，失败重试 +1）→ <b>1 ~ 2 次</b>。</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>六、边际成本速查表</h2>
+    <table>
+      <thead><tr><th>变动</th><th>额外调用</th><th>额外成本（估，按典型用量）</th></tr></thead>
+      <tbody>
+        <tr><td>每天多生成 1 批（5 条新闻）</td><td>+1 ~ 2 次</td><td>≈ 见下方"典型单次"</td></tr>
+        <tr><td>每天多生成 1 条新闻（BATCH 不变）</td><td>0（已含在批内）</td><td>≈ 0（摊薄）</td></tr>
+        <tr><td>改到高峰时段跑（9–12/14–18）</td><td>0</td><td>×2 倍</td></tr>
+        <tr><td>多跑一次手动修复（某天语段）</td><td>+1 ~ 2 次</td><td>≈ 见下方"典型单次"</td></tr>
+      </tbody>
+    </table>
+    <p class="hint" id="typical"></p>
+  </section>
+
+  <section>
+    <h2>七、额度充值与当前状态</h2>
+    <ul>
+      <li>实际余额与扣费以 <b>DeepSeek 开放平台（platform.deepseek.com）</b> 账单为准；本表只记录"用量 × 官方单价"的估算金额。</li>
+      <li>建议：每月初核对平台账单与本表累计金额是否一致（差异来自峰谷时段、缓存命中率波动、或官方调价）。</li>
+      <li>当前状态：<b id="balstate">见平台</b>。充值入口：platform.deepseek.com → 充值。</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>八、变更记录</h2>
+    <table>
+      <thead><tr><th>日期</th><th>变更</th><th>影响</th></tr></thead>
+      <tbody>
+        <tr><td>2026-08-12</td><td>新增成本记录机制：<code>llm.js</code> 捕获真实 token 用量，<code>cost.js</code> 按官方单价写入 <code>cost-data.js</code>，每日流水线自动落账；新建本支出文档。</td><td>从此每天 DeepSeek 花费可被精确记录（此前无记录）。</td></tr>
+      </tbody>
+    </table>
+  </section>
+</div>
+
+<script>
+(function () {
+  var data = (typeof COST_DATA !== 'undefined' && Array.isArray(COST_DATA)) ? COST_DATA : [];
+  var fmt = function (n, d) { d = (d == null) ? 2 : d; return Number(n || 0).toLocaleString('zh-CN', { minimumFractionDigits: d, maximumFractionDigits: d }); };
+  var fmt0 = function (n) { return fmt(n, 0); };
+  var fmt4 = function (n) { return '¥' + fmt(n, 4); };
+
+  // 按天聚合
+  var byDay = {};
+  data.forEach(function (r) {
+    if (!byDay[r.date]) byDay[r.date] = { date: r.date, calls: 0, prompt: 0, cached: 0, completion: 0, cost: 0, manual: 0, pipe: 0 };
+    var d = byDay[r.date];
+    d.calls += r.calls || 0; d.prompt += r.prompt || 0; d.cached += r.cached || 0;
+    d.completion += r.completion || 0; d.cost += r.costCNY || 0;
+    if (r.type === 'manual-fix') d.manual += 1; else d.pipe += 1;
+  });
+  var days = Object.keys(byDay).sort().reverse().map(function (k) { return byDay[k]; });
+
+  var totalCost = data.reduce(function (s, r) { return s + (r.costCNY || 0); }, 0);
+  var totalCalls = data.reduce(function (s, r) { return s + (r.calls || 0); }, 0);
+  var dayCount = days.length;
+  var avgDay = dayCount ? totalCost / dayCount : 0;
+  var annual = avgDay * 365;
+
+  // KPI 卡片
+  var kpis = [
+    { v: fmt4(totalCost), l: '累计花费（已记录 ' + dayCount + ' 天）' },
+    { v: fmt4(avgDay), l: '日均花费' },
+    { v: fmt4(annual), l: '按日均年化预估' },
+    { v: fmt0(totalCalls), l: '累计 API 调用次数' }
+  ];
+  document.getElementById('kpis').innerHTML = kpis.map(function (k) {
+    return '<div class="kpi"><div class="v">' + k.v + '</div><div class="l">' + k.l + '</div></div>';
+  }).join('');
+
+  // 每日表
+  var dailyHtml = '';
+  if (!days.length) {
+    dailyHtml = '<div class="empty">暂无记录。机制已于 2026-08-12 上线，自今夜 02:00 起每日流水线会自动落账；人工修复也会即时记录。</div>';
+  } else {
+    dailyHtml = '<table><thead><tr><th>日期</th><th>类型</th><th>调用</th><th>输入tokens</th><th>缓存命中</th><th>输出tokens</th><th>成本</th></tr></thead><tbody>';
+    days.forEach(function (d) {
+      var type = (d.manual ? '<span class="pill manual">手动+' + d.manual + '</span> ' : '') + (d.pipe ? '<span class="pill">流水线×' + d.pipe + '</span>' : '');
+      dailyHtml += '<tr><td>' + d.date + '</td><td>' + type + '</td><td>' + fmt0(d.calls) + '</td><td>' + fmt0(d.prompt) + '</td><td>' + fmt0(d.cached) + '</td><td>' + fmt0(d.completion) + '</td><td>' + fmt4(d.cost) + '</td></tr>';
+    });
+    dailyHtml += '<tfoot><tr><td>合计</td><td></td><td>' + fmt0(totalCalls) + '</td><td>' + fmt0(days.reduce(function(s,d){return s+d.prompt;},0)) + '</td><td>' + fmt0(days.reduce(function(s,d){return s+d.cached;},0)) + '</td><td>' + fmt0(days.reduce(function(s,d){return s+d.completion;},0)) + '</td><td>' + fmt4(totalCost) + '</td></tr></tfoot></table>';
+  }
+  document.getElementById('daily').innerHTML = dailyHtml;
+
+  // 周/月/年
+  function bucketBy(getKey) {
+    var m = {};
+    data.forEach(function (r) {
+      var k = getKey(r.date);
+      if (!m[k]) m[k] = { key: k, cost: 0, calls: 0 };
+      m[k].cost += r.costCNY || 0; m[k].calls += r.calls || 0;
+    });
+    return Object.keys(m).sort().reverse().map(function (k) { return m[k]; });
+  }
+  var monthly = bucketBy(function (d) { return d.slice(0, 7); });
+  var yearly = bucketBy(function (d) { return d.slice(0, 4); });
+  var last7 = days.slice(0, 7).reduce(function (s, d) { return s + d.cost; }, 0);
+  var last30 = days.slice(0, 30).reduce(function (s, d) { return s + d.cost; }, 0);
+
+  var ph = '<table><thead><tr><th>区间</th><th>成本</th><th>调用</th><th>日均</th></tr></thead><tbody>';
+  ph += '<tr><td>近 7 天（已记录部分）</td><td>' + fmt4(last7) + '</td><td>' + fmt0(days.slice(0,7).reduce(function(s,d){return s+d.calls;},0)) + '</td><td>' + fmt4(dayCount?last7/Math.min(7,dayCount):0) + '</td></tr>';
+  ph += '<tr><td>近 30 天（已记录部分）</td><td>' + fmt4(last30) + '</td><td>' + fmt0(days.slice(0,30).reduce(function(s,d){return s+d.calls;},0)) + '</td><td>' + fmt4(dayCount?last30/Math.min(30,dayCount):0) + '</td></tr>';
+  monthly.forEach(function (m) { ph += '<tr><td>月 ' + m.key + '</td><td>' + fmt4(m.cost) + '</td><td>' + fmt0(m.calls) + '</td><td>' + fmt4(m.cost/30) + '</td></tr>'; });
+  yearly.forEach(function (y) { ph += '<tr><td>年 ' + y.key + '</td><td>' + fmt4(y.cost) + '</td><td>' + fmt0(y.calls) + '</td><td>' + fmt4(y.cost/365) + '</td></tr>'; });
+  ph += '</tbody></table>';
+  document.getElementById('periods').innerHTML = ph;
+
+  // 典型单次成本（用真实记录反推，否则占位）
+  var typ = document.getElementById('typical');
+  if (data.length) {
+    var avgIn = data.reduce(function(s,r){return s+(r.prompt||0);},0)/data.length;
+    var avgOut = data.reduce(function(s,r){return s+(r.completion||0);},0)/data.length;
+    var avgCache = data.reduce(function(s,r){return s+(r.cached||0);},0)/data.length;
+    typ.innerHTML = '典型单次调用：输入≈' + fmt0(avgIn) + ' tokens（其中缓存命中≈' + fmt0(avgCache) + '）、输出≈' + fmt0(avgOut) + ' tokens → 单次成本≈' + fmt4(((avgCache*0.02)+((avgIn-avgCache)*1.0)+(avgOut*2.0))/1e6) + '。故每天流水线（3~6 次）≈ ' + fmt4(3*((avgCache*0.02)+((avgIn-avgCache)*1.0)+(avgOut*2.0))/1e6) + ' ~ ' + fmt4(6*((avgCache*0.02)+((avgIn-avgCache)*1.0)+(avgOut*2.0))/1e6) + '。';
+  } else {
+    typ.textContent = '待真实记录累积后，此处自动填充典型单次成本。';
+  }
+})();
+</script>
+</body>
+</html>

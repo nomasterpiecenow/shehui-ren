@@ -7,7 +7,8 @@
 const fs = require('fs');
 const path = require('path');
 const vm = require('vm');
-const { chat } = require('./llm');
+const { chat, getUsage } = require('./llm');
+const { recordCost } = require('./cost');
 
 const ROOT = path.resolve(__dirname, '..');
 const TARGET = process.argv[2] || '2026-08-12';
@@ -115,6 +116,15 @@ async function main() {
 `;
   fs.writeFileSync(OUT_PATH, header + 'var NEWS_DATA = ' + JSON.stringify(base, null, 2) + ';\n');
   console.log(`[fix] 已写回 ${OUT_PATH}（${TARGET} 的 essayQuote 已更新，其余日期不变）`);
+
+  // 记录本次 DeepSeek 成本（手动修复也消耗额度，计入实际调用当天）
+  try {
+    const u = getUsage();
+    const cost = recordCost({ type: 'manual-fix', usage: u, note: '修复 ' + TARGET + ' 的 essayQuote' });
+    console.log(`[fix] DeepSeek 成本记录: ${u.calls} 次调用 → ¥${cost.toFixed(4)}`);
+  } catch (e) {
+    console.warn('[fix] 成本记录失败(非致命):', e.message);
+  }
 }
 
 main().catch((e) => {

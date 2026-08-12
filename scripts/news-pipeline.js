@@ -15,7 +15,8 @@ const fs = require('fs');
 const path = require('path');
 const vm = require('vm');
 
-const { chat } = require('./llm');
+const { chat, getUsage, resetUsage } = require('./llm');
+const { recordCost } = require('./cost');
 const { getCandidates } = require('./news-source');
 const { validate } = require('./validate-light');
 const { NODE_IDS, NODE_LABELS, nodeDisc, TOPIC_LIB, TOPIC_IDS } = require('./vocab');
@@ -210,6 +211,7 @@ function decorate(finalItems) {
 }
 
 async function main() {
+  resetUsage();
   console.log('[pipeline] 加载候选新闻…');
   const candidates = await getCandidates();
   if (!candidates || candidates.length < 15) {
@@ -295,6 +297,15 @@ async function main() {
 `;
   fs.writeFileSync(NEWS_FILE, header + 'var NEWS_DATA = ' + JSON.stringify(trimmed, null, 2) + ';\n');
   console.log(`[pipeline] 已写入 ${today} 的 ${finalItems.length} 条新闻到 news-data.js（保留近 ${keep.length} 天）`);
+
+  // 记录本次 DeepSeek 成本（真实用量 → 单价换算，详见 支出文档.html）
+  try {
+    const u = getUsage();
+    const cost = recordCost({ date: today, type: 'pipeline', usage: u });
+    console.log(`[pipeline] DeepSeek 成本记录: ${u.calls} 次调用 / 输入 ${u.prompt}(缓存 ${u.cached}) / 输出 ${u.completion} → ¥${cost.toFixed(4)}`);
+  } catch (e) {
+    console.warn('[pipeline] 成本记录失败(非致命):', e.message);
+  }
 
   // 同步更新 review log（轻量）
   try {

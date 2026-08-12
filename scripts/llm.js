@@ -29,6 +29,19 @@ const API_KEY = process.env.DEEPSEEK_API_KEY;
 const MODEL = process.env.DEEPSEEK_MODEL || 'deepseek-v4-flash';
 const BASE = process.env.DEEPSEEK_BASE || 'https://api.deepseek.com';
 
+// —— 用量累计（供成本记录：记录真实 token 用量，成本由单价换算，详见 支出文档.html）——
+let _usage = { calls: 0, prompt: 0, cached: 0, completion: 0 };
+function _addUsage(u) {
+  if (!u) return;
+  _usage.calls += 1;
+  _usage.prompt += u.prompt_tokens || 0;
+  _usage.completion += u.completion_tokens || 0;
+  const det = u.prompt_tokens_details || {};
+  _usage.cached += det.cached_tokens || 0;
+}
+function getUsage() { return { ..._usage }; }
+function resetUsage() { _usage = { calls: 0, prompt: 0, cached: 0, completion: 0 }; }
+
 if (!API_KEY) {
   console.error('[llm] 缺少 DEEPSEEK_API_KEY（本地用 .env，云端用 GitHub Secret）');
   process.exit(2);
@@ -60,7 +73,8 @@ async function chat(messages, { temperature = 0.7, maxTokens = 4000 } = {}) {
     throw new Error('DeepSeek HTTP ' + resp.status + ': ' + txt.slice(0, 600));
   }
   const j = await resp.json();
+  if (j && j.usage) _addUsage(j.usage);
   return j.choices[0].message.content;
 }
 
-module.exports = { chat, MODEL, API_KEY, BASE };
+module.exports = { chat, MODEL, API_KEY, BASE, getUsage, resetUsage };
