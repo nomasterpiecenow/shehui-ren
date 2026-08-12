@@ -696,7 +696,7 @@
     <section id="overview">
         <h1>社会人 <em>功能模块说明</em></h1>
         <p class="subtitle">帮助初学者理解社会科学理论的可视化网站 · 本文档是功能契约，所有改动需同步更新</p>
-        <span class="version-badge">v1.52 · 2026-08-11</span>
+        <span class="version-badge">v1.53 · 2026-08-12</span>
 
         <h3>产品定位</h3>
         <p><strong>用社会科学看社会</strong> —— 将高大上的理论落地到社会生活的实践中。网站包含两个页面：</p>
@@ -747,12 +747,12 @@
 [5 S2特大]   跨热榜归并，≥4 平台 = 特大(major+platforms)
 [6 打分]     S4强度(strong/medium/weak·weak剔) / S3学科 / S6链接合法 / <strong>S4.5社会锚点(A强/B可建构/C纯描述·C淘汰)</strong>
 [7 S1组批]   含全部A/B类特大 → 补热榜非特大至(15-Q) → S2.5主题配额Q=3填满15；去重；S5时效
-[8 S6校验]   字段齐全+url可访问+<strong>重抓主源核对事实一致</strong>+essayQuote必填(速用金句)
+[8 S6校验]   字段齐全+url可访问+<strong>重抓主源核对事实一致</strong>+essayQuote必填(100–130字议论文素材语段·速用金句)
 [9 S9研究]   每条中英文各搜一次，挂载直接相关的前沿研究(best-effort)
 [10 入库]    用 Edit 把 'YYYY-MM-DD':[15条] 插入 news-data.js；超 7 天删最旧
 [11 同步镜像] cp news-data.js → ctrip-claw/
 [12 写日志]  news-review-log.json（chosen/rejected/summary）
-[13 自检]    node news-validate.js（含 essayQuote 硬闸；不通过不发布脏数据）
+[13 自检]    node news-validate.js（含 essayQuote 必填 + 80–160字长度硬闸；不通过不发布脏数据）
 [14 部署]    node deploy-netlify.js → 上线 shehui-ren.com
 [15 汇报]    中文列出本批 15 条 + 关联理论 + 是否特大 + 主题倾斜条数 + 三科覆盖 + 校验结果
       </div>
@@ -837,7 +837,7 @@
     <section id="B7">
       <h2>[B7] 校验与防御（news-validate.js）</h2>
       <ul style="padding-left:20px;font-size:14px;line-height:1.9">
-        <li>逐条硬闸：必填字段齐全 + <strong>essayQuote 速用金句必填</strong>（缺则 FAIL，脏数据不发布）。</li>
+        <li>逐条硬闸：必填字段齐全 + <strong>essayQuote 速用金句必填 + 80–160字长度硬闸</strong>（缺或字数不符则 FAIL，脏数据不发布）。</li>
         <li>跑在 Node 沙箱（已补全 <code>matchMedia</code>/<code>location</code> 等浏览器 API stub），自动化步骤13 调用；不通过则保留日志并告警、不入库。</li>
         <li><strong>根治史</strong>：2026-08-06 前 essayQuote 常漏（靠事后手补）；现已强制必填 + 硬闸，7天105条 FAIL=0。</li>
       </ul>
@@ -1616,6 +1616,7 @@ news-export.html 点击「下载 PDF（付费）」
         <table class="module-table" id="clTable">
             <thead><tr><th>日期</th><th>版本</th><th>改动内容</th><th>涉及模块</th></tr></thead>
             <tbody>
+                <tr><td>2026-08-12</td><td>v1.53</td><td><strong>[修复 essayQuote 生成质量塌方 · 提示词对齐规范] 回应"速用语段质量大幅下降"：</strong>① <strong>根因</strong>：云端流水线 <code>scripts/news-pipeline.js</code> 的 essayQuote 指令仅写「议论文金句，1 句，有文采」，模型据此吐 18–45 字格言式短句；而契约/规范要求的「议论文素材语段 100–130 字、须显式写出人/社会角度」从未写进生成提示词，导致速用模式作文素材卡内容空洞。② <strong>修复提示词</strong>——<code>news-pipeline.js</code> 的 <code>systemPrompt</code> 将 essayQuote 指令改为「100–130 字成段议论文素材语段，先点明结构性矛盾或人/社会角度再展开论证，严禁格言式短句/纯抒情口号」，并在规则段加同义硬闸；今后每日云端生成即按此产出。③ <strong>校验硬闸</strong>——<code>validate-light.js</code> 的 essayQuote 由"非空即可"升级为「80–160 字长度硬闸」（对应规范 100–130），弱金句被拒、触发重生成。④ <strong>当日数据急救</strong>——新增一次性脚本 <code>scripts/fix-essayquote.js</code>，仅重生成指定日期的 essayQuote（保留其余字段），用强化提示词把 2026-08-12 的 15 条全部改写为 109–130 字议论文语段（如加装电梯引奥斯特罗姆/哈贝马斯谈集体行动困境、ESG 引诺斯/阿罗谈制度变迁），已部署上线 shehui-ren.com。本变更为纯后端数据生成/校验机制，<strong>无用户端页面/UI 改动</strong>；源码(含契约)已同步 Gitee。</td><td>B2, B7, C2, 新闻自动化, DeepSeek</td></tr>
                 <tr><td>2026-08-11</td><td>v1.52</td><td><strong>[云端新闻链路端到端验证通过 + 部署兜底修复] 把 v1.51 的云端方案真正落地并跑通一次完整试运行：</strong>① <strong>推仓库</strong>——代码已推至 <code>github.com/nomasterpiecenow/shehui-ren</code>（main 分支），含 <code>scripts/</code> 与 <code>.github/workflows/daily-news.yml</code>，GitHub 默认分支从 main 对齐。② <strong>密钥就位</strong>——<code>DEEPSEEK_API_KEY</code> / <code>DEEPSEEK_MODEL</code>(deepseek-v4-flash) / <code>NETLIFY_AUTH_TOKEN</code> / <code>GITEE_TOKEN</code> 全部以加密 Secrets 写入仓库（libsodium 公钥加密），不进代码。③ <strong>试运行全绿</strong>——手动触发一次：DeepSeek 生成 15 条 → 提交 GitHub → 镜像 Gitee → 部署 Netlify，<code>conclusion=success</code>。④ <strong>修部署兜底构建失败</strong>——首跑草稿+restore 兜底报 "Error while running build"（CI 无 <code>api/node_modules</code> 致函数打包失败），在 workflow 部署前加 <code>cd api && npm install --omit=dev</code> 预装函数依赖后，打包正常、草稿部署成功并 <code>restore</code> 发布（state=ready → shehui-ren.com）。⑤ <strong>线上已更新</strong>——验证 shehui-ren.com/news-data.js 最新为 2026-08-11、15 条 AI 生成新闻。⑥ <strong>日常节奏</strong>——此后每天北京时间 02:00 由 GitHub Actions 全自动生成+部署，<strong>不再依赖本机开机</strong>；Gitee 镜像使另一台设备 <code>git pull</code> 即获最新新闻。</td><td>B8, 新闻自动化, 部署, 运维, DeepSeek, GitHub</td></tr>
                 <tr><td>2026-08-11</td><td>v1.51</td><td><strong>[每日新闻机制上云 · GitHub Actions + DeepSeek，不再绑死本机] 回应"新闻更新要脱离这台电脑强制在线"：</strong>① <strong>云端流水线</strong>——新增 <code>scripts/</code>：<code>llm.js</code>(DeepSeek 客户端·OpenAI 兼容·非思考模式) / <code>vocab.js</code>(加载 node-index.json 的 311 节点 + topic-lib.js 的 34 主题受控词表，并给 soc/econ/psy 学科归属) / <code>news-source.js</code>(候选源：先抓公开热榜，失败回退 <code>sample-candidates.json</code>，保证云端不硬失败) / <code>validate-light.js</code>(不依赖 HTML 的轻量校验，硬闸与 news-validate.js 一致) / <code>news-pipeline.js</code>(编排：分 3 批×5 条调 DeepSeek → 按 id/label 归一化纠偏回受控词表 → 校验 → 写回 news-data.js 近 7 天)。② <strong>定时部署</strong>——新增 <code>.github/workflows/daily-news.yml</code>：每天北京时间 02:00（UTC 18:00，非高峰）跑流水线生成新闻 → 提交 GitHub → <code>deploy-netlify.js</code> 部署（沿用草稿+restore 兜底）。③ <strong>密钥安全</strong>——<code>DEEPSEEK_API_KEY</code> / <code>NETLIFY_AUTH_TOKEN</code> / 可选 <code>GITEE_TOKEN</code> 走 GitHub Secret，不进代码；本地测试用 <code>.env</code>（已 gitignore）。④ <strong>.gitignore 调整</strong>——<code>deploy-netlify.js</code> 与 <code>news-review-log.json</code> 改为强制纳入（原被忽略，云端部署需它们）。⑤ <strong>成本</strong>——约 ¥0.04–0.11/天（DeepSeek 非思考模式·3 次调用）。⑥ <strong>已验证</strong>——真实 API 端到端 dry-run + 写回后跑 news-validate.js，7 天 FAIL=0/WARN=0、三科覆盖齐全。⑦ <strong>README 同步</strong>——新增「每日新闻的云端自动化」章节说明架构与密钥配置。⑧ 原 WorkBuddy 定时任务（rrule 塌缩+绑本机）不再是主路径，老问题随之消失。⑨ <strong>v1 已知权衡</strong>——公开热榜多只给标题，大模型基于标题+通用知识写解读，thread 以结构性背景脉络为主、不编造具体事件；后续可接"按 url 抓正文"提保真（扩展点）。本版为纯后端运维/数据生成机制，<strong>无用户端页面/UI 改动</strong>，待推 GitHub 仓库后由 Actions 接管每日生成；源码(契约)已同步。</td><td>B8, 新闻自动化, 部署, 运维, DeepSeek</td></tr>
                 <tr><td>2026-08-10</td><td>v1.50</td><td><strong>[付费下载 PDF 链路上线 · 方向B：服务端生成 + 自动支付门禁] 回应"手机打印把 A4 拦腰折断、素材需可带走可付费"：</strong>① <strong>废弃浏览器原生打印方案</strong>，改服务端用 pdf-lib 生成真实 A4 PDF——所有设备同一份文件、中文正常、自动分页、绝不在卡片中间截断。② <strong>支付门禁</strong>——新增 [B9] 链路：<code>create-order</code>(下单) → <code>pay-confirm</code>(mock 模拟支付成功→签发 HMAC 令牌) / <code>pay-webhook</code>(真实支付异步通知占位) → <code>download</code>(校验令牌→生成 PDF 返回，无令牌即 403)；令牌为 HMAC-SHA256，载荷 {paid,plan,iat,exp}，下载只验签名+有效期、不查库。③ <strong>字体稳健</strong>——<code>_common.js</code> 的 <code>loadFontBytes()</code> 本地读 <code>assets/fonts/simhei.ttf</code>，生产回退站点静态资源 <code>https://shehui-ren.com/assets/fonts/simhei.ttf</code>，<strong>不把 9.7MB 字体打进函数包也不会缺失</strong>；新增 <code>netlify.toml</code> 设 <code>functions.directory=api</code>，Netlify 按 <code>api/package.json</code> 自动装 pdf-lib+@pdf-lib/fontkit。④ <strong>前端</strong>——<code>news-export.html</code> 顶部「下载 PDF（付费）」按钮上锁、点击弹支付窗（mock 显示"模拟支付成功"、真实显示收款码），付费成功存令牌并下载；原「打印」仍免费。⑤ <strong>本地联调</strong>——<code>paywall-dev.js</code> 模拟 Functions+静态托管，<code>.test-flow.js</code> 断言全链路、<code>.debug-pdf.js</code> 单测 PDF。⑥ <strong>部署就绪</strong>——当前 <code>PAYMENT_PROVIDER=mock</code> 可本地跑通；真实微信/支付宝 Native 支付的下单与通知为占位，填商户号+密钥即生效（详见新增 <code>PAYMENT_INTEGRATION.md</code>）。⑦ service worker 缓存 <code>shehui-ren-v46</code>→<code>shehui-ren-v47</code>（news-export.html 改动）。本版走预览验收后发布；源码(契约)已同步 Gitee。</td><td>B9, 付费, 商业, 导出, 移动端, 部署</td></tr>
