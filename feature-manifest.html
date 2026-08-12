@@ -696,7 +696,7 @@
     <section id="overview">
         <h1>社会人 <em>功能模块说明</em></h1>
         <p class="subtitle">帮助初学者理解社会科学理论的可视化网站 · 本文档是功能契约，所有改动需同步更新</p>
-        <span class="version-badge">v1.55 · 2026-08-12</span>
+        <span class="version-badge">v1.56 · 2026-08-12</span>
         <span class="version-badge" style="background:#e0f2fe;color:#0369a1">配套成本文档：<a href="支出文档.html" style="color:#0369a1">支出文档.html</a></span>
 
         <h3>产品定位</h3>
@@ -748,12 +748,12 @@
 [5 S2特大]   跨热榜归并，≥4 平台 = 特大(major+platforms)
 [6 打分]     S4强度(strong/medium/weak·weak剔) / S3学科 / S6链接合法 / <strong>S4.5社会锚点(A强/B可建构/C纯描述·C淘汰)</strong>
 [7 S1组批]   含全部A/B类特大 → 补热榜非特大至(15-Q) → S2.5主题配额Q=3填满15；去重；S5时效
-[8 S6校验]   字段齐全+url可访问+<strong>重抓主源核对事实一致</strong>+essayQuote必填(200–260字高考议论文论证段·五步结构·速用金句)
+[8 S6校验]   字段齐全+url可访问+<strong>重抓主源核对事实一致</strong>+essayQuote必填(200–260字金句项链风格·含2-3可背诵金句+修辞必选·速用金句)
 [9 S9研究]   每条中英文各搜一次，挂载直接相关的前沿研究(best-effort)
 [10 入库]    用 Edit 把 'YYYY-MM-DD':[15条] 插入 news-data.js；超 7 天删最旧
 [11 同步镜像] cp news-data.js → ctrip-claw/
 [12 写日志]  news-review-log.json（chosen/rejected/summary）
-[13 自检]    node news-validate.js（含 essayQuote 必填 + 120–260字长度硬闸；不通过不发布脏数据）
+[13 自检]    node news-validate.js（含 essayQuote 必填 + 150–300字长度硬闸；不通过不发布脏数据）
 [14 部署]    node deploy-netlify.js → 上线 shehui-ren.com
 [15 汇报]    中文列出本批 15 条 + 关联理论 + 是否特大 + 主题倾斜条数 + 三科覆盖 + 校验结果
       </div>
@@ -817,7 +817,7 @@
           <tr><td><code>theories</code></td><td>[{id,label}]</td><td>关联知识图谱节点（id 必须∈节点集）</td></tr>
           <tr><td><code>major</code> / <code>platforms</code></td><td>bool / string[]</td><td>是否特大 / 判定平台(≥4)</td></tr>
           <tr><td><code>essayTopics</code></td><td>[{id,label}]</td><td>作文主题标签（id∈TOPIC_LIB），速用模式用</td></tr>
-          <tr><td><code>essayQuote</code></td><td>string</td><td><strong>速用金句（高考议论文论证段，200–260字，五步结构，必填）</strong></td></tr>
+          <tr><td><code>essayQuote</code></td><td>string</td><td><strong>速用金句（金句项链风格，200–260字，含2-3可背诵金句+修辞必选，必填）</strong></td></tr>
           <tr><td><code>research</code></td><td>{...}</td><td>可选，嵌套于 interpretation 的前沿研究</td></tr>
         </tbody>
       </table>
@@ -838,7 +838,7 @@
     <section id="B7">
       <h2>[B7] 校验与防御（news-validate.js）</h2>
       <ul style="padding-left:20px;font-size:14px;line-height:1.9">
-        <li>逐条硬闸：必填字段齐全 + <strong>essayQuote 速用金句必填 + 150–300字长度硬闸（规范 200–260 字高考议论文论证段）</strong>（缺或字数不符则 FAIL，脏数据不发布）。</li>
+        <li>逐条硬闸：必填字段齐全 + <strong>essayQuote 速用金句必填 + 150–300字长度硬闸（规范 200–260 字金句项链风格）</strong>（缺或字数不符则 FAIL，脏数据不发布）。</li>
         <li>跑在 Node 沙箱（已补全 <code>matchMedia</code>/<code>location</code> 等浏览器 API stub），自动化步骤13 调用；不通过则保留日志并告警、不入库。</li>
         <li><strong>根治史</strong>：2026-08-06 前 essayQuote 常漏（靠事后手补）；现已强制必填 + 硬闸，7天105条 FAIL=0。</li>
       </ul>
@@ -1617,6 +1617,7 @@ news-export.html 点击「下载 PDF（付费）」
         <table class="module-table" id="clTable">
             <thead><tr><th>日期</th><th>版本</th><th>改动内容</th><th>涉及模块</th></tr></thead>
             <tbody>
+                <tr><td>2026-08-12</td><td>v1.56</td><td><strong>[essayQuote 升级为「金句项链」风格 · 强化作文味] 回应"速用语段作文味不够浓"：</strong>① <strong>根因</strong>：v1.54 的「高考议论文标准论证段·五步结构」偏逻辑论证、像社论，缺金句密度与修辞；用户指出 8/4–8/8 旧版金句（如「没有谁是不可替代的，迟钝的傲慢终将被时代悄悄清算」「社会的温度，不写在文件里，而藏在每个人愿为陌生生命多跑的那几步之中」）更有价值，据此提炼配方。② <strong>提示词重写</strong>——essayQuote 改为「<strong>金句项链风格，200–260 字</strong>」：一根核心判断串起 2–3 颗可独立背诵的金句珠子；写法＝①开头抓人（矛盾/数字/比喻/反问句破题）②中段两层展开（简述新闻事实+提炼人/社会道理）③结尾短促有力（普世道理，15字内或对仗）；整段须含 2–3 个对仗/比喻/警策句，至少用一种修辞（对偶/排比/比喻/引用名言古语/对比/数字意象），显式点明人/社会角度；persona 改为「高考满分作文水准的金句素材段（发展等级·有文采）」，并弱化原"理性克制"为"有思辨深度、有少年意气、有社会关怀"。③ <strong>一次性脚本同步</strong>——<code>fix-essayquote.js</code> 的 <code>systemPrompt</code> 同频升级。④ <strong>当日数据急救</strong>——已用新提示词把 2026-08-12 的 15 条 essayQuote 重做（含卢梭/奥斯特罗姆/哈贝马斯/鲍曼/诺斯等引用、对仗金句、短促收束），部署上线、推 GitHub 云端仓库、Gitee 镜像三方一致。本变更为纯后端数据生成机制，<strong>无用户端页面/UI 改动</strong>；源码(契约)已同步。</td><td>B2, B7, C2, 新闻自动化, DeepSeek</td></tr>
                 <tr><td>2026-08-12</td><td>v1.55</td><td><strong>[新增 DeepSeek 每日成本记录机制 · 配套支出文档] 回应"记录每一天使用 DeepSeek 的成本"：</strong>① <strong>根因/缺口</strong>——此前无任何成本记录，且 <code>llm.js</code> 的 <code>chat()</code> 只返回文本、丢弃 API 响应里的 <code>usage</code>，无法知道每天花多少。② <strong>用量捕获</strong>——<code>llm.js</code> 新增模块级用量累计（<code>getUsage()</code>/<code>resetUsage()</code>），在 <code>chat()</code> 中捕获每次调用的真实 token 用量（prompt_tokens / completion_tokens / 缓存命中 cached_tokens）。③ <strong>成本记录模块</strong>——新增 <code>scripts/cost.js</code>：集中单价常量 <code>PRICING</code>（deepseek-v4-flash 官方现行价：输入缓存命中 ¥0.02/百万、未命中 ¥1.00/百万、输出 ¥2.00/百万；峰谷倍率×2 仅高峰触发，流水线 02:00 平峰不乘），<code>computeCost()</code> 由真实用量换算金额，<code>recordCost()</code> 追加写入 <code>cost-data.js</code>。④ <strong>接入流水线</strong>——<code>news-pipeline.js</code> 与 <code>fix-essayquote.js</code> 运行结束各调一次 <code>recordCost()</code>，按天落账；<code>daily-news.yml</code> 的 <code>git add</code> 增加 <code>cost-data.js</code> 使其随流水线提交。⑤ <strong>支出文档</strong>——新建 <code>支出文档.html</code>（加载 <code>cost-data.js</code>），含日/周/月/年账单表、单价口径、调用次数算式、边际成本速查表、额度状态、变更记录，与本契约互链。⑥ <strong>实测</strong>——修复脚本单次真实调用：1 次 / 1565 输入(256 缓存) / 2307 输出 ≈ ¥0.0059。本变更为纯后端成本计量，<strong>无用户端页面/UI 改动</strong>；源码(契约)已同步。</td><td>B2, B7, 成本, 新闻自动化, DeepSeek</td></tr>
                 <tr><td>2026-08-12</td><td>v1.54</td><td><strong>[essayQuote 升级为高考议论文标准论证段 · 五步结构] 回应"速用语段仍不尽如人意"：</strong>① <strong>根因</strong>：v1.53 仅要求 essayQuote「100–130 字成段有论证」，但没规定议论文段落的<strong>标准结构</strong>，DeepSeek 易写成说明文/散文段，不像能直接抄进高考作文的论证段（缺观点句、无因果/假设/对比分析）。② <strong>提示词重写</strong>——<code>news-pipeline.js</code> 的 essayQuote 指令改为「<strong>200–260 字高考议论文论证段，严格五步结构</strong>」：①观点句亮明分论点→②阐释句解释关联→③材料句引入新闻事实→④分析句务必做因果/假设/对比分析（严禁只描述现象）→⑤结论句回扣升华；persona 加「尤其擅长改写高考标准论证段（符合新课标卷基础/发展等级评分）」。③ <strong>校验放宽</strong>——<code>validate-light.js</code> 长度硬闸由 80–160 升为「150–300（规范 200–260）」，给五步结构留空间。④ <strong>一次性脚本同步</strong>——<code>fix-essayquote.js</code> 提示词与长度口径同频升级，可把任意历史日期重写成论证段。⑤ <strong>权威规范同步</strong>——<code>NEWS_REVIEW_STANDARD.md</code> 的 essayQuote 定义改为「高考议论文论证段·五步结构·160–220字」。⑥ <strong>当日数据急救</strong>——已用新版提示词把 2026-08-12 的 15 条 essayQuote 重做并部署上线。本变更为纯后端数据生成/校验机制，<strong>无用户端页面/UI 改动</strong>；源码(含契约)已同步 Gitee。</td><td>B2, B7, C2, 新闻自动化, DeepSeek</td></tr>
                 <tr><td>2026-08-12</td><td>v1.53</td><td><strong>[修复 essayQuote 生成质量塌方 · 提示词对齐规范] 回应"速用语段质量大幅下降"：</strong>① <strong>根因</strong>：云端流水线 <code>scripts/news-pipeline.js</code> 的 essayQuote 指令仅写「议论文金句，1 句，有文采」，模型据此吐 18–45 字格言式短句；而契约/规范要求的「议论文素材语段 100–130 字、须显式写出人/社会角度」从未写进生成提示词，导致速用模式作文素材卡内容空洞。② <strong>修复提示词</strong>——<code>news-pipeline.js</code> 的 <code>systemPrompt</code> 将 essayQuote 指令改为「100–130 字成段议论文素材语段，先点明结构性矛盾或人/社会角度再展开论证，严禁格言式短句/纯抒情口号」，并在规则段加同义硬闸；今后每日云端生成即按此产出。③ <strong>校验硬闸</strong>——<code>validate-light.js</code> 的 essayQuote 由"非空即可"升级为「80–160 字长度硬闸」（对应规范 100–130），弱金句被拒、触发重生成。④ <strong>当日数据急救</strong>——新增一次性脚本 <code>scripts/fix-essayquote.js</code>，仅重生成指定日期的 essayQuote（保留其余字段），用强化提示词把 2026-08-12 的 15 条全部改写为 109–130 字议论文语段（如加装电梯引奥斯特罗姆/哈贝马斯谈集体行动困境、ESG 引诺斯/阿罗谈制度变迁），已部署上线 shehui-ren.com。本变更为纯后端数据生成/校验机制，<strong>无用户端页面/UI 改动</strong>；源码(含契约)已同步 Gitee。</td><td>B2, B7, C2, 新闻自动化, DeepSeek</td></tr>
