@@ -51,8 +51,13 @@ function validate(items, { expectedCount = 15 } = {}) {
     REQUIRED.forEach((f) =>
       ok(it[f] !== undefined && it[f] !== null && String(it[f]).trim() !== '', tag + ': 缺字段 ' + f)
     );
-    // 速用金句必填
-    ok(it.essayQuote && String(it.essayQuote).trim(), tag + ': 缺 essayQuote');
+    // 速用金句必填 + 长度硬闸（规范：100–130 字议论文素材语段；留出余量 80–160）
+    const eq = it.essayQuote ? String(it.essayQuote).trim() : '';
+    ok(eq, tag + ': 缺 essayQuote');
+    if (eq) {
+      const n = [...eq].length;
+      ok(n >= 80 && n <= 160, tag + ': essayQuote 长度不符（应 100–130 字），当前 ' + n + ' 字');
+    }
     // 作文主题必填
     ok(Array.isArray(it.essayTopics) && it.essayTopics.length >= 1, tag + ': 缺 essayTopics');
     (it.essayTopics || []).forEach((t, ti) => {

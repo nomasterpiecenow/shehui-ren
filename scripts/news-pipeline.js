@@ -96,7 +96,7 @@ ${nodes}
       ],
       "theories": [ {"id":"节点id","label":"节点label"}, ... ],
       "essayTopics": [ {"id":"主题id","label":"主题label"}, ... ],
-      "essayQuote": "议论文金句，1 句，有文采",
+      "essayQuote": "【议论文素材语段，100–130 字，成 1 段】紧扣本条新闻真实社科内核，写一段可直接引用的议论段：先点明现象背后的结构性矛盾或人/社会角度（如「极端天气常态化下，谁在为气候风险买单」），再展开一两句有依据的议论。严禁写成一句格言式鸡汤短句或纯抒情口号，必须成段、有论证、可当作文素材直接使用。",
       "platforms": [ "同候选 platforms" ]
     }
   ]
@@ -109,6 +109,7 @@ ${nodes}
 - lensId 必须出现在该条 theories 列表内；theories 与 lensId 的 id/label 必须与「社科节点」词表完全一致。
 - 严禁混淆两套词表：theories / lensId 只能填「社科节点」的 id（第三列 soc/econ/psy）；essayTopics 只能填「作文主题」的 id。例如 trust / duty_devote / community / fairness 是作文主题 id，绝不是节点，不能放进 theories 或 lensId。
 - essayTopics 的 id/label 必须与「作文主题」词表完全一致。
+- essayQuote 必须是一段 **100–130 字**的议论文素材语段（成段、有论证、点明人/社会角度），严禁写成一句格言式短句或纯抒情口号；B 类新闻须显式写出其建构出的人/社会角度，纯描述通报不得作为金句。
 - 所有文本用简体中文，措辞理性、克制、有社会关怀。`;
 }
 
