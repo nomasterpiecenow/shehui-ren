@@ -27,5 +27,17 @@ var COST_DATA = [
     "costCNY": 0.005849,
     "ts": "2026-08-12T07:33:55.680Z",
     "note": "修复 2026-08-12 的 essayQuote"
+  },
+  {
+    "date": "2026-08-12",
+    "model": "deepseek-v4-flash",
+    "type": "manual-fix",
+    "calls": 1,
+    "prompt": 1993,
+    "cached": 0,
+    "completion": 2362,
+    "costCNY": 0.006717,
+    "ts": "2026-08-12T09:21:06.855Z",
+    "note": "修复 2026-08-12 的 essayQuote"
   }
 ];

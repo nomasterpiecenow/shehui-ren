@@ -51,12 +51,22 @@ function validate(items, { expectedCount = 15 } = {}) {
     REQUIRED.forEach((f) =>
       ok(it[f] !== undefined && it[f] !== null && String(it[f]).trim() !== '', tag + ': 缺字段 ' + f)
     );
-    // 速用金句必填 + 长度硬闸（规范：200–260 字高考议论文论证段；留出余量 150–300）
+    // 速用金句必填 + 长度硬闸（规范：200–260 字高考论证段；留出余量 200–300）
     const eq = it.essayQuote ? String(it.essayQuote).trim() : '';
     ok(eq, tag + ': 缺 essayQuote');
     if (eq) {
       const n = [...eq].length;
-      ok(n >= 150 && n <= 300, tag + ': essayQuote 长度不符（应 200–260 字高考论证段），当前 ' + n + ' 字');
+      ok(n >= 180 && n <= 300, tag + ': essayQuote 长度不符（应 200–260 字高考论证段，余量 180–300），当前 ' + n + ' 字');
+    }
+    // 骨架标签校验（起/承/转 三段均在受控词表，保证速用语段多样性可追溯）
+    const sk = it.skeleton ? String(it.skeleton).trim() : '';
+    if (sk) {
+      const parts = sk.split('·');
+      const okSk = parts.length === 3 &&
+        ['引', '排', '情', '设', '对', '警'].includes(parts[0]) &&
+        ['五', '正', '辩', '叠', '破'].includes(parts[1]) &&
+        ['升', '号', '展', '环', '隐'].includes(parts[2]);
+      ok(okSk, tag + ': skeleton 格式/类型非法 -> ' + sk);
     }
     // 作文主题必填
     ok(Array.isArray(it.essayTopics) && it.essayTopics.length >= 1, tag + ': 缺 essayTopics');

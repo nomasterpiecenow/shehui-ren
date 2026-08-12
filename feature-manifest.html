@@ -696,7 +696,7 @@
     <section id="overview">
         <h1>社会人 <em>功能模块说明</em></h1>
         <p class="subtitle">帮助初学者理解社会科学理论的可视化网站 · 本文档是功能契约，所有改动需同步更新</p>
-        <span class="version-badge">v1.56 · 2026-08-12</span>
+        <span class="version-badge">v1.57 · 2026-08-12</span>
         <span class="version-badge" style="background:#e0f2fe;color:#0369a1">配套成本文档：<a href="支出文档.html" style="color:#0369a1">支出文档.html</a></span>
 
         <h3>产品定位</h3>
@@ -748,15 +748,38 @@
 [5 S2特大]   跨热榜归并，≥4 平台 = 特大(major+platforms)
 [6 打分]     S4强度(strong/medium/weak·weak剔) / S3学科 / S6链接合法 / <strong>S4.5社会锚点(A强/B可建构/C纯描述·C淘汰)</strong>
 [7 S1组批]   含全部A/B类特大 → 补热榜非特大至(15-Q) → S2.5主题配额Q=3填满15；去重；S5时效
-[8 S6校验]   字段齐全+url可访问+<strong>重抓主源核对事实一致</strong>+essayQuote必填(200–260字金句项链风格·含2-3可背诵金句+修辞必选·速用金句)
+[8 S6校验]   字段齐全+url可访问+<strong>重抓主源核对事实一致</strong>+essayQuote必填(<strong>骨架轮换风格</strong>·200–280字·起型须按全局分配表·相邻不起同型·速用金句)
 [9 S9研究]   每条中英文各搜一次，挂载直接相关的前沿研究(best-effort)
 [10 入库]    用 Edit 把 'YYYY-MM-DD':[15条] 插入 news-data.js；超 7 天删最旧
 [11 同步镜像] cp news-data.js → ctrip-claw/
 [12 写日志]  news-review-log.json（chosen/rejected/summary）
-[13 自检]    node news-validate.js（含 essayQuote 必填 + 150–300字长度硬闸；不通过不发布脏数据）
+[13 自检]    node news-validate.js（含 essayQuote 必填 + 180–300字长度硬闸 + skeleton 标签校验；不通过不发布脏数据）
 [14 部署]    node deploy-netlify.js → 上线 shehui-ren.com
 [15 汇报]    中文列出本批 15 条 + 关联理论 + 是否特大 + 主题倾斜条数 + 三科覆盖 + 校验结果
       </div>
+    </section>
+
+    <section id="B2-5">
+      <h2>[B2.5] 速用语段骨架轮换机制（v1.57）</h2>
+      <p><strong>问题</strong>：v1.56 把 essayQuote 写死成单一「金句项链」模具（矛盾破题→两层展开→对仗收尾），导致每日 15 条结构高度雷同、句式套路化。</p>
+      <p><strong>方案（A+B 折中）</strong>：把单一模具换成「骨架库 + 写死轮换表」。模型在指定骨架类型内自由发挥内容（灵动），但起型严格按全局分配表生成（不雷同、不重跑）。</p>
+      <div class="info-box tip">
+        <div class="info-box-title">🧱 骨架库（起 / 承 / 转 各选一型）</div>
+        <p><strong>起（开头）6 型</strong>：引=引用名言/古语 · 排=排比铺陈 · 情=情景意象 · 设=设问反问 · 对=对比对立 · 警=警句突现<br>
+        <strong>承（展开）5 型</strong>：五=五步标准论证 · 正=正反对比 · 辩=辩证思辨 · 叠=同类叠加 · 破=驳论破立<br>
+        <strong>转（收尾）5 型</strong>：升=升华立意 · 号=号召行动 · 展=展望寄语 · 环=呼应回环 · 隐=哲理隐喻</p>
+      </div>
+      <div class="info-box">
+        <div class="info-box-title">📐 15 条起型全局分配表（相邻不同、分布均匀：引3排3情3设2对2警2）</div>
+        <p>第1条=引 / 第2条=排 / 第3条=情 / 第4条=设 / 第5条=对 / 第6条=警 / 第7条=排 / 第8条=引 / 第9条=情 / 第10条=对 / 第11条=设 / 第12条=警 / 第13条=情 / 第14条=引 / 第15条=排<br>
+        （流水线分 3 批×5 条生成，每批调用时由 <code>generateBatch</code> 传入全局起始索引，逐条在新闻条目后标注【本条起型必须为：X】，保证分批后仍整体多样）</p>
+      </div>
+      <ul style="padding-left:20px;font-size:14px;line-height:1.9">
+        <li><strong>字数</strong>：规范 200–280 字（校验余量 180–300）；至少含 1 个可背诵金句，修辞不限（不再强制对仗）。</li>
+        <li><strong>skeleton 标签</strong>：模型额外输出 <code>skeleton="起型·承型·转型"</code>（如「引·辩·升」）用于校验；<strong>写回 news-data.js 时剥离，线上数据不含该字段</strong>。</li>
+        <li><strong>校验兜底</strong>：fix-essayquote.js 强校验「起型==分配表、承/转在库、字数」；validate-light.js 校验 skeleton 格式/类型。A+B 下极少触发重跑，不额外消耗额度。</li>
+        <li><strong>代码落点</strong>：<code>fix-essayquote.js</code>（systemPrompt / buildUser / 校验）、<code>news-pipeline.js</code>（ESSAY_SKELETON_SEQ 常量 / generateBatch 传 start / 写回剥离）、<code>validate-light.js</code>（skeleton 校验 + 字数余量）。</li>
+      </ul>
     </section>
 
     <section id="B3">
@@ -817,7 +840,7 @@
           <tr><td><code>theories</code></td><td>[{id,label}]</td><td>关联知识图谱节点（id 必须∈节点集）</td></tr>
           <tr><td><code>major</code> / <code>platforms</code></td><td>bool / string[]</td><td>是否特大 / 判定平台(≥4)</td></tr>
           <tr><td><code>essayTopics</code></td><td>[{id,label}]</td><td>作文主题标签（id∈TOPIC_LIB），速用模式用</td></tr>
-          <tr><td><code>essayQuote</code></td><td>string</td><td><strong>速用金句（金句项链风格，200–260字，含2-3可背诵金句+修辞必选，必填）</strong></td></tr>
+          <tr><td><code>essayQuote</code></td><td>string</td><td><strong>速用金句（骨架轮换风格，200–280字，从「骨架库」选起/承/转各一型组合，相邻不起同型，必填）</strong></td></tr>
           <tr><td><code>research</code></td><td>{...}</td><td>可选，嵌套于 interpretation 的前沿研究</td></tr>
         </tbody>
       </table>
@@ -838,7 +861,7 @@
     <section id="B7">
       <h2>[B7] 校验与防御（news-validate.js）</h2>
       <ul style="padding-left:20px;font-size:14px;line-height:1.9">
-        <li>逐条硬闸：必填字段齐全 + <strong>essayQuote 速用金句必填 + 150–300字长度硬闸（规范 200–260 字金句项链风格）</strong>（缺或字数不符则 FAIL，脏数据不发布）。</li>
+        <li>逐条硬闸：必填字段齐全 + <strong>essayQuote 速用金句必填 + 180–300字长度硬闸（规范 200–280 字骨架轮换风格）</strong> + skeleton 标签格式/类型校验（缺或字数/类型不符则 FAIL，脏数据不发布）。</li>
         <li>跑在 Node 沙箱（已补全 <code>matchMedia</code>/<code>location</code> 等浏览器 API stub），自动化步骤13 调用；不通过则保留日志并告警、不入库。</li>
         <li><strong>根治史</strong>：2026-08-06 前 essayQuote 常漏（靠事后手补）；现已强制必填 + 硬闸，7天105条 FAIL=0。</li>
       </ul>
