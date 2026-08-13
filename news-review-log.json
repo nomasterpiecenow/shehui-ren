@@ -1,51 +1,28 @@
 {
   "meta": {
-    "date": "2026-08-11",
+    "date": "2026-08-13",
     "slot": "morning",
-    "generatedAt": "2026-08-11T01:45:09.872Z",
+    "generatedAt": "2026-08-13T01:18:23.741Z",
     "count": 15,
-    "majorCount": 3,
+    "majorCount": 2,
     "disciplinesCovered": [
       "econ",
-      "soc",
-      "psy"
+      "psy",
+      "soc"
     ],
-    "researchCount": 1,
+    "researchCount": 2,
     "validation": "PASS"
   },
   "chosen": [
     {
       "id": 1,
-      "title": "一边降息控成本、一边加息揽储：银行存款市场罕见两极分化",
-      "major": true,
-      "platforms": [
-        "微博热搜",
-        "百度热搜",
-        "央视财经",
-        "腾讯新闻",
-        "新浪财经"
-      ],
-      "disciplines": [
-        "econ",
-        "soc"
-      ],
-      "strongest": "strong",
-      "theories": [
-        "econ_monetary_policy",
-        "econ_macro",
-        "econ_new_keynesian"
-      ]
-    },
-    {
-      "id": 2,
-      "title": "钟睒睒央视发声：电商平台是\"特殊中间商\"，必须限制平台权力",
+      "title": "上半年结婚登记327.5万对创历史新低，婚姻正成一道「可选题」",
       "major": true,
       "platforms": [
         "微博热搜",
         "百度热搜",
         "今日头条",
-        "腾讯新闻",
-        "新浪财经"
+        "抖音"
       ],
       "disciplines": [
         "econ",
@@ -53,35 +30,100 @@
       ],
       "strongest": "strong",
       "theories": [
-        "econ_monopoly",
-        "digital",
-        "technology"
+        "family",
+        "stratification",
+        "econ_welfare"
       ]
     },
     {
-      "id": 3,
-      "title": "\"白海豚\"过境：上海宝山转移两万余名临险人员，社区互助筑起应急网",
+      "id": 2,
+      "title": "7月新能源汽车销量占比首破60%，绿色消费从政策驱动转向生活选择",
       "major": true,
       "platforms": [
-        "微博热搜",
-        "百度热搜",
-        "知乎热榜",
-        "抖音热榜",
-        "今日头条"
+        "央视新闻",
+        "今日头条",
+        "腾讯新闻",
+        "川观新闻"
       ],
       "disciplines": [
+        "econ",
         "soc"
       ],
       "strongest": "strong",
       "theories": [
-        "risk_society",
-        "social_capital",
-        "socialization"
+        "econ_supply_demand",
+        "environment",
+        "technology",
+        "econ_growth"
+      ]
+    },
+    {
+      "id": 3,
+      "title": "C919开通北京—乌兰巴托首条国际航线，国产大飞机迈入常态化运营",
+      "major": false,
+      "platforms": [],
+      "disciplines": [
+        "econ",
+        "soc"
+      ],
+      "strongest": "medium",
+      "theories": [
+        "technology",
+        "globalization",
+        "econ_growth"
       ]
     },
     {
       "id": 4,
-      "title": "大批高职分数线超本科：252个专业组调档线越过本科线",
+      "title": "「成为中国人」成海外社交平台热词，中式生活引发全球模仿",
+      "major": false,
+      "platforms": [],
+      "disciplines": [
+        "soc"
+      ],
+      "strongest": "medium",
+      "theories": [
+        "cultural_capital",
+        "globalization",
+        "socialization"
+      ]
+    },
+    {
+      "id": 5,
+      "title": "冬奥冠军武大靖出任中国短道速滑队主教练，从破纪录者到带队人",
+      "major": false,
+      "platforms": [],
+      "disciplines": [
+        "psy",
+        "soc"
+      ],
+      "strongest": "medium",
+      "theories": [
+        "youth",
+        "psy_self_efficacy",
+        "socialization"
+      ]
+    },
+    {
+      "id": 6,
+      "title": "胖东来公示两起侵犯员工人格尊严案例，顶撞、掌掴员工者被起诉",
+      "major": false,
+      "platforms": [],
+      "disciplines": [
+        "psy",
+        "soc"
+      ],
+      "strongest": "strong",
+      "theories": [
+        "work",
+        "law",
+        "social_capital",
+        "psy_psych_safety"
+      ]
+    },
+    {
+      "id": 7,
+      "title": "笔试第一称遭第二名花钱劝弃考，雷州通报副校长停职",
       "major": false,
       "platforms": [],
       "disciplines": [
@@ -91,75 +133,30 @@
       "theories": [
         "education",
         "stratification",
-        "cultural_capital"
-      ]
-    },
-    {
-      "id": 5,
-      "title": "为防野泳，江西一村自建免费泳池：基层治理从\"一禁了之\"到\"以疏代堵\"",
-      "major": false,
-      "platforms": [],
-      "disciplines": [
-        "soc"
-      ],
-      "strongest": "strong",
-      "theories": [
-        "institutionalism",
-        "socialization",
-        "social_capital"
-      ]
-    },
-    {
-      "id": 6,
-      "title": "推动高质量充分就业：\"十五五\"开局，新就业形态职业伤害保障推向全国",
-      "major": false,
-      "platforms": [],
-      "disciplines": [
-        "econ",
-        "soc"
-      ],
-      "strongest": "strong",
-      "theories": [
-        "econ_labor",
-        "precariat",
-        "econ_welfare"
-      ]
-    },
-    {
-      "id": 7,
-      "title": "武汉新手爸爸7分钟手机申领出生证：新生儿出生\"一件事\"改革落地",
-      "major": false,
-      "platforms": [],
-      "disciplines": [
-        "soc",
-        "econ"
-      ],
-      "strongest": "strong",
-      "theories": [
-        "institutionalism",
-        "digital",
-        "rationalization_theory"
+        "meritocracy"
       ]
     },
     {
       "id": 8,
-      "title": "成都自建房新规8月10日生效：禁止城镇居民下乡买农村宅基地",
+      "title": "深圳炸鸡店深夜爆单，店员边哭边干终致呼吸性碱中毒",
       "major": false,
       "platforms": [],
       "disciplines": [
         "econ",
+        "psy",
         "soc"
       ],
       "strongest": "strong",
       "theories": [
-        "econ_institution",
-        "urban",
-        "institutionalism"
+        "work",
+        "econ_labor",
+        "psy_emotion",
+        "attention_economy"
       ]
     },
     {
       "id": 9,
-      "title": "整治驾培垄断：全国办结在办案件12件，剑指\"抱团涨价、协会串谋\"",
+      "title": "最高法发布特许经营典型案例，明确严厉打击加盟连锁违法犯罪",
       "major": false,
       "platforms": [],
       "disciplines": [
@@ -168,62 +165,14 @@
       ],
       "strongest": "strong",
       "theories": [
-        "econ_monopoly",
         "law",
-        "econ_institution"
+        "institutionalism",
+        "econ_moral_hazard"
       ]
     },
     {
       "id": 10,
-      "title": "视频号8月10日起要求AI带货短视频主动标注，未标限制分发",
-      "major": false,
-      "platforms": [],
-      "disciplines": [
-        "soc",
-        "econ"
-      ],
-      "strongest": "strong",
-      "theories": [
-        "technology",
-        "law",
-        "digital"
-      ]
-    },
-    {
-      "id": 11,
-      "title": "一家三口轻信AI识菇\"无毒\"中毒，9岁男童一度送入PICU",
-      "major": false,
-      "platforms": [],
-      "disciplines": [
-        "soc",
-        "psy"
-      ],
-      "strongest": "strong",
-      "theories": [
-        "technology",
-        "health",
-        "digital"
-      ]
-    },
-    {
-      "id": 12,
-      "title": "贪凉吃冷饮诱发呼吸道疾病，8岁女童连咳三天查出肺部大片阴影",
-      "major": false,
-      "platforms": [],
-      "disciplines": [
-        "soc",
-        "psy"
-      ],
-      "strongest": "medium",
-      "theories": [
-        "health",
-        "socialization",
-        "family"
-      ]
-    },
-    {
-      "id": 13,
-      "title": "哥伦比亚7.5级强震已致132人遇难，全国进入\"国家灾难状态\"",
+      "title": "90后算法工程师用代码17小时删光公司89TB数据，获刑五年十个月",
       "major": false,
       "platforms": [],
       "disciplines": [
@@ -231,69 +180,110 @@
       ],
       "strongest": "strong",
       "theories": [
-        "risk_society",
-        "social_solidarity",
-        "health"
+        "law",
+        "technology",
+        "deviance"
       ]
     },
     {
-      "id": 14,
-      "title": "美团8·8服务消费节：健康卡覆盖300城10万门店，聚焦\"一老一小\"",
+      "id": 11,
+      "title": "2岁幼儿急诊漏诊致死，首诊医生犯医疗事故罪获刑一年",
       "major": false,
       "platforms": [],
       "disciplines": [
         "econ",
         "soc"
       ],
+      "strongest": "strong",
+      "theories": [
+        "law",
+        "health",
+        "econ_health_econ"
+      ]
+    },
+    {
+      "id": 12,
+      "title": "金税四期打通11部门数据，社保少缴漏缴无处遁形",
+      "major": false,
+      "platforms": [],
+      "disciplines": [
+        "econ",
+        "soc"
+      ],
+      "strongest": "strong",
+      "theories": [
+        "institutionalism",
+        "econ_welfare",
+        "law"
+      ]
+    },
+    {
+      "id": 13,
+      "title": "耗资千万的江西莲花站建成11年未通客运，成「最孤独火车站」",
+      "major": false,
+      "platforms": [],
+      "disciplines": [
+        "soc"
+      ],
       "strongest": "medium",
       "theories": [
-        "econ_institution",
-        "digital",
-        "social_capital"
+        "urban",
+        "institutionalism",
+        "meritocracy"
+      ]
+    },
+    {
+      "id": 14,
+      "title": "演员戚薇发布AI数字分身引争议，一张脸能否被无限复制？",
+      "major": false,
+      "platforms": [],
+      "disciplines": [
+        "soc"
+      ],
+      "strongest": "medium",
+      "theories": [
+        "technology",
+        "self_presentation",
+        "digital"
       ]
     },
     {
       "id": 15,
-      "title": "市场监管总局批准发布338项重要国家标准，含15项强制性标准",
+      "title": "网约车司机边开车边刷短剧引热议，平台回应加强监测警示",
       "major": false,
       "platforms": [],
       "disciplines": [
-        "soc",
-        "econ"
+        "soc"
       ],
       "strongest": "medium",
       "theories": [
-        "science",
-        "institutionalism",
-        "econ_public_finance"
+        "work",
+        "attention_economy",
+        "law"
       ]
     }
   ],
   "rejected": [
     {
-      "title": "某国大选/国际政局动态",
-      "reason": "S0 剔除：国际政治类，非社会民生热点，且弱关联社科知识图谱。"
+      "title": "白海豚台风旧角度续发",
+      "reason": "S5 去重：白海豚已于 08-05/06/07 连发三天达上限，本次不续发"
     },
     {
-      "title": "某明星塌房/婚恋八卦",
-      "reason": "S0 剔除：娱乐八卦，无学科分析价值。"
+      "title": "国际政局动态（某国大选/外交）",
+      "reason": "S0 剔除：国际政治类，非社会民生热点，弱关联社科图谱"
     },
     {
-      "title": "网友个人帖：吐槽某公司/晒亲身经历",
-      "reason": "S0 剔除：纯 UGC 个人帖，无一级信源，不可采。"
+      "title": "娱乐明星塌房/八卦",
+      "reason": "S0 剔除：娱乐八卦，无社科解读价值"
     },
     {
-      "title": "网传\"某地突发险情\"短视频（无官方通报）",
-      "reason": "S0 剔除：网传无源灾情，缺权威信源，不采。"
+      "title": "纯 UGC 个人帖（微博/抖音/小红书个人内容）",
+      "reason": "S0 剔除：UGC 个人帖，无一级编辑源佐证"
     },
     {
-      "title": "台风\"白海豚\"早期角度（08-05/06/07 已连发三天）",
-      "reason": "S5 去重：白海豚 08-05/06/07 已连发三天达上限；本次仅以\"08-11 上海宝山转移2.3万人+社区互助\"新进展角度合规续发（见 #3）。"
-    },
-    {
-      "title": "某弱关联单点候选（仅1-2平台低热度）",
-      "reason": "S2 未达 major 阈值（<4 平台）且强链不足，名额已满，未纳入。"
+      "title": "网传无源灾情/猎奇事件",
+      "reason": "S0 剔除：无权威来源，事实无法核验"
     }
   ],
-  "summary": "2026-08-11 早间批次：入库15条（3特大+12非特大）。特大均为≥4平台跨榜事件——#1 存款降息加息两极分化(econ_monetary_policy)、#2 钟睒睒呼吁限制平台权力(econ_monopoly)、#3 白海豚过境上海宝山转移2.3万人+社区互助(risk_society/social_capital，新进展角度续发)。学科覆盖 econ/soc/psy 三科；节点id全部∈311节点集；每条含合规 essayTopics 与100+字应试金句 essayQuote；#3 嵌 S9 前沿研究(Aldrich & Meyer 2015 社会资本与社区韧性)。S2.5 青春家国主题配额3条(#4高职超本科线/#6就业保障/#15国家标准)标记 themePick。"
+  "summary": "本批 15 条：特大 2 条（结婚登记 327.5 万对新低、新能源车 7 月占比首破 60%），三科全覆盖（soc/econ/psy），含 S9 前沿研究 2 条（新能源车消费行为、急诊漏诊防御性医疗）；校验 FAIL=0 WARN=0。"
 }
