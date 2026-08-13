@@ -154,8 +154,15 @@ function normTopic(ref) {
 }
 // 归一化单条；返回 null 表示该条无法修复（如 theories 全部无效）
 function normalizeItem(it) {
-  const theories = (it.theories || []).map(normNode).filter(Boolean);
-  if (!theories.length) return null;
+  let theories = (it.theories || []).map(normNode).filter(Boolean);
+  if (!theories.length) {
+    // 兜底：单条节点全部失效时不让整批放弃——先借用 interpretations 的有效 lens，再不行用全局首个节点
+    const fromLens = (it.interpretations || [])
+      .map((p) => (NODE_IDS.has(p.lensId) ? { id: p.lensId, label: NODE_LABELS[p.lensId] } : (p.lens ? normNode({ label: p.lens }) : null)))
+      .filter(Boolean);
+    const fb = fromLens[0] || (() => { const id = [...NODE_IDS][0]; return { id, label: NODE_LABELS[id] }; })();
+    theories = [fb];
+  }
   const essayTopics = (it.essayTopics || []).map(normTopic).filter(Boolean);
   const theoryIds = new Set(theories.map((t) => t.id));
   const interpretations = (it.interpretations || []).map((p) => {
