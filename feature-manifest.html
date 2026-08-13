@@ -882,6 +882,7 @@
         <li><strong>成本</strong>：约 ¥0.04–0.11/天（DeepSeek 非思考模式，3 次调用）；故 Actions 排在凌晨非高峰。DeepSeek 近年多次调价，高峰翻倍需注意。</li>
         <li><strong>本地手动跑</strong>：<code>node scripts/news-pipeline.js --dry-run</code>（只校验不写）／<code>node scripts/news-pipeline.js</code>（真实写回）。已用真实 API 端到端验证：news-validate.js 7 天 FAIL=0/WARN=0。</li>
         <li><strong>v1 已知权衡</strong>：公开热榜多只给标题、不给正文，云端大模型基于标题+通用知识撰写解读，<code>thread</code> 以结构性背景脉络为主、不编造具体日期/单一确凿事件；后续可接入「按 url 抓取正文」提升保真度（扩展点）。</li>
+        <li><strong>v1.57 后稳定性加固（2026-08-13）</strong>：① <code>daily-news.yml</code> 的 <code>DEEPSEEK_MODEL</code>/<code>DEEPSEEK_BASE</code> 改为硬编码默认值 <code>deepseek-v4-flash</code>/<code>https://api.deepseek.com</code>（对齐本机成功配置，规避 Secret 配错导致生成失败）；② <code>news-pipeline.js</code> 的 <code>normalizeItem</code> 对「单条 <code>theories</code> 节点全部不在受控词表」做兜底（先借 <code>interpretations</code> 的有效 lens，再不行用全局首个节点），<strong>不再因单条失效整批放弃</strong>，根治此前云端偶发「归一化失败→整任务 failure→当天无新闻」。</li>
       </ul>
     </section>
 
