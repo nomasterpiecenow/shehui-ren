@@ -17,7 +17,7 @@ const vm = require('vm');
 
 const { chat, getUsage, resetUsage } = require('./llm');
 const { recordCost } = require('./cost');
-const { getCandidates } = require('./news-source');
+const { getCandidates, discoverOfficial } = require('./news-source');
 const { validate } = require('./validate-light');
 const { NODE_IDS, NODE_LABELS, nodeDisc, TOPIC_LIB, TOPIC_IDS } = require('./vocab');
 
@@ -107,6 +107,7 @@ ${nodes}
       "essayTopics": [ {"id":"主题id","label":"主题label"}, ... ],
       "essayQuote": "【作文素材段，200–280 字，成 1 段】一段可直接抄进高考作文的语段：用一根核心判断串起 1–3 颗可独立背诵的金句。写法：从「骨架库」选 起/承/转 各一型组合（起6型：引/排/情/设/对/警；承5型：五/正/辩/叠/破；转5型：升/号/展/环/隐）。本批起型须按用户消息中的「骨架分配表」使用，相邻不起同型、整体分布均匀。整段至少含 1 个可背诵金句，修辞不限；语言有思辨深度、少年意气、社会关怀，须显式点明人/社会角度。严禁写成纯抒情口号、说明文、简单复述标题。",
       "skeleton": "该条骨架标签，格式「起型·承型·转型」，如「引·辩·升」",
+      "research": { "title":"真实存在的研究/著作/报告名(不确定则省略此字段)", "authors":"", "year":0, "venue":"", "url":"", "summary":"", "fromNode":"关联的理论节点 id" },
       "platforms": [ "同候选 platforms" ]
     }
   ]
@@ -120,6 +121,8 @@ ${nodes}
 - 严禁混淆两套词表：theories / lensId 只能填「社科节点」的 id（第三列 soc/econ/psy）；essayTopics 只能填「作文主题」的 id。例如 trust / duty_devote / community / fairness 是作文主题 id，绝不是节点，不能放进 theories 或 lensId。
 - essayTopics 的 id/label 必须与「作文主题」词表完全一致。
 - essayQuote 必须是一段 **200–280 字**的「作文素材段」：用一根核心判断串起 1–3 颗可独立背诵的金句；从「骨架库」（起6型：引/排/情/设/对/警；承5型：五/正/辩/叠/破；转5型：升/号/展/环/隐）选 起/承/转 各一型组合；本批起型须严格按用户消息中的「骨架分配表」使用（相邻不起同型、整体分布均匀）；整段至少含 1 个可背诵金句，修辞不限；须显式点明新闻建构出的人/社会角度。严禁写成纯抒情口号、说明文段落、或简单复述标题。同时输出 skeleton 字段（「起型·承型·转型」），起型须与分配表一致。B 类新闻须显式写出其建构出的人/社会角度，纯描述通报不得作为金句。
+- source 必须是真实官方来源名（如「央视网」「新华网」「人民网」「中国青年网」），不得写「头条热榜」「微博热搜」等聚合源标记；url 必须是该官媒报道原文链接。若候选已附官媒来源与原文摘要（summary 字段），请以之为准撰写，thread 须基于该原文事实。
+- research：基于新闻关联的理论节点或所给官媒原文，引用 1 条真实存在的研究/著作/报告（须真实可核验，含 title/authors/year/venue/url/summary/fromNode）；若无法确认真实来源，则省略该字段，严禁编造。
 - 所有文本用简体中文，措辞有思辨深度、有少年意气、有社会关怀，避免平铺直叙的社论腔。`;
 }
 
@@ -211,7 +214,8 @@ async function generateBatch(batchCandidates, { topics, nodes, start = 0 }, prev
         : '') +
       `本批为全局第 ${start + 1}–${start + batchCandidates.length} 条（共 15 条）。骨架分配表中对应起型为：${seg.join(' / ')}，请第 1 条用第 1 个、依次对应。\n\n` +
       '候选新闻（请逐条产出卡片，每条已标注【起型必须为：X】，严格据此生成）：\n' +
-      batchCandidates.map((c, i) => `【第${i + 1}条 起型必须为：${seg[i] || ''}】\n` + JSON.stringify(c, null, 2)).join('\n\n');
+      batchCandidates.map((c, i) => `【第${i + 1}条 起型必须为：${seg[i] || ''}】\n` + JSON.stringify(c, null, 2)).join('\n\n') +
+      '\n\n注意：候选已尽量附上官媒来源(source/url)与原文摘要(summary)。请以官媒来源为准撰写，thread 须基于原文事实；无 summary 时用公开可核验的宏观事实，严禁编造单一具体事件。';
 
     const content = await chat(
       [
@@ -238,7 +242,7 @@ function decorate(finalItems) {
   withCount.sort((a, b) => b._pc - a._pc);
   const topN = Math.min(5, withCount.length);
   const out = withCount.map((it, idx) => {
-    const { _pc, id: _oldId, ...rest } = it;
+    const { _pc, id: _oldId, summary: _sum, ...rest } = it;
     const theories = Array.isArray(rest.theories) ? rest.theories : [];
     const discs = [...new Set(theories.map((t) => nodeDisc(t.id)).filter(Boolean))];
     return {
@@ -278,6 +282,21 @@ async function main() {
     }
   }
   chosen = chosen.slice(0, 15);
+
+  // 官媒发现：官媒 RSS 候选已带真实原文摘要（source=中国新闻网）；仅对热榜补充候选（无 summary）尝试联网找官媒原文
+  console.log('[pipeline] 为热榜补充候选抓取官媒原文…');
+  for (const c of chosen) {
+    if (c.summary) continue; // 官媒 RSS 已带真实摘要，跳过
+    try {
+      const off = await discoverOfficial(c.title);
+      if (off) { c.source = off.source; c.url = off.url; c.summary = off.summary; }
+    } catch (e) {
+      /* 抓取失败则保留热榜 source 兜底 */
+    }
+  }
+  const officialCount = chosen.filter((c) => c.summary).length;
+  console.log(`[pipeline] 已附官媒原文 ${officialCount}/${chosen.length} 条`);
+
   const { topics, nodes } = vocabText();
 
   const batches = [];

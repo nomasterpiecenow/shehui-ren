@@ -12,6 +12,9 @@
 const fs = require('fs');
 const path = require('path');
 
+// 浏览器级 UA，提升搜索引擎 / 官媒页面可达性
+const UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36';
+
 // fetch 兼容：部分旧 Node 无全局 fetch，用 http/https 兜底（保证任意 Node 版本可跑）
 let _fetch = globalThis.fetch;
 if (typeof _fetch !== 'function') {
@@ -207,19 +210,185 @@ function loadSample() {
  * @param {{allowSample?: boolean}} [opts] allowSample=true 时允许回退离线样例（仅手动/调试）。
  */
 async function getCandidates(opts = {}) {
-  const live = await fetchHotLists();
-  if (live.length >= 15) {
-    const filtered = qualityFilter(live);
-    console.log('[source] 实时候选 ' + live.length + ' 条 → 质量过滤后 ' + filtered.length + ' 条');
-    return filtered;
+  // 官媒定向（主源）：中国新闻网当日 RSS —— 复刻本地「官媒主题定向」
+  const official = await getOfficialCandidates();
+  console.log('[source] 官媒 RSS 候选 ' + official.length + ' 条');
+
+  // 热榜（选题信号 + major 判定 + 题材补充）
+  const hot = await fetchHotLists();
+  const hotFiltered = qualityFilter(hot);
+  console.log('[source] 热榜实时候选 ' + hot.length + ' 条 → 质量过滤 ' + hotFiltered.length + ' 条');
+
+  // 合并：官媒为主；热榜补充未覆盖题材。目标放大到 ~55，保证回填多日去重时有足够候选
+  const TARGET = 55;
+  const officialTitles = new Set(official.map((o) => normTitle(o.title)));
+  let merged = official.slice();
+  for (const h of hotFiltered) {
+    if (merged.length >= TARGET) break;
+    if (officialTitles.has(normTitle(h.title))) continue; // 与官媒去重
+    merged.push({ ...h, platforms: h.platforms || [h.source] });
+  }
+
+  // 给官媒候选补 major 信号：若标题也在热榜多平台出现，并入 platforms
+  const hotByTitle = new Map(hotFiltered.map((h) => [normTitle(h.title), h.platforms || [h.source]]));
+  for (const o of merged) {
+    const hp = hotByTitle.get(normTitle(o.title));
+    if (hp) o.platforms = [...new Set([...o.platforms, ...hp])];
+  }
+
+  if (merged.length >= 15) {
+    console.log(
+      '[source] 合并候选 ' + merged.length + ' 条（官媒 ' + official.length + ' + 热榜补 ' + (merged.length - official.length) + '）'
+    );
+    return merged;
   }
   if (opts.allowSample) {
     const s = loadSample();
     console.log('[source] 回退样例候选 ' + s.length + ' 条（仅手动/调试，不进线上）');
     return s;
   }
-  console.error('[source] 全部实时来源均不可用，候选不足，放弃本次生成（不发布假新闻）');
+  console.error('[source] 候选不足 15 条，放弃本次生成（不发布假新闻）');
   return null;
 }
 
-module.exports = { getCandidates, fetchHotLists, qualityFilter, loadSample, ENDPOINTS };
+// —— 官媒发现层（复刻本地「生成前联网抓官媒原文」）——
+// 思路：热榜标题仅作种子；对每条标题用搜索引擎找官媒报道原文，
+// 把 source/url 换成真实官媒，summary 换成官媒正文片段，喂给模型写出有厚度的卡片。
+const OFFICIAL_MAP = [
+  { host: 'people.com.cn', name: '人民网' },
+  { host: 'xinhuanet.com', name: '新华网' },
+  { host: 'news.cn', name: '新华网' },
+  { host: 'cctv.com', name: '央视网' },
+  { host: 'cctv.cn', name: '央视网' },
+  { host: 'youth.cn', name: '中国青年网' },
+  { host: 'chinanews.com.cn', name: '中国新闻网' },
+  { host: 'ce.cn', name: '中国经济网' },
+  { host: 'stdaily.com', name: '科技日报' },
+  { host: 'cas.cn', name: '中国科学院' },
+  { host: 'thepaper.cn', name: '澎湃新闻' },
+  { host: 'gov.cn', name: '中国政府网' },
+  { host: 'chinadaily.com.cn', name: '中国日报网' },
+  { host: 'cnr.cn', name: '央广网' },
+];
+function officialName(host) {
+  for (const m of OFFICIAL_MAP) if (host.includes(m.host)) return m.name;
+  return null;
+}
+// 排除首页 / 门户 / 备案 / 查询类噪声链接
+function isNoiseLink(u) {
+  const low = u.toLowerCase();
+  if (low.includes('beian.miit.gov.cn')) return true;
+  if (low.includes('miit.gov.cn/dxxzsp') || low.includes('dxzhgl.miit.gov.cn')) return true;
+  if (low.includes('mps.gov.cn') && low.includes('websearch')) return true;
+  if (/\/(index|default)\.\w+$/i.test(u)) return true;
+  if (/\/[^/]+\/$/.test(u) && u.split('/').length <= 4) return true; // 门户根 / 二级目录首页
+  return false;
+}
+function scorePath(u) {
+  let s = 0;
+  if (/\/20\d{2}[/-]\d{2}/.test(u)) s += 3; // 含日期
+  if (/\/(politics|news|world|tech|society|finance|cpp|local|2026|2025)\//i.test(u)) s += 2;
+  if (u.split('/').length >= 6) s += 1;
+  return s;
+}
+async function searchOfficial(title) {
+  // 双源：必应网页搜索 + 必应新闻搜索（新闻源官媒覆盖更好）
+  const queries = [
+    'https://www.bing.com/search?q=' + encodeURIComponent(title) + '&setlang=zh-CN&cc=CN',
+    'https://www.bing.com/news/search?q=' + encodeURIComponent(title) + '&setlang=zh-CN&cc=CN',
+  ];
+  const allLinks = [];
+  for (const url of queries) {
+    try {
+      const r = await _fetch(url, { headers: { 'User-Agent': UA, 'Accept-Language': 'zh-CN' }, signal: AbortSignal.timeout(10000) });
+      const html = await r.text();
+      const re = /href="(https?:\/\/[^"]+)"/g;
+      let m;
+      while ((m = re.exec(html))) allLinks.push(m[1]);
+    } catch (e) {
+      /* 该引擎失败，试下一个 */
+    }
+  }
+  const official = allLinks
+    .map((u) => {
+      let h = '';
+      try { h = new URL(u).hostname; } catch (e) {}
+      return { u, name: officialName(h) };
+    })
+    .filter((x) => x.name && !isNoiseLink(x.u))
+    .sort((a, b) => scorePath(b.u) - scorePath(a.u));
+  return official.slice(0, 6);
+}
+async function fetchArticle(url) {
+  const r = await _fetch(url, { headers: { 'User-Agent': UA }, signal: AbortSignal.timeout(10000) });
+  const html = await r.text();
+  const ps = [...html.matchAll(/<p[^>]*>([\s\S]*?)<\/p>/gi)]
+    .map((m) => m[1].replace(/<[^>]+>/g, ' ').replace(/&[a-z]+;/gi, ' ').replace(/\s+/g, ' ').trim())
+    .filter((t) => t.length > 25 && !/版权|责任编辑|扫描二维码|分享到|客户端|登录|关注我们/.test(t));
+  const text = ps.join(' ').slice(0, 900);
+  return text || html.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 400);
+}
+async function discoverOfficial(title) {
+  const cand = await searchOfficial(title);
+  for (const c of cand) {
+    try {
+      const summary = await fetchArticle(c.u);
+      // 过滤掉抓到门户首页/导航的情况（正文像站点地图而非报道）
+      if (summary && summary.length > 60 && !/中央人民政府|无障碍|门户网站|版权所有|主办单位|网站地图/.test(summary)) {
+        return { source: c.name, url: c.u, summary };
+      }
+    } catch (e) {
+      /* 该链接抓不到，试下一个 */
+    }
+  }
+  return null; // 没找到官媒 → 调用方保留热榜 source 兜底
+}
+
+// —— 官媒定向主源（复刻本地「官媒主题定向」）——
+// 中国新闻网当日 RSS：返回真实官媒报道（title/link/description 摘要/pubDate 均为当日），
+// 自带新闻摘要，无需再 fetch 正文，稳定且零额外请求。
+async function getOfficialCandidates() {
+  // 中国新闻网多频道当日 RSS（国内/滚动/国际/财经/社会），合并去重 ≈100+ 条真实官媒报道
+  const FEEDS = [
+    'https://www.chinanews.com.cn/rss/scroll-news.xml',
+    'https://www.chinanews.com.cn/rss/china.xml',
+    'https://www.chinanews.com.cn/rss/world.xml',
+    'https://www.chinanews.com.cn/rss/finance.xml',
+    'https://www.chinanews.com.cn/rss/society.xml',
+  ];
+  const out = [];
+  const seen = new Set();
+  for (const url of FEEDS) {
+    try {
+      const r = await _fetch(url, { headers: { 'User-Agent': UA }, signal: AbortSignal.timeout(10000) });
+      const xml = await r.text();
+      const items = [...xml.matchAll(/<item>([\s\S]*?)<\/item>/g)].map((m) => m[1]);
+      for (const it of items) {
+        const title = (it.match(/<title>([\s\S]*?)<\/title>/) || [])[1];
+        const link = (it.match(/<link>([\s\S]*?)<\/link>/) || [])[1];
+        const desc = (it.match(/<description>([\s\S]*?)<\/description>/) || [])[1] || '';
+        if (!title || !link) continue;
+        const k = normTitle(title);
+        if (seen.has(k)) continue; // 跨频道去重
+        seen.add(k);
+        const summary = desc
+          .replace(/<!\[CDATA\[(.*?)\]\]>/s, '$1')
+          .replace(/<[^>]+>/g, ' ')
+          .replace(/\s+/g, ' ')
+          .trim();
+        out.push({
+          title: title.trim(),
+          source: '中国新闻网',
+          url: link.trim(),
+          summary: summary.slice(0, 300),
+          platforms: ['中国新闻网'],
+        });
+      }
+    } catch (e) {
+      /* 该 feed 失败跳过 */
+    }
+  }
+  return out;
+}
+
+module.exports = { getCandidates, fetchHotLists, qualityFilter, loadSample, ENDPOINTS, discoverOfficial, getOfficialCandidates };
