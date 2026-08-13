@@ -696,7 +696,7 @@
     <section id="overview">
         <h1>社会人 <em>功能模块说明</em></h1>
         <p class="subtitle">帮助初学者理解社会科学理论的可视化网站 · 本文档是功能契约，所有改动需同步更新</p>
-        <span class="version-badge">v1.57 · 2026-08-12</span>
+        <span class="version-badge">v1.58 · 2026-08-13</span>
         <span class="version-badge" style="background:#e0f2fe;color:#0369a1">配套成本文档：<a href="支出文档.html" style="color:#0369a1">支出文档.html</a></span>
 
         <h3>产品定位</h3>
@@ -738,12 +738,13 @@
 
     <section id="B2">
       <h2>[B2] 新闻数据流水线（15 步全自动）</h2>
-      <p>每天由 WorkBuddy 自动化任务 <code>automation-1784183014346</code>（名"社会人 新闻全自动更新"）触发，一次把"抓取→审核→入库→上线"全跑完。计划每日 <strong>9:06 与 21:06</strong> 两批（实际见 [B8]）。</p>
+      <p>每日北京时间 <strong>02:00</strong> 由 <strong>Gitee Go（国内 runner）</strong>流水线（<code>.gitee/workflows/news.yml</code>）抓取多源真实热榜 → DeepSeek 生成 → 推送 GitHub；GitHub Actions（<code>.github/workflows/daily-news.yml</code>，<code>on: push</code>）随后部署 Netlify（详见 [B8]）。彻底不再依赖本机开机。</p>
       <div class="code-block">
 <span class="cmt">// 一条新闻从"热搜"到"你能看到"的 15 步</span>
 [1 读标准]   NEWS_REVIEW_STANDARD.md 的 S0–S9 / S2.5 / S4.5
 [2 取节点集] 从 sociology-map.html 正则提取 12 个知识节点数组(THINKERS/THEORIES/CONCEPTS/TOPICS 各三科)
-[3 抓取候选] WebSearch/WebFetch 拉 ≥4 热榜(微博/百度/知乎/头条/抖音)+官媒定向(青春/家国/思辨) → 40~60 条候选池
+[3 抓取候选] <code>news-source.js</code> 程序化拉多个国内公开热榜 JSON 端点（微博 / 百度 / 知乎 / 头条 / 抖音），任一可达即用、被反爬源自动跳过（不致命）；合并去重（跨榜同题合并 platforms→用于 major 判定）→ 轮转交错取前 ~34 条候选池。当前服务器 IP 下稳定可用：百度 / 头条 / 抖音。
+[3b 安全回退] 全部来源均不可用 → <code>getCandidates()</code> 返回 null → 流水线退出（不写文件）→ 沿用昨日真实新闻，<strong>绝不回退样例冒充真实新闻</strong>（sample-candidates.json 仅离线 <code>--sample</code> 调试用）。
 [4 S0过滤]   政治/谣言/NSFW/UGC个人帖(无编辑源佐证) → 剔除
 [5 S2特大]   跨热榜归并，≥4 平台 = 特大(major+platforms)
 [6 打分]     S4强度(strong/medium/weak·weak剔) / S3学科 / S6链接合法 / <strong>S4.5社会锚点(A强/B可建构/C纯描述·C淘汰)</strong>
@@ -869,20 +870,24 @@
 
     <section id="B8">
       <h2>[B8] 调度（云端化 · 不再绑死本机）</h2>
-      <p>每日新闻生成从「本机 WorkBuddy 定时任务」迁移到 <strong>GitHub + GitHub Actions + DeepSeek</strong>，彻底不再要求这台 Windows 开机/不休眠。原 WorkBuddy 自动化 <code>automation-1784183014346</code>（rrule 塌缩+绑定本机进程）随之不再是主路径，其「只有早班 9:06 跑、晚班 21:06 从不运行、关机即停」的老问题自然消失。</p>
+      <p>每日新闻生成与部署已彻底云端化、且<strong>抓取搬到国内</strong>。v1.51–v1.57 在 <strong>GitHub Actions（海外 runner）</strong>抓取，海外 IP 抓不到微博/知乎（403/401），被迫回退样例 → 线上出现假新闻。v1.58 起改为：<strong>抓取+生成在 Gitee Go（国内 runner，北京时间 02:00）</strong>完成，生成后推送 GitHub，<strong>由 GitHub Actions（海外，能连 Netlify）在 push 时部署</strong>。两端各司其职：国内抓、海外发。</p>
       <div class="code-block">
-<span class="cmt">// 每日北京时间 02:00（UTC 18:00），GitHub Actions 自动执行</span>
-.github/workflows/daily-news.yml
-  → <span class="fn">scripts/news-pipeline.js</span>  取候选 → 分3批×5条调 DeepSeek → 轻量校验 → 写回 news-data.js
-  → git commit &amp; push 到 GitHub（可选镜像 Gitee）
+<span class="cmt">// 北京时间 02:00，Gitee Go（国内）执行抓取+生成</span>
+.gitee/workflows/news.yml
+  → 拉 GitHub 最新代码（reset --hard github/main，避免覆盖本机代码改动）
+  → <span class="fn">scripts/news-pipeline.js</span>  多源真实热榜 → 分3批×5条调 DeepSeek → 轻量校验 → 写回 news-data.js
+  → git commit &amp; push 到 Gitee + push 到 GitHub main
+<span class="cmt">// GitHub Actions 收到 push 即部署（海外能连 Netlify）</span>
+.github/workflows/daily-news.yml  (on: push branches:[main])
   → <span class="fn">deploy-netlify.js</span>         部署上线（沿用草稿 + restore 兜底）</div>
       <ul>
-        <li><strong>流水线脚本（scripts/）</strong>：<code>llm.js</code>(DeepSeek 客户端·非思考模式) / <code>vocab.js</code>(311 节点+34 主题受控词表) / <code>news-source.js</code>(候选源：先抓公开热榜，失败回退 <code>sample-candidates.json</code>) / <code>validate-light.js</code>(轻量校验，硬闸同 news-validate.js) / <code>news-pipeline.js</code>(编排)。</li>
-        <li><strong>密钥走 Secret</strong>：<code>DEEPSEEK_API_KEY</code> / <code>NETLIFY_AUTH_TOKEN</code> / 可选 <code>GITEE_TOKEN</code>，<strong>均不进代码</strong>（本地测试用仓库根 <code>.env</code>，已 gitignore）。</li>
+        <li><strong>流水线脚本（scripts/）</strong>：<code>llm.js</code>(DeepSeek 客户端·非思考模式) / <code>vocab.js</code>(311 节点+34 主题受控词表) / <code>news-source.js</code>(候选源：多源真实热榜 JSON——微博/百度/知乎/头条/抖音，被反爬源自动跳过；<strong>全部失败则不覆盖、绝不发样例</strong>) / <code>validate-light.js</code>(轻量校验，硬闸同 news-validate.js) / <code>news-pipeline.js</code>(编排)。</li>
+        <li><strong>密钥走 Secret</strong>：Gitee Go 密文 <code>DEEPSEEK_API_KEY</code> / <code>GITHUB_PAT</code>（推送 GitHub 用）；GitHub Actions 密文 <code>NETLIFY_AUTH_TOKEN</code>。均不进代码（本地测试用仓库根 <code>.env</code>，已 gitignore）。</li>
         <li><strong>成本</strong>：约 ¥0.04–0.11/天（DeepSeek 非思考模式，3 次调用）；故 Actions 排在凌晨非高峰。DeepSeek 近年多次调价，高峰翻倍需注意。</li>
         <li><strong>本地手动跑</strong>：<code>node scripts/news-pipeline.js --dry-run</code>（只校验不写）／<code>node scripts/news-pipeline.js</code>（真实写回）。已用真实 API 端到端验证：news-validate.js 7 天 FAIL=0/WARN=0。</li>
         <li><strong>v1 已知权衡</strong>：公开热榜多只给标题、不给正文，云端大模型基于标题+通用知识撰写解读，<code>thread</code> 以结构性背景脉络为主、不编造具体日期/单一确凿事件；后续可接入「按 url 抓取正文」提升保真度（扩展点）。</li>
         <li><strong>v1.57 后稳定性加固（2026-08-13）</strong>：① <code>daily-news.yml</code> 的 <code>DEEPSEEK_MODEL</code>/<code>DEEPSEEK_BASE</code> 改为硬编码默认值 <code>deepseek-v4-flash</code>/<code>https://api.deepseek.com</code>（对齐本机成功配置，规避 Secret 配错导致生成失败）；② <code>news-pipeline.js</code> 的 <code>normalizeItem</code> 对「单条 <code>theories</code> 节点全部不在受控词表」做兜底（先借 <code>interpretations</code> 的有效 lens，再不行用全局首个节点），<strong>不再因单条失效整批放弃</strong>，根治此前云端偶发「归一化失败→整任务 failure→当天无新闻」。</li>
+        <li><strong>v1.58 抓取搬国内 + 多源真实热榜（2026-08-13）</strong>：① <strong>根因</strong>——v1.51 起新闻在 GitHub Actions 海外 runner 抓取，海外 IP 抓不到微博/知乎（403/401）→ 回退 <code>sample-candidates.json</code> → 线上 11/12/13 出现假新闻冒充真实来源。② <strong>多源</strong>——<code>news-source.js</code> 扩为微博/百度/知乎/头条/抖音 多端点，合并去重+跨榜同题合并 platforms→major 判定；被反爬源自动跳过（不致命）。③ <strong>安全回退</strong>——全部来源失败返回 null → 流水线退出、不写文件、沿用昨日真实新闻、<strong>绝不发样例</strong>。④ <strong>架构</strong>——抓取+生成搬 Gitee Go（国内 runner，北京时间 02:00），生成后推 GitHub；GitHub Actions 改为 <code>on: push</code> 仅部署（海外能连 Netlify）。⑤ <strong>契约纠偏</strong>——[B2] 原写「WebSearch/WebFetch 多源」与实际单源不符，已改真实多源+国内架构。⑥ <strong>实测</strong>——本机多源抓取拿到 34 条真实候选、3 源跨榜同题可识别。待用户在 gitee.com 开启 Gitee Go + 配 DEEPSEEK_API_KEY/GITHUB_PAT 后全自动接管。</li>
       </ul>
     </section>
 
@@ -1641,6 +1646,7 @@ news-export.html 点击「下载 PDF（付费）」
         <table class="module-table" id="clTable">
             <thead><tr><th>日期</th><th>版本</th><th>改动内容</th><th>涉及模块</th></tr></thead>
             <tbody>
+                <tr><td>2026-08-13</td><td>v1.58</td><td><strong>[新闻抓取搬国内(Gitee Go) + 多源真实热榜 + 安全回退] 回应"线上出现假新闻冒充真实来源、契约多源描述与实际不符"：</strong>① <strong>根因</strong>——v1.51 起新闻在 GitHub Actions 海外 runner 抓取，海外 IP 抓不到微博/知乎(403/401)→回退 sample-candidates.json→线上 11/12/13 出现假新闻。② <strong>多源真实热榜</strong>——<code>news-source.js</code> 扩为微博/百度/知乎/头条/抖音 多端点 JSON，合并去重+跨榜同题合并 platforms(→major 判定)；被反爬源自动跳过不致命。当前服务器 IP 稳定可用：百度/头条/抖音。③ <strong>安全回退</strong>——全部来源失败返回 null→流水线退出、不写文件、沿用昨日真实新闻、<strong>绝不发样例</strong>。④ <strong>架构</strong>——抓取+生成搬 Gitee Go(国内 runner，北京时间 02:00)完成→推 GitHub；GitHub Actions 改 <code>on:push</code> 仅部署 Netlify(海外能连)。⑤ <strong>契约纠偏</strong>——[B2] 原写"WebSearch/WebFetch 多源"与实际单源不符，已改真实多源+国内架构；[B8] 同步。⑥ <strong>实测</strong>——本机多源抓取 34 条真实候选、3 源跨榜同题可识别。⑦ <strong>支出文档无需改</strong>(成本不变，仍约 ¥0.04–0.11/天)。无用户端 UI 改动；待用户在 gitee.com 开启 Gitee Go + 配 DEEPSEEK_API_KEY/GITHUB_PAT 两密文后全自动接管。</td><td>B2, B8, 新闻自动化, 部署, 运维, DeepSeek, Gitee Go</td></tr>
                 <tr><td>2026-08-12</td><td>v1.56</td><td><strong>[essayQuote 升级为「金句项链」风格 · 强化作文味] 回应"速用语段作文味不够浓"：</strong>① <strong>根因</strong>：v1.54 的「高考议论文标准论证段·五步结构」偏逻辑论证、像社论，缺金句密度与修辞；用户指出 8/4–8/8 旧版金句（如「没有谁是不可替代的，迟钝的傲慢终将被时代悄悄清算」「社会的温度，不写在文件里，而藏在每个人愿为陌生生命多跑的那几步之中」）更有价值，据此提炼配方。② <strong>提示词重写</strong>——essayQuote 改为「<strong>金句项链风格，200–260 字</strong>」：一根核心判断串起 2–3 颗可独立背诵的金句珠子；写法＝①开头抓人（矛盾/数字/比喻/反问句破题）②中段两层展开（简述新闻事实+提炼人/社会道理）③结尾短促有力（普世道理，15字内或对仗）；整段须含 2–3 个对仗/比喻/警策句，至少用一种修辞（对偶/排比/比喻/引用名言古语/对比/数字意象），显式点明人/社会角度；persona 改为「高考满分作文水准的金句素材段（发展等级·有文采）」，并弱化原"理性克制"为"有思辨深度、有少年意气、有社会关怀"。③ <strong>一次性脚本同步</strong>——<code>fix-essayquote.js</code> 的 <code>systemPrompt</code> 同频升级。④ <strong>当日数据急救</strong>——已用新提示词把 2026-08-12 的 15 条 essayQuote 重做（含卢梭/奥斯特罗姆/哈贝马斯/鲍曼/诺斯等引用、对仗金句、短促收束），部署上线、推 GitHub 云端仓库、Gitee 镜像三方一致。本变更为纯后端数据生成机制，<strong>无用户端页面/UI 改动</strong>；源码(契约)已同步。</td><td>B2, B7, C2, 新闻自动化, DeepSeek</td></tr>
                 <tr><td>2026-08-12</td><td>v1.55</td><td><strong>[新增 DeepSeek 每日成本记录机制 · 配套支出文档] 回应"记录每一天使用 DeepSeek 的成本"：</strong>① <strong>根因/缺口</strong>——此前无任何成本记录，且 <code>llm.js</code> 的 <code>chat()</code> 只返回文本、丢弃 API 响应里的 <code>usage</code>，无法知道每天花多少。② <strong>用量捕获</strong>——<code>llm.js</code> 新增模块级用量累计（<code>getUsage()</code>/<code>resetUsage()</code>），在 <code>chat()</code> 中捕获每次调用的真实 token 用量（prompt_tokens / completion_tokens / 缓存命中 cached_tokens）。③ <strong>成本记录模块</strong>——新增 <code>scripts/cost.js</code>：集中单价常量 <code>PRICING</code>（deepseek-v4-flash 官方现行价：输入缓存命中 ¥0.02/百万、未命中 ¥1.00/百万、输出 ¥2.00/百万；峰谷倍率×2 仅高峰触发，流水线 02:00 平峰不乘），<code>computeCost()</code> 由真实用量换算金额，<code>recordCost()</code> 追加写入 <code>cost-data.js</code>。④ <strong>接入流水线</strong>——<code>news-pipeline.js</code> 与 <code>fix-essayquote.js</code> 运行结束各调一次 <code>recordCost()</code>，按天落账；<code>daily-news.yml</code> 的 <code>git add</code> 增加 <code>cost-data.js</code> 使其随流水线提交。⑤ <strong>支出文档</strong>——新建 <code>支出文档.html</code>（加载 <code>cost-data.js</code>），含日/周/月/年账单表、单价口径、调用次数算式、边际成本速查表、额度状态、变更记录，与本契约互链。⑥ <strong>实测</strong>——修复脚本单次真实调用：1 次 / 1565 输入(256 缓存) / 2307 输出 ≈ ¥0.0059。本变更为纯后端成本计量，<strong>无用户端页面/UI 改动</strong>；源码(契约)已同步。</td><td>B2, B7, 成本, 新闻自动化, DeepSeek</td></tr>
                 <tr><td>2026-08-12</td><td>v1.54</td><td><strong>[essayQuote 升级为高考议论文标准论证段 · 五步结构] 回应"速用语段仍不尽如人意"：</strong>① <strong>根因</strong>：v1.53 仅要求 essayQuote「100–130 字成段有论证」，但没规定议论文段落的<strong>标准结构</strong>，DeepSeek 易写成说明文/散文段，不像能直接抄进高考作文的论证段（缺观点句、无因果/假设/对比分析）。② <strong>提示词重写</strong>——<code>news-pipeline.js</code> 的 essayQuote 指令改为「<strong>200–260 字高考议论文论证段，严格五步结构</strong>」：①观点句亮明分论点→②阐释句解释关联→③材料句引入新闻事实→④分析句务必做因果/假设/对比分析（严禁只描述现象）→⑤结论句回扣升华；persona 加「尤其擅长改写高考标准论证段（符合新课标卷基础/发展等级评分）」。③ <strong>校验放宽</strong>——<code>validate-light.js</code> 长度硬闸由 80–160 升为「150–300（规范 200–260）」，给五步结构留空间。④ <strong>一次性脚本同步</strong>——<code>fix-essayquote.js</code> 提示词与长度口径同频升级，可把任意历史日期重写成论证段。⑤ <strong>权威规范同步</strong>——<code>NEWS_REVIEW_STANDARD.md</code> 的 essayQuote 定义改为「高考议论文论证段·五步结构·160–220字」。⑥ <strong>当日数据急救</strong>——已用新版提示词把 2026-08-12 的 15 条 essayQuote 重做并部署上线。本变更为纯后端数据生成/校验机制，<strong>无用户端页面/UI 改动</strong>；源码(含契约)已同步 Gitee。</td><td>B2, B7, C2, 新闻自动化, DeepSeek</td></tr>

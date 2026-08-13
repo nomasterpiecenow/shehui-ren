@@ -1,6 +1,6 @@
 /* scripts/news-pipeline.js — 云端每日新闻编排（无本机值守）
  * 流程：
- *   1. 取候选新闻（news-source：实时热榜优先，失败回退样例）
+ *   1. 取候选新闻（news-source：多源真实热榜；全部来源失败则不覆盖）
  *   2. 分 3 批（每批 5 条）调用 DeepSeek，产出结构化卡片
  *   3. 轻量校验（validate-light）；每批失败重试一次（带错误反馈）
  *   4. 合并 15 条、重编号、标 major/review，写回 news-data.js（保留近 7 天）
@@ -123,12 +123,38 @@ ${nodes}
 - 所有文本用简体中文，措辞有思辨深度、有少年意气、有社会关怀，避免平铺直叙的社论腔。`;
 }
 
+function toItems(t) {
+  const j = JSON.parse(t);
+  return Array.isArray(j.items) ? j.items : Array.isArray(j) ? j : null;
+}
 function parseItems(content) {
   let txt = (content || '').trim();
   // 去掉可能的 ```json 围栏
-  txt = txt.replace(/^```(?:json)?/i, '').replace(/```$/, '').trim();
-  const j = JSON.parse(txt);
-  return Array.isArray(j.items) ? j.items : (Array.isArray(j) ? j : null);
+  txt = txt.replace(/^```(?:json)?/i, '').replace(/```$/i, '').trim();
+  // 先直接解析
+  try {
+    const r = toItems(txt);
+    if (r) return r;
+  } catch (e) {}
+  // 容错：抽取第一个 [ 到最后一个 ] 之间的数组（模型可能前后多吐文字）
+  const s = txt.indexOf('[');
+  const e = txt.lastIndexOf(']');
+  if (s !== -1 && e > s) {
+    try {
+      const r = toItems(txt.slice(s, e + 1));
+      if (r) return r;
+    } catch (e2) {}
+  }
+  // 或抽取 { ... items ... } 对象
+  const os = txt.indexOf('{');
+  const oe = txt.lastIndexOf('}');
+  if (os !== -1 && oe > os) {
+    try {
+      const r = toItems(txt.slice(os, oe + 1));
+      if (r) return r;
+    } catch (e3) {}
+  }
+  return null;
 }
 
 // —— 把模型输出纠偏回受控词表（按 id 或 label 匹配）——
@@ -192,7 +218,7 @@ async function generateBatch(batchCandidates, { topics, nodes, start = 0 }, prev
         { role: 'system', content: systemPrompt(topics, nodes) },
         { role: 'user', content: userMsg },
       ],
-      { temperature: 0.7, maxTokens: 5000 }
+      { temperature: 0.7, maxTokens: 8000 }
     );
     const items = parseItems(content);
     if (!items) throw new Error('无法解析模型输出为 items 数组');
@@ -248,7 +274,7 @@ async function main() {
     console.log(`[pipeline] 生成第 ${b + 1}/${batches.length} 批（${batch.length} 条）…`);
     let items = null;
     let lastErr = null;
-    for (let attempt = 0; attempt < 2; attempt++) {
+    for (let attempt = 0; attempt < 4; attempt++) {
       try {
         const raw = await generateBatch(batch, { topics, nodes, start: b * BATCH }, attempt === 1 ? lastErr : null);
         // 归一化（纠偏回受控词表）
@@ -300,7 +326,8 @@ async function main() {
 
   // 写回 news-data.js，保留近 7 天
   const data = loadNewsData();
-  const today = shanghaiDate();
+  const forcedDate = (process.argv.find((a) => a.startsWith('--date=')) || '').split('=')[1];
+  const today = forcedDate && /^\d{4}-\d{2}-\d{2}$/.test(forcedDate) ? forcedDate : shanghaiDate();
   data[today] = finalItems.map(({ skeleton, ...r }) => r);
   const keep = Object.keys(data)
     .sort((a, b) => b.localeCompare(a))

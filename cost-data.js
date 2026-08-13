@@ -51,5 +51,53 @@ var COST_DATA = [
     "costCNY": 0.034315,
     "ts": "2026-08-13T08:18:04.683Z",
     "note": ""
+  },
+  {
+    "date": "2026-08-13",
+    "model": "deepseek-v4-flash",
+    "type": "pipeline",
+    "calls": 4,
+    "prompt": 24592,
+    "cached": 20608,
+    "completion": 15340,
+    "costCNY": 0.035076,
+    "ts": "2026-08-13T11:17:43.739Z",
+    "note": ""
+  },
+  {
+    "date": "2026-08-11",
+    "model": "deepseek-v4-flash",
+    "type": "pipeline",
+    "calls": 3,
+    "prompt": 18278,
+    "cached": 16896,
+    "completion": 14434,
+    "costCNY": 0.030588,
+    "ts": "2026-08-13T11:19:12.143Z",
+    "note": ""
+  },
+  {
+    "date": "2026-08-12",
+    "model": "deepseek-v4-flash",
+    "type": "pipeline",
+    "calls": 4,
+    "prompt": 24462,
+    "cached": 21248,
+    "completion": 18593,
+    "costCNY": 0.040825,
+    "ts": "2026-08-13T11:22:00.875Z",
+    "note": ""
+  },
+  {
+    "date": "2026-08-13",
+    "model": "deepseek-v4-flash",
+    "type": "pipeline",
+    "calls": 4,
+    "prompt": 24612,
+    "cached": 21376,
+    "completion": 15927,
+    "costCNY": 0.035518,
+    "ts": "2026-08-13T11:24:30.569Z",
+    "note": ""
   }
 ];

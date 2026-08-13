@@ -23,8 +23,9 @@
 | `NEWS_REVIEW_STANDARD.md` / `news-validate.js` / `news-review-log.json` | 新闻审核规范与校验脚本 |
 | `deploy-netlify.js` | **跨设备通用版**部署脚本（自动探测 node / netlify-cli，详见下方） |
 | `netlify.toml` | Netlify 配置：站点根即仓库、`functions.directory = "api"`，Functions 自动生效 |
-| `scripts/` | **云端每日新闻流水线**（无需本机在线）：`llm.js`(DeepSeek 客户端) / `vocab.js`(受控词表) / `news-source.js`(候选源) / `validate-light.js`(轻量校验) / `news-pipeline.js`(编排) / `sample-candidates.json`(离线兜底) |
-| `.github/workflows/daily-news.yml` | GitHub Actions：定时（北京时间 02:00）跑流水线生成新闻 → 提交 → 部署 Netlify，钥匙走 Secret |
+| `scripts/` | **云端每日新闻流水线**（无需本机在线）：`llm.js`(DeepSeek 客户端) / `vocab.js`(受控词表) / `news-source.js`(候选源·多源真实热榜) / `validate-light.js`(轻量校验) / `news-pipeline.js`(编排) / `sample-candidates.json`(仅离线调试，不自动回退) |
+| `.github/workflows/daily-news.yml` | GitHub Actions：仅部署——Gitee 推送后 `deploy-netlify.js` 上线（海外能连 Netlify），钥匙走 Secret |
+| `.gitee/workflows/news.yml` | Gitee Go（国内）：北京时间 02:00 抓取多源真实热榜 → DeepSeek 生成 → 推送 GitHub，钥匙走 Secret（DEEPSEEK_API_KEY / GITHUB_PAT） |
 | `api/*.js` | **付费下载 PDF 链路**（Netlify Functions）：`create-order`/`pay-confirm`/`pay-webhook`/`download` + 共享 `_common.js` + `pdf-builder.js` + `package.json` |
 | `assets/fonts/simhei.ttf` | 中文黑体（9.7MB），函数字体回退源，随站点静态发布 |
 | `news-export.html` | 素材导出页：A4 预览 + 「打印（免费）」+「下载 PDF（付费）」按钮 |
@@ -134,9 +135,10 @@ Netlify 免费额度耗尽时，生产部署（`deploy --prod`）会返回 **403
 现在改由 **GitHub + GitHub Actions + DeepSeek** 在云端完成，彻底不再绑死这台电脑：
 
 ```
-GitHub Actions（每天北京时间 02:00）
+Gitee Go（国内，每天北京时间 02:00）
   └─ scripts/news-pipeline.js
-       1. news-source.js   取候选热点（实时热榜优先，失败回退 sample-candidates.json）
+       1. news-source.js   取候选热点（多源真实热榜，全部失败则不覆盖、绝不回退样例）
+   （生成后推送 GitHub → 触发 GitHub Actions 仅部署 Netlify）
        2. llm.js           分 3 批 ×5 条调用 DeepSeek（非思考模式），产出结构化卡片
        3. validate-light.js 轻量校验（受控词表硬闸：节点 id / 主题 id / 字段齐全）
        4. 写回 news-data.js（保留近 7 天）
