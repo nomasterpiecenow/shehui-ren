@@ -154,7 +154,7 @@ async function fetchOne(ep) {
 // 多源拉取 + 轮转交错合并（保证前 N 条跨源多样；跨榜同题合并 platforms）
 async function fetchHotLists() {
   const results = await Promise.all(ENDPOINTS.map(fetchOne));
-  const perSource = results.map((r) => r.slice(0, 12));
+  const perSource = results.map((r) => r.slice(0, 30));
   const maxLen = Math.max(0, ...perSource.map((r) => r.length));
   const merged = [];
   const seen = new Map();

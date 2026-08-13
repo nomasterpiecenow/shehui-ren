@@ -262,7 +262,22 @@ async function main() {
     console.error('[pipeline] 候选不足 15 条，退出');
     process.exit(1);
   }
-  const chosen = candidates.slice(0, 15);
+  // 跨天去重：回填历史日时，排除已生成日期已用的标题，避免三天内容雷同
+  const excludeArg = (process.argv.find((a) => a.startsWith('--exclude-dates=')) || '').split('=')[1] || '';
+  let chosen = candidates;
+  if (excludeArg) {
+    const usedTitles = new Set();
+    const data = loadNewsData();
+    for (const d of excludeArg.split(',').map((s) => s.trim()).filter(Boolean)) {
+      (data[d] || []).forEach((it) => { if (it && it.title) usedTitles.add(it.title); });
+    }
+    if (usedTitles.size) {
+      const filtered = candidates.filter((c) => !usedTitles.has(c.title));
+      chosen = filtered.length >= 15 ? filtered : candidates;
+      console.log(`[pipeline] 跨天去重：排除 ${usedTitles.size} 个已用标题，候选 ${candidates.length}→${chosen.length}`);
+    }
+  }
+  chosen = chosen.slice(0, 15);
   const { topics, nodes } = vocabText();
 
   const batches = [];
