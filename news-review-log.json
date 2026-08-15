@@ -1,467 +1,517 @@
 {
-  "generatedAt": "2026-08-14T01:19:56.248Z",
-  "summary": {
-    "batchDate": "2026-08-14",
+  "meta": {
+    "batchDate": "2026-08-15",
     "slot": "morning",
-    "candidatePool": 50,
-    "chosen": 15,
-    "majors": 2,
-    "themePicks": 3,
-    "disciplineCoverage": {
-      "soc": 10,
-      "econ": 5,
-      "psy": 3
-    },
-    "researchCount": 1,
-    "s0Compliance": "pass",
-    "s2MajorPlatforms": {
-      "上海员工台风请假被罚": [
-        "微博热搜",
-        "百度热搜",
-        "知乎热榜",
-        "今日头条",
-        "网易财经",
-        "央视网"
-      ],
-      "福建消防员池坷杰牺牲": [
-        "微博热搜",
-        "百度热搜",
-        "澎湃新闻",
-        "腾讯新闻",
-        "央视新闻",
-        "网易"
-      ]
-    },
-    "validation": {
-      "fail": 0,
-      "warn": 0
-    },
-    "notes": "S4.5 A/B类全部入选，无C类；S2.5配额Q=3已用满(生态环境法典/青春小店/小小志愿者)；essayQuote+essayTopics全15条齐备；community非节点改用social_capital(社会资本)。"
+    "generatedAt": "2026-08-15T01:15:02.712Z",
+    "standard": "NEWS_REVIEW_STANDARD.md (S0/S1/S2/S3/S4/S4.5/S5/S6/S7/S9)",
+    "totalChosen": 15,
+    "majors": 3,
+    "themePicks": [
+      5,
+      6,
+      7
+    ],
+    "disciplineCoverage": [
+      "soc",
+      "econ",
+      "psy"
+    ],
+    "s45Excluded": 0,
+    "dateKeysAfter": 7,
+    "oldestTrimmed": "2026-08-06"
   },
   "chosen": [
     {
       "id": 1,
-      "title": "台风天请假1小时被罚近1500元，上海人社局：违规",
-      "source": "综合新闻",
-      "url": "https://new.qq.com/rain/a/20260814A03QN200",
+      "title": "河南周口贾鲁河堤坝溃口约30米，781人转移零伤亡",
+      "url": "https://www.cnr.cn/china/gdgg/20260814/t20260814_527761928.shtml",
+      "source": "央广网",
       "major": true,
+      "theories": [
+        "risk_society",
+        "social_capital",
+        "urban"
+      ],
+      "essayTopics": [
+        "risk_uncertain",
+        "community",
+        "duty_devote"
+      ],
+      "disciplines": [
+        "soc"
+      ],
       "platforms": [
         "微博热搜",
         "百度热搜",
         "知乎热榜",
         "今日头条",
-        "网易财经",
-        "央视网"
+        "抖音热榜",
+        "央广网"
       ],
-      "strength": "strong",
-      "disciplines": [
-        "soc"
-      ],
-      "theories": [
-        "law",
-        "work"
-      ],
-      "lensId": "law",
-      "essayTopics": [
-        "fairness",
-        "freedom_rules",
-        "trust"
-      ],
-      "themePick": false
+      "s45": "A"
     },
     {
       "id": 2,
-      "title": "福建福安船厂火灾爆炸，23岁消防员池坷杰英勇牺牲",
+      "title": "母女被拐31年后团圆，父亲被骗11年无偿劳动终获38万赔偿",
+      "url": "https://k.sina.com.cn/article_7879922982_1d5ae15260680b9132.html",
       "source": "综合新闻",
-      "url": "https://m.thepaper.cn/newsDetail_forward_33780632",
       "major": true,
-      "platforms": [
-        "微博热搜",
-        "百度热搜",
-        "澎湃新闻",
-        "腾讯新闻",
-        "央视新闻",
-        "网易"
-      ],
-      "strength": "strong",
-      "disciplines": [
-        "soc"
-      ],
       "theories": [
-        "social_solidarity",
-        "risk_society"
-      ],
-      "lensId": "social_solidarity",
-      "essayTopics": [
-        "ordinary_great",
-        "duty_devote",
-        "youth_duty"
-      ],
-      "themePick": false
-    },
-    {
-      "id": 3,
-      "title": "生态环境法典8月15日施行，为美丽中国提供法治保障",
-      "source": "人民日报",
-      "url": "https://news.china.com.cn/2026-08/14/content_118647057.html",
-      "major": false,
-      "platforms": null,
-      "strength": "strong",
-      "disciplines": [
-        "soc"
-      ],
-      "theories": [
-        "institutionalism",
-        "environment"
-      ],
-      "lensId": "institutionalism",
-      "essayTopics": [
-        "nation_resonance",
-        "times_mission",
-        "green_dev"
-      ],
-      "themePick": true
-    },
-    {
-      "id": 4,
-      "title": "「青春小店」创业记：青年把梦想开进街巷",
-      "source": "人民日报",
-      "url": "https://so.html5.qq.com/page/real/search_news?docid=70000021_6556a7d139f81252",
-      "major": false,
-      "platforms": null,
-      "strength": "strong",
-      "disciplines": [
-        "soc",
-        "psy"
-      ],
-      "theories": [
-        "youth",
-        "socialization",
-        "psy_self_efficacy"
-      ],
-      "lensId": "youth",
-      "essayTopics": [
-        "youth_struggle",
-        "youth_duty",
-        "ideal_action"
-      ],
-      "themePick": true
-    },
-    {
-      "id": 5,
-      "title": "服务社会，当一名小小志愿者",
-      "source": "人民日报",
-      "url": "https://society.people.com.cn/n1/2026/0814/c1008-40779272.html",
-      "major": false,
-      "platforms": null,
-      "strength": "strong",
-      "disciplines": [
-        "soc"
-      ],
-      "theories": [
-        "socialization",
-        "social_capital"
-      ],
-      "lensId": "socialization",
-      "essayTopics": [
-        "youth_duty",
-        "altruism",
-        "community"
-      ],
-      "themePick": true
-    },
-    {
-      "id": 6,
-      "title": "三大外卖平台将在京落地「红灯停表」，等红灯为骑手自动补时",
-      "source": "中国青年报",
-      "url": "https://www.toutiao.com/article/7673651811475046921/",
-      "major": false,
-      "platforms": null,
-      "strength": "strong",
-      "disciplines": [
-        "soc",
-        "psy"
-      ],
-      "theories": [
-        "work",
-        "technology",
-        "psy_stress"
-      ],
-      "lensId": "work",
-      "essayTopics": [
-        "tech_for_good",
-        "fast_slow",
-        "fairness"
-      ],
-      "themePick": false
-    },
-    {
-      "id": 7,
-      "title": "央行8月14日开展10000亿元买断式逆回购操作",
-      "source": "综合新闻",
-      "url": "https://gu.qq.com/resources/shy/news/detail-v2/index.html?t=1#/index?_tentrees_trans=0&id=SN20260814090126b690048b",
-      "major": false,
-      "platforms": null,
-      "strength": "medium",
-      "disciplines": [
-        "econ"
-      ],
-      "theories": [
-        "econ_monetary_policy",
-        "econ_macro"
-      ],
-      "lensId": "econ_monetary_policy",
-      "essayTopics": [
-        "risk_uncertain",
-        "fast_slow"
-      ],
-      "themePick": false
-    },
-    {
-      "id": 8,
-      "title": "全国碳排放权交易市场累计成交量突破9.3亿吨",
-      "source": "综合新闻",
-      "url": "https://gu.qq.com/resources/shy/news/detail-v2/index.html?t=1#/index?_tentrees_trans=0&id=SN20260814050629973b931d",
-      "major": false,
-      "platforms": null,
-      "strength": "medium",
-      "disciplines": [
-        "econ",
-        "soc"
-      ],
-      "theories": [
-        "econ_public_finance",
-        "environment"
-      ],
-      "lensId": "econ_public_finance",
-      "essayTopics": [
-        "green_dev",
-        "risk_uncertain",
-        "nation_resonance"
-      ],
-      "themePick": false
-    },
-    {
-      "id": 9,
-      "title": "首艘国产大型邮轮「爱达·魔都号」首航大湾区",
-      "source": "综合新闻",
-      "url": "https://new.qq.com/rain/a/20260814A03E2V00",
-      "major": false,
-      "platforms": null,
-      "strength": "strong",
-      "disciplines": [
-        "soc"
-      ],
-      "theories": [
-        "technology",
-        "science"
-      ],
-      "lensId": "technology",
-      "essayTopics": [
-        "nation_resonance",
-        "times_mission",
-        "tech_for_good"
-      ],
-      "themePick": false
-    },
-    {
-      "id": 10,
-      "title": "「舍不得买新教材就休学退学」，西南医科大学通报辅导员不当言论",
-      "source": "综合新闻",
-      "url": "https://www.163.com/dy/article/L48M1C6V0544TTW6.html",
-      "major": false,
-      "platforms": null,
-      "strength": "strong",
-      "disciplines": [
-        "soc",
-        "psy"
-      ],
-      "theories": [
-        "education",
-        "institutionalism",
-        "psy_emotion"
-      ],
-      "lensId": "emotional_labor",
-      "essayTopics": [
-        "fairness",
-        "integrity",
-        "self_aware"
-      ],
-      "themePick": false
-    },
-    {
-      "id": 11,
-      "title": "4块牛肉干64元复称仅17元，赵一鸣零食再被指缺斤少两",
-      "source": "综合新闻",
-      "url": "https://www.163.com/dy/article/L48BGLGB0530RTB0.html",
-      "major": false,
-      "platforms": null,
-      "strength": "strong",
-      "disciplines": [
-        "econ"
-      ],
-      "theories": [
-        "econ_moral_hazard",
-        "deviance"
-      ],
-      "lensId": "econ_moral_hazard",
-      "essayTopics": [
-        "integrity",
-        "righteousness_interest",
-        "trust"
-      ],
-      "themePick": false
-    },
-    {
-      "id": 12,
-      "title": "河南郏县北汝河段民堤溃口，暂无人员伤亡",
-      "source": "综合新闻",
-      "url": "https://new.qq.com/rain/a/20260814A03SGO00",
-      "major": false,
-      "platforms": null,
-      "strength": "strong",
-      "disciplines": [
-        "soc"
-      ],
-      "theories": [
-        "risk_society",
-        "urban"
-      ],
-      "lensId": "risk_society",
-      "essayTopics": [
-        "risk_uncertain",
-        "community",
-        "fairness"
-      ],
-      "themePick": false
-    },
-    {
-      "id": 13,
-      "title": "辽宁朝阳一牧业公司发生中毒事故3人死亡，省安委会挂牌督办",
-      "source": "综合新闻",
-      "url": "https://www.163.com/dy/article/L49FGHCR05568W0A.html",
-      "major": false,
-      "platforms": null,
-      "strength": "strong",
-      "disciplines": [
-        "soc"
-      ],
-      "theories": [
-        "work",
+        "crime",
+        "family",
         "law"
       ],
-      "lensId": "work",
-      "essayTopics": [
-        "fairness",
-        "duty_devote",
-        "trust"
-      ],
-      "themePick": false
-    },
-    {
-      "id": 14,
-      "title": "公办校「课时服务人员」争议：编外岗位能否托住教育公平",
-      "source": "综合新闻",
-      "url": "https://new.qq.com/rain/a/20260813A07ZKT00",
-      "major": false,
-      "platforms": null,
-      "strength": "medium",
-      "disciplines": [
-        "soc",
-        "econ"
-      ],
-      "theories": [
-        "education",
-        "econ_welfare"
-      ],
-      "lensId": "education",
       "essayTopics": [
         "fairness",
         "trust",
-        "self_aware"
+        "duty_devote"
       ],
-      "themePick": false
+      "disciplines": [
+        "soc"
+      ],
+      "platforms": [
+        "微博热搜",
+        "百度热搜",
+        "知乎热榜",
+        "今日头条",
+        "抖音热榜"
+      ],
+      "s45": "A"
     },
     {
-      "id": 15,
-      "title": "一年超8万家面包店关停，小店经济在连锁与平台夹缝中求生",
-      "source": "综合新闻",
-      "url": "https://www.toutiao.com/article/7670171734906683904/",
-      "major": false,
-      "platforms": null,
-      "strength": "medium",
+      "id": 3,
+      "title": "旺旺一季度净利暴跌38%，董事长罕见定性为重大经营危机",
+      "url": "https://k.sina.com.cn/article_7879922977_1d5ae152106801i9vo.html",
+      "source": "新浪财经",
+      "major": true,
+      "theories": [
+        "econ_behavioral",
+        "econ_macro"
+      ],
+      "essayTopics": [
+        "gain_loss",
+        "persist_flex",
+        "righteousness_interest"
+      ],
       "disciplines": [
         "econ"
       ],
-      "theories": [
-        "econ_behavioral",
-        "econ_supply_demand"
+      "platforms": [
+        "微博热搜",
+        "百度热搜",
+        "知乎热榜",
+        "今日头条",
+        "抖音热榜"
       ],
-      "lensId": "econ_behavioral",
+      "s45": "A"
+    },
+    {
+      "id": 4,
+      "title": "苏泊尔一则由AI生成的擦边广告引争议，目前已下架",
+      "url": "https://www.ithome.com/0/986/464.htm",
+      "source": "IT之家",
+      "major": false,
+      "theories": [
+        "gender",
+        "media",
+        "digital"
+      ],
       "essayTopics": [
-        "gain_loss",
-        "fast_slow",
+        "prejudice",
+        "ai_ethics",
+        "tech_for_good"
+      ],
+      "disciplines": [
+        "soc"
+      ],
+      "platforms": [
+        "微博热搜",
+        "百度热搜",
+        "知乎热榜",
+        "今日头条",
+        "抖音热榜"
+      ],
+      "s45": "A"
+    },
+    {
+      "id": 5,
+      "title": "第四个全国生态日到来，绿水青山理念更加深入人心",
+      "url": "https://new.qq.com/rain/a/20260815A002B200",
+      "source": "腾讯新闻",
+      "major": false,
+      "theories": [
+        "environment",
+        "institutionalism",
+        "social_capital"
+      ],
+      "essayTopics": [
+        "harmony_nature",
+        "green_dev",
         "community"
       ],
-      "themePick": false
+      "disciplines": [
+        "soc"
+      ],
+      "platforms": [
+        "微博热搜",
+        "百度热搜",
+        "人民日报",
+        "新华网",
+        "央视网"
+      ],
+      "s45": "A"
+    },
+    {
+      "id": 6,
+      "title": "全国生态日，青年志愿者巡河护水守护一江清流",
+      "url": "https://www.rmlt.com.cn/2026/0815/754546.shtml",
+      "source": "人民论坛网",
+      "major": false,
+      "theories": [
+        "youth",
+        "socialization",
+        "environment"
+      ],
+      "essayTopics": [
+        "youth_duty",
+        "community",
+        "harmony_nature"
+      ],
+      "disciplines": [
+        "soc"
+      ],
+      "platforms": [
+        "人民日报",
+        "新华网",
+        "央视网",
+        "微博热搜",
+        "百度热搜"
+      ],
+      "s45": "A"
+    },
+    {
+      "id": 7,
+      "title": "河南推出带薪错峰休假新政，鼓励职工避峰出行",
+      "url": "https://www.toutiao.com/article/7670501724737552939",
+      "source": "中国青年网",
+      "major": false,
+      "theories": [
+        "work",
+        "econ_welfare",
+        "institutionalism"
+      ],
+      "essayTopics": [
+        "fairness",
+        "freedom_rules",
+        "duty_devote"
+      ],
+      "disciplines": [
+        "soc",
+        "econ"
+      ],
+      "platforms": [
+        "微博热搜",
+        "百度热搜",
+        "今日头条",
+        "中国青年网",
+        "央视网"
+      ],
+      "s45": "A"
+    },
+    {
+      "id": 8,
+      "title": "微信朋友圈为何不能二次编辑？功能设计引网友讨论",
+      "url": "https://www.163.com/dy/article/L4B7M0FE0514R9P4.html",
+      "source": "综合新闻",
+      "major": false,
+      "theories": [
+        "self_presentation",
+        "psy_stress",
+        "media"
+      ],
+      "essayTopics": [
+        "self_aware",
+        "virtual_real",
+        "info_cocoon"
+      ],
+      "disciplines": [
+        "soc",
+        "psy"
+      ],
+      "platforms": [
+        "微博热搜",
+        "百度热搜",
+        "知乎热榜",
+        "今日头条",
+        "网易"
+      ],
+      "s45": "A"
+    },
+    {
+      "id": 9,
+      "title": "温州一炸鸡店员手伸裤内打包，食品卫生引众怒",
+      "url": "https://www.163.com/dy/article/L4APG63F0514CDBK.html",
+      "source": "中国青年报",
+      "major": false,
+      "theories": [
+        "deviance",
+        "health",
+        "law"
+      ],
+      "essayTopics": [
+        "integrity",
+        "fairness",
+        "trust"
+      ],
+      "disciplines": [
+        "soc"
+      ],
+      "platforms": [
+        "微博热搜",
+        "百度热搜",
+        "知乎热榜",
+        "今日头条",
+        "抖音热榜"
+      ],
+      "s45": "A"
+    },
+    {
+      "id": 10,
+      "title": "废弃医疗塑料被制成手机壳等日用品，健康风险引关注",
+      "url": "https://www.china.com.cn/opinion2020/2026-08/10/content_118641027.shtml",
+      "source": "中国网",
+      "major": false,
+      "theories": [
+        "digital",
+        "health",
+        "deviance"
+      ],
+      "essayTopics": [
+        "integrity",
+        "tech_for_good",
+        "trust"
+      ],
+      "disciplines": [
+        "soc"
+      ],
+      "platforms": [
+        "微博热搜",
+        "百度热搜",
+        "知乎热榜",
+        "今日头条",
+        "中国网"
+      ],
+      "s45": "A"
+    },
+    {
+      "id": 11,
+      "title": "AI人才成秋招顶流，大厂开出弹性薪酬上不封顶",
+      "url": "https://www.toutiao.com/article/7674027085161103881",
+      "source": "津云",
+      "major": false,
+      "theories": [
+        "technology",
+        "econ_human_capital",
+        "work"
+      ],
+      "essayTopics": [
+        "tech_for_good",
+        "lifelong_learn",
+        "gain_loss"
+      ],
+      "disciplines": [
+        "soc",
+        "econ"
+      ],
+      "platforms": [
+        "百度热搜",
+        "抖音热榜",
+        "今日头条",
+        "微博热搜",
+        "知乎热榜"
+      ],
+      "s45": "A"
+    },
+    {
+      "id": 12,
+      "title": "湖南涟源煤矿瓦斯突出7人失联，救援全力展开",
+      "url": "https://www.hn.chinanews.com.cn/news/shsh/2026/0814/532527.html",
+      "source": "中国新闻网",
+      "major": false,
+      "theories": [
+        "risk_society",
+        "work",
+        "law"
+      ],
+      "essayTopics": [
+        "risk_uncertain",
+        "duty_devote",
+        "fairness"
+      ],
+      "disciplines": [
+        "soc"
+      ],
+      "platforms": [
+        "微博热搜",
+        "百度热搜",
+        "知乎热榜",
+        "今日头条",
+        "中国新闻网"
+      ],
+      "s45": "A"
+    },
+    {
+      "id": 13,
+      "title": "大学新生因买不起电脑犯难，折射教育起点公平之困",
+      "url": "https://www.sohu.com/a/1061315219_120098969",
+      "source": "综合新闻",
+      "major": false,
+      "theories": [
+        "education",
+        "econ_human_capital",
+        "stratification"
+      ],
+      "essayTopics": [
+        "fairness",
+        "lifelong_learn",
+        "self_vs_greater"
+      ],
+      "disciplines": [
+        "soc",
+        "econ"
+      ],
+      "platforms": [
+        "微博热搜",
+        "百度热搜",
+        "知乎热榜",
+        "今日头条",
+        "搜狐"
+      ],
+      "s45": "A"
+    },
+    {
+      "id": 14,
+      "title": "甘肃会宁西瓜少年马成一篇《我的妈妈》打动全网",
+      "url": "https://www.topnews.cn/news/145ED5EC48B94D77",
+      "source": "顶端新闻",
+      "major": false,
+      "theories": [
+        "youth",
+        "socialization",
+        "psy_attachment"
+      ],
+      "essayTopics": [
+        "youth_struggle",
+        "youth_duty",
+        "self_aware"
+      ],
+      "disciplines": [
+        "soc",
+        "psy"
+      ],
+      "platforms": [
+        "微博热搜",
+        "百度热搜",
+        "知乎热榜",
+        "抖音热榜",
+        "今日头条"
+      ],
+      "s45": "A"
+    },
+    {
+      "id": 15,
+      "title": "黄色烂梗侵入校园，吞噬10后小学生的语言与审美",
+      "url": "https://www.huxiu.com/article/4880269.html",
+      "source": "虎嗅",
+      "major": false,
+      "theories": [
+        "education",
+        "youth",
+        "psy_conformity"
+      ],
+      "essayTopics": [
+        "prejudice",
+        "integrity",
+        "self_aware"
+      ],
+      "disciplines": [
+        "soc",
+        "psy"
+      ],
+      "platforms": [
+        "微博热搜",
+        "百度热搜",
+        "知乎热榜",
+        "今日头条",
+        "虎嗅"
+      ],
+      "s45": "A"
     }
   ],
   "rejected": [
     {
-      "title": "23岁博士确诊胃癌晚期",
-      "reason": "S5 过期：源 08-08，超出近24h窗口"
+      "title": "生态环境法典8.15施行+禁塑令",
+      "reason": "S5 去重：2026-08-14 已入库同事件（生态环境法典8.15施行），改取#5「第四个全国生态日/绿水青山理念」新角度"
     },
     {
-      "title": "戚薇主动授权AI数字分身",
-      "reason": "S5 过期：源 08-06/07，远超24h"
+      "title": "央行1万亿买断式逆回购",
+      "reason": "S5 去重：2026-08-14 已入库同事件，改取#11「AI人才秋招弹性薪酬」新事件"
     },
     {
-      "title": "深圳6岁女童鼻腔6颗磁力珠",
-      "reason": "S5 过期：源 08-09，超出近24h"
+      "title": "台风白海豚残余环流致河南暴雨/太湖流域洪水",
+      "reason": "S5 上限：白海豚自 08-05 起已连发多日（08-05~08-14 多日覆盖），不再续发"
     },
     {
-      "title": "金价跌回3字头半年回撤30%",
-      "reason": "S6 标题/事实一致性存疑：国际金价仍居4400美元/盎司高位，「3字头」表述与数据源不符，放弃入库"
+      "title": "许昌暴雨60万人断水停电",
+      "reason": "S0 辟谣：官方核实为旧闻翻炒/移花接木，非真实当日灾情"
     },
     {
-      "title": "韩国股市连续三日熔断",
-      "reason": "S2.5/S4 weak：源为个人观点、弱关联，且已过期"
+      "title": "高市早苗向靖国神社供奉祭品 / 日本防卫大臣参拜",
+      "reason": "S0 国际政治敏感，剔除"
     },
     {
-      "title": "普通人集体拒绝(某平台)",
-      "reason": "S0 排除：UGC个人帖，无编辑源佐证"
+      "title": "印尼7.7级地震引发海啸",
+      "reason": "S0 国际灾害，弱社会学科价值，剔除"
     },
     {
-      "title": "教育部新设32所本科高校",
-      "reason": "S5 过期：源 06-16/17"
+      "title": "日本关东强降雨8人死亡",
+      "reason": "S0 国际事件，剔除"
     },
     {
-      "title": "黑龙江5名高中生发射临近空间火箭",
-      "reason": "S5 过期：源 06-10"
+      "title": "国防部就日本投降81周年发声",
+      "reason": "S0 涉政治表态，剔除"
     },
     {
-      "title": "广西灾后重建中的青年",
-      "reason": "S5 过期：源 08-06，超出近24h"
+      "title": "国乒男单连续无缘八强",
+      "reason": "S0 体育赛事，弱社会学科价值"
     },
     {
-      "title": "新华网评青年创新",
-      "reason": "S5 过期：源 08-02"
+      "title": "王嘉尔宋雨琦恋情 / 王传君体脂率 / 披荆斩棘直播事故",
+      "reason": "S0 娱乐八卦，剔除"
     },
     {
-      "title": "国漫崛起青年追光",
-      "reason": "S5 过期：源 08-10，超出近24h"
+      "title": "郭德纲西安演出取消",
+      "reason": "S0 文娱事件，剔除"
     },
     {
-      "title": "两弹一星元勋王希季逝世(08-12)",
-      "reason": "S5 边界(~48h)且名额已满，未入选"
+      "title": "程晓波/赵书跃 涉嫌严重违纪违法被查",
+      "reason": "S0 纪委案件（政治边界），剔除"
     },
     {
-      "title": "我国自然资源一张图(抖音)",
-      "reason": "名额已满且可建构角度偏弱，未入选"
+      "title": "摩洛哥涉中国留学生人身伤害案",
+      "reason": "S0 国际事件，剔除"
     },
     {
-      "title": "英伟达开源大模型",
-      "reason": "事实待核且名额已满，未入选"
+      "title": "番茄小说作者文黛黛假死",
+      "reason": "S0 网文圈 UGC 争议，弱学科价值"
+    },
+    {
+      "title": "天津第三家盒马开业",
+      "reason": "S2 弱社会锚点，名额已满未入选"
+    },
+    {
+      "title": "油价年内第5次下调",
+      "reason": "S2 民生利多但学科纵深弱，名额已满未入选（econ 已由#3/#11承载）"
     }
   ]
 }
