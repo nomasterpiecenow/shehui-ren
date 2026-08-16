@@ -204,3 +204,46 @@
 - 同步: news-data.js + news-review-log.json 已 cp 至 D:/Users/wtianyi/ctrip-claw/
 - 部署: deploy-netlify.js 生产+草稿均报 Unauthorized/401（.netlify_token 自 08-08 起持续失效）→ 未发布到 shehui-ren.com；兜底走 **Gitee 同步**（git commit news-data.js news-review-log.json → push master），Mac 端 git pull 即获本批新闻
 - 红线: 未改 sociology-map.html/deploy-netlify.js/.netlify_token；临时脚本(_inspect/_rebuild/_patch/_quote/_report/_mklog_0811) 跑完已删
+
+## 2026-08-14 (morning, ~09:19)
+- 批次日期: 2026-08-14（morning 槽，近24h）；候选池约 50 条（微博/百度/知乎/头条/抖音 + 央媒/部委编辑源；多源 WebSearch 并行检索 + 重抓主源核对 title/gist 关键事实）
+- 入库: 15 条（2 特大 + 13 非特大），日期键插入 NEWS_DATA 首位；删除最旧 2026-08-05，日期数保持 7（08-14~08-06）
+- 特大(2, 均≥4平台经程序核对): #1 上海员工台风天请假被罚近1500元(work/law,6平台,人民日报/腾讯深度法律分析)、#2 福建宁德消防员池坷杰牺牲(social_solidarity/risk_society,6平台,澎湃)
+- 非特大(13): 生态环境法典8.15施行(institutionalism/environment,themePick)、青春小店创业记(youth/socialization/psy_self_efficacy,themePick)、小小志愿者(socialization/social_capital,themePick)、外卖红灯停表(work/technology/psy_stress)、央行1万亿逆回购(econ_monetary_policy/econ_macro)、碳排放突破9.3亿吨(econ_public_finance/environment)、爱达魔都号首航大湾区(technology/science)、西南医科大辅导员言论(education/institutionalism/psy_emotion)、赵一鸣牛肉干称重(econ_moral_hazard/deviance)、河南郏县北汝河溃口(risk_society/urban)、辽宁朝阳牧业中毒3死(work/law)、东莞课时服务人员争议(education/econ_welfare)、一年超8万家面包店关停(econ_behavioral/econ_supply_demand)
+- 学科覆盖: soc 10 / econ 5 / psy 3，三科全覆盖；节点 id 全部∈311节点集（逐一比对 law/work/social_solidarity/risk_society/institutionalism/environment/youth/socialization/psy_self_efficacy/technology/science/education/emotional_labor/econ_moral_hazard/deviance/econ_monetary_policy/econ_macro/econ_public_finance/urban/econ_behavioral/econ_supply_demand/econ_welfare 均存在）；注 community 非节点（仅 topic），#5 改用 social_capital(社会资本)
+- S9 前沿研究: 1 条（#2 消防员 → Aldrich & Meyer 2015 "Social Capital and Community Resilience" American Behavioral Scientist 59(2):254-269 DOI 10.1177/0002764214550299 fromNode=social_solidarity），嵌 interpretation.research，url 真实(DOI)、fromNode∈311节点集
+- S2.5 青春家国主题配额 3 条(#3 生态环境法典、#4 青春小店、#5 小小志愿者)标记 themePick，均官媒正向(人民日报/新华社)
+- 质检: `node news-validate.js` → **FAIL=0 WARN=0**（7日期各15条，311节点）；全量非中文字符扫描 08-14 块，命中均为 JSON 键名与合法「AI」专名，无偶然外文混入；title/gist 事实与源文一致（重抓主源核对）
+- S5 去重/剔除: 23岁博士胃癌(08-08)/戚薇AI分身(08-06/07)/深圳女童磁力珠(08-09)/国漫崛起(08-10)/广西灾后(08-06)/新华网评青年(08-02)/教育部32所本科(06-16)/黑龙江火箭(06-10) 均超24h弃；金价"3字头"事实疑(国际金价仍4400+)弃；韩国熔断/普通人拒绝(UGC)弱关联弃；王希季(08-12边界)、自然资源一张图、英伟达开源 名额满未入选
+- S0 剔除/未纳入: 国际政治(特朗普/普京/俄乌/法枪击)、娱乐八卦(王一博/薛珍麒虚拟偶像)、纯UGC个人帖、网传无源灾情
+- 同步: news-data.js + news-review-log.json 已 cp 至 D:/Users/wtianyi/ctrip-claw/
+- 部署: deploy-netlify.js 生产+草稿均报 Unauthorized/401（.netlify_token 自 08-08 起持续失效）→ 未发布到 shehui-ren.com；兜底走 **Gitee 同步**（git add news-data.js news-review-log.json node-index.json → commit "news: auto-sync 2026-08-14" → push master，退出码 0，83b4d11..6d35904），Mac 端 git pull 即获本批新闻
+- 红线: 未改 sociology-map.html/deploy-netlify.js/.netlify_token；临时脚本(_ins_0814_data/_ins_0814/_mk_log_0814) 跑完已删
+
+## 2026-08-15 (morning, ~09:15)
+- 批次日期: 2026-08-15（morning 槽，近24h）；候选池约 50 条（微博/百度/知乎/抖音/头条 + 央媒/部委编辑源；多源 WebSearch 并行检索 + 重抓主源核对 title/gist 关键事实）
+- 入库: 15 条（3 特大 + 12 非特大），日期键插入 NEWS_DATA 首位；删除最旧 2026-08-06，日期数保持 7（08-15~08-07）
+- 特大(3, 均≥4平台经程序核对): #1 周口贾鲁河溃口约30米零伤亡(risk_society/social_capital/urban,抖音#1/微博/百度/央广)、#2 母女被拐父亲被骗11年无偿劳动(crime/family/law,微博#2/百度/知乎)、#3 旺旺净利暴跌38%重大经营危机(econ_behavioral/econ_macro,微博#1/百度/知乎)
+- 非特大(12): 苏泊尔AI擦边广告下架(gender/media/digital,S9 research fromNode=gender)、第四个全国生态日/绿水青山理念(environment/institutionalism/social_capital,themePick)、青年护水志愿者(youth/socialization/environment,themePick)、河南带薪错峰休假(work/econ_welfare/institutionalism,themePick)、微信朋友圈无二次编辑(self_presentation/psy_stress/media)、温州炸鸡手伸裤内打包(deviance/health/law)、医疗垃圾制手机壳(digital/health/deviance,S9 research fromNode=health)、AI人才秋招弹性薪酬(technology/econ_human_capital/work)、湖南涟源煤矿瓦斯7人失联(risk_society/work/law)、大学新生买不起电脑(education/econ_human_capital/stratification)、西瓜少年马成(youth/socialization/psy_attachment)、黄色烂梗吞噬10后(education/youth/psy_conformity)
+- 学科覆盖: soc 15 / econ 5(#3/#7/#11/#13) / psy 4(#8/#14/#15) → 三科全覆盖；节点 id 全部∈311节点集（逐一比对 risk_society/social_capital/urban/crime/family/law/econ_behavioral/econ_macro/gender/media/digital/environment/institutionalism/work/self_presentation/psy_stress/deviance/health/econ_monetary_policy/stratification/education/econ_human_capital/psy_attachment/psy_conformity 均存在）
+- S9 前沿研究: 2 条（#4 苏泊尔→Yilmaz & Ashqar 2025 arXiv:2502.12838 "Towards Equitable AI: Detecting Bias in Using LLMs for Marketing Content" fromNode=gender；#10 医疗垃圾→China Daily 2019 "Illegal reuse of medical plastic a health risk" fromNode=health），均嵌 interpretation.research，url 真实、fromNode∈311节点集
+- S2.5 青春家国主题配额 3 条(#5 生态日理念/#6 青年护水/#7 带薪休假)标记 themePick，均官媒正向(人民日报/新华网/央视网/人民论坛/中国青年网)
+- 质检: `node news-validate.js` → **FAIL=0 WARN=0**（7日期各15条，311节点）；essayQuote 全补写至 100+ 字（102-126）；非中文字符扫描 08-15 块无偶然外文混入
+- S5 去重/剔除: 生态环境法典8.15(08-14已入库→改取#5生态日理念新角度)、央行1万亿逆回购(08-14已入库→改取#11 AI人才)、台风白海豚(08-05..08-14连发达上限不续发)、许昌暴雨60万人断水(辟谣旧闻)、国际政治(靖国神社/高市/印尼地震)、娱乐八卦、纪委案件、纯UGC
+- 同步: news-data.js + news-review-log.json 已 cp 至 D:/Users/wtianyi/ctrip-claw/
+- 部署: deploy-netlify.js 生产+草稿均报 Unauthorized/401（.netlify_token 自 08-08 起持续失效）→ 未发布到 shehui-ren.com；兜底走 **Gitee 同步**（git add news-data.js news-review-log.json node-index.json → commit "news: auto-sync 2026-08-15" → push master，退出码 0，6d35904..8bd31bf），Mac 端 git pull 即获本批新闻
+- 红线: 未改 sociology-map.html/deploy-netlify.js/.netlify_token；临时脚本(_build_0815/_fixq_0815/_mklog_0815) 跑完已删
+
+## 2026-08-16 (morning, ~09:13)
+- 批次日期: 2026-08-16（morning 槽，近24h）；候选池约 50 条（微博/百度/知乎/抖音/头条 + 央媒/部委编辑源；多源 WebSearch 并行检索 + 重抓主源核对 title/gist 关键事实）
+- 入库: 15 条（3 特大 + 12 非特大），日期键插入 NEWS_DATA 首位；删除最旧 2026-08-07，日期数保持 7（08-16~08-08）
+- 特大(3, 均≥4平台): #1 台风"白海豚"残涡长三角内涝(risk_society/social_capital/urban, S9 research fromNode=social_capital)、#2 宇树机器人撞人逃逸王兴兴回应(technology/rationalization_theory/psy_social_influence, S9 research fromNode=psy_social_influence)、#3 医疗检验收费662项全国一把尺(institutionalism/econ_welfare/health)
+- 非特大(12): 人民锐评镜头完美主义(goffman/media/institutionalism,themePick)、奔丧请假被拒解聘(work/law)、强制社保误读(law/econ_welfare/institutionalism)、纸尿裤甲酰胺(health/deviance/econ_moral_hazard)、机器人进厂(technology/work/alienation)、1分钱外卖反内卷(econ_monopoly/econ_behavioral/law)、DeepSeek V4 Pro峰谷涨价(technology/econ_info_asym/econ_behavioral)、塔克拉玛干新农人(youth/education/stratification,themePick)、职场新鲜人(work/youth/psy_self_efficacy,themePick)、南康救小女孩(social_capital/socialization/social_solidarity)、天津银行婚姻登记点(institutionalism/family/law)、印尼7.7级强震(risk_society/social_solidarity/health)
+- 学科覆盖: soc 13 / econ 5 / psy 3（#2 psy_social_influence、#10 psy_stress、#12 psy_self_efficacy），三科全覆盖；essayTopics 9 维度全覆盖；节点 id 全部∈311节点集（altruism/prejudice 仅作 TOPIC 不作 theory，#13 theory 改用 social_capital/socialization/social_solidarity）
+- S9 前沿研究: 2 条（#1 城市洪水社区韧性 Nature Sci Rep 2026 fromNode=social_capital；#2 机器人责备归因 arXiv:2510.01862 fromNode=psy_social_influence），均嵌 interpretation.research，url 真实、fromNode∈311节点集
+- S2.5 青春家国主题配额 3 条(#4 人民锐评/#11 塔克拉玛干新农人/#12 职场新鲜人) 标记 themePick，均官媒正向(人民网/人民日报)
+- 质检: `node news-validate.js` → **FAIL=0 WARN=0**（7日期各15条，311节点）；essayQuote 全补写至 100+ 字议论文金句；非中文字符扫描 08-16 块无偶然外文混入
+- S0 剔除/未纳入: 国际政治延伸、娱乐八卦、纯UGC个人帖、白海豚旧角度(08-05..08-15连发达上限改取残涡新进展)、事实无法核验的营销翻车
+- 同步: news-data.js + news-review-log.json 已 cp 至 D:/Users/wtianyi/ctrip-claw/
+- 部署: deploy-netlify.js 生产+草稿均报 Unauthorized/401（令牌仍失效）→ 未发布到 shehui-ren.com；兜底走 **Gitee 同步**（git add news-data.js news-review-log.json node-index.json → commit "news: auto-sync 2026-08-16" → push master，退出码 0，8bd31bf..90501bb），Mac 端 git pull 即获本批新闻
+- 红线: 未改 sociology-map.html/deploy-netlify.js/.netlify_token；临时脚本(_ins_0816) 跑完已删
