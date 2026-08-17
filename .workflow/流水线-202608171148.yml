@@ -1,0 +1,44 @@
+version: '1.0'
+name: daily-news
+displayName: '每日新闻生成（国内抓取）'
+# 仅定时触发；不要加 push 触发，否则本流水线 push 回 Gitee 会无限自循环
+triggers:
+  schedule:
+    - cron: '0 2 * * *'   # 北京时间 02:00（Gitee Go 时区默认 UTC+8）
+stages:
+  - stage:
+      name: gen
+      displayName: '抓取并生成新闻'
+      jobs:
+        - job: gen
+          steps:
+            - checkout
+            - run: |
+                set -e
+                # 确保 Node 18+（全局 fetch 需要）；Gitee Go 默认 Node 可能较旧则装 Node 22
+                if ! node --version 2>/dev/null | grep -qE '^v(1[89]|2[0-9])'; then
+                  echo "[ci] 安装 Node 22 ..."
+                  curl -fsSL https://nodejs.org/dist/v22.22.2/node-v22.22.2-linux-x64.tar.xz -o /tmp/node.tar.xz
+                  tar -xJf /tmp/node.tar.xz -C /tmp
+                  export PATH=/tmp/node-v22.22.2-linux-x64/bin:$PATH
+                fi
+                node --version
+                # 拉取 GitHub 最新代码作为基准（避免覆盖本机推到 GitHub 的代码改动）
+                git remote add github https://x-access-token:${GITHUB_PAT}@github.com/nomasterpiecenow/shehui-ren.git
+                git fetch github main
+                git reset --hard github/main
+                # 生成新闻（多源真实热榜 → DeepSeek）；DEEPSEEK_API_KEY 由流水线密文注入
+                DEEPSEEK_MODEL=deepseek-v4-flash DEEPSEEK_BASE=https://api.deepseek.com node scripts/news-pipeline.js
+            - run: |
+                set -e
+                git config user.name "gitee-go[bot]"
+                git config user.email "gitee-go@users.noreply.gitee.com"
+                git add news-data.js news-review-log.json cost-data.js
+                if git diff --cached --quiet; then
+                  echo "无新闻变更，跳过提交"
+                  exit 0
+                fi
+                git commit -m "news: auto-update $(TZ=Asia/Shanghai date +%F)"
+                git push origin HEAD:master
+                git push github HEAD:main
+
